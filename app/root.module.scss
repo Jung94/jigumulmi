@@ -1,0 +1,303 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+@keyframes openDetailOfBakery {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.container {
+  height: calc(100vh - $--header-height - 2px); // 2px : header's border-bottom
+  background-color: map.get($--colors, "off-white");
+
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  // grid-template-columns: 1.618fr 1fr;
+  overflow: hidden;
+
+  .map {
+    border-right: 2px solid #666;
+  }
+
+  .bakeries_wrap {
+    display: flex;
+    justify-content: flex-end;
+    background-color: map.get($--colors, "blush");
+    overflow-y: hidden;
+
+    .card_detail {
+      width: 380px;
+      border-right: 1px solid #555;
+      background-color: map.get($--colors, "off-white");
+      overflow-y: auto;
+      opacity: 0;
+      
+      animation: openDetailOfBakery 0.5s ease-out 0.1s 1 alternate both;
+      // animation: name duration timing-function delay iteration-count direction fill-mode;
+
+      .card_detail_carousel {
+        position: relative;
+        object-fit: cover;
+        width: 100%;
+        max-width: 380px;
+        aspect-ratio: 3 / 2;
+      }
+      .card_detail_content {
+        // border: 1px solid blue;
+        // padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        // gap: 0.5rem;
+        background-color: map.get($--colors, "blush");
+
+        .title_wrap {
+          padding: 1rem 0 0.5rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background-color: map.get($--colors, "off-white");
+
+          .title {
+            color: #111;
+            font-size: 1.125rem;
+            font-weight: 700;
+          }
+          .category_main {
+            color: #8f8f8f;
+            font-size: 0.813rem;
+          }
+        }
+        .info_wrap {
+          padding: 0.5rem 1rem 0;
+          background-color: map.get($--colors, "off-white");
+
+          .info {
+            // border: 1px solid red;
+            padding: 10px 0;
+            color: #333;
+            font-size: 14px;
+            border-bottom: 0.5px solid #d1d1d1;
+            display: grid;
+            grid-template-columns: 1rem 1fr;
+            gap: 10px;
+
+            .left {
+              // border: 1px solid #d1d1d1;
+              display: flex;
+              justify-content: flex;
+              align-items: center;
+            }
+
+            .station {
+              font-size: 13px;
+            }
+
+            .status {
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              // gap: 0.75rem;
+
+              .current_status {
+                padding-right: 0.5rem;
+                font-weight: 600;
+                line-height: 15px;
+                border-right: 0.5px solid #cacaca;
+              }
+              .time {
+                font-size: 13px;
+                padding-left: 0.5rem;
+              }
+            }
+          }
+        }
+        .content_wrap {
+          // border: 1px solid red;
+          padding: 0.5rem 1rem;
+          background-color: map.get($--colors, "off-white");
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          .main_menus {
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+
+            .menu {
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              gap: 10px;
+
+              .checkbox {
+                margin-left: 1px;
+                width: 14px;
+                height: 14px;
+                border-radius: 20rem;
+                border: 1px solid #000;
+                background-color: map.get($--colors, "desert-gold");
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    .cards {
+      // border: 1px solid blue;
+      width: 380px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0.6rem;
+      overflow-y: auto;
+  
+      .card {
+        background-color: map.get($--colors, "off-white");
+        border: 1.5px solid #222;
+        padding: 0 0.5rem 0 0;
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+  
+        max-height: 9rem;
+  
+        .card_image {
+          border-right: 1.5px solid #222;
+          position: relative;
+          width: 50%;
+          transition: all 0.12s;
+          cursor: pointer;
+        }
+        .card_image:hover {
+          opacity: 0.8;
+        }
+        .card_image::after {
+          display: block;
+          content: '';
+          padding-bottom: 100%;
+        }
+        .image {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .card_info_wrap {
+          // border: 1px solid blue;
+          padding: 0.5rem 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 0.6rem;
+          width: 100%;
+          cursor: pointer;
+  
+          .top {
+            // border: 1px solid red;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+  
+            .left {
+              // border: 1px solid red;
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+              
+              .card_title {
+                // border: 1px solid blue;
+                font-size: 1rem;
+                font-weight: 600;
+              }
+              .card_desc {
+                // border: 1px solid blue;
+                font-size: 0.75rem;
+                font-weight: 400;
+              }
+            }
+    
+            .right{
+              min-width: fit-content;
+    
+              .status {
+                font-size: 0.75rem;
+                border-radius: 4px;
+              }
+              .open {
+                color: #222;
+              }
+              .close {
+                color: map.get($--colors, "brick-red");
+              }
+              .status_01 {
+                padding: 0.1rem 0.3rem;
+                font-size: 0.8rem;
+                font-weight: 500;
+                border: 1px solid #222;
+                background-color: map.get($--colors, "park-green");
+              }
+            }
+          }
+          .bottom {
+            // border: 1px solid blue;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 0.3rem;
+  
+            .subway_line {
+              width: 1rem;
+              height: 1rem;
+              color: white;
+              font-size: 10px;
+              // border-radius: 2px;
+              background-color: #00a84d;
+  
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            .subway_station {
+              font-size: 11px;
+            }
+          }
+        }
+      }
+    }
+  
+    .floating_button {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .registration_bakery {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 20rem;
+      border: 1.5px solid #222;
+      // background-color: map.get($--colors, "crystal-blue");
+      background-color: map.get($--colors, "desert-gold");
+    }
+  }
+}
+
+.hasDetail {
+  grid-template-columns: 2fr 760px;
+}
+
+// 지하철 호선 색상
+// https://namu.wiki/w/%EC%88%98%EB%8F%84%EA%B6%8C%20%EC%A0%84%EC%B2%A0%201%ED%98%B8%EC%84%A0
+
+// #0052a4 - 1호선
+// #00a84d - 2호선

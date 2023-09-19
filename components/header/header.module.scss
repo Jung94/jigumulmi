@@ -1,0 +1,42 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+.container {
+  position: -webkit-sticky; /* 사파리 브라우저 지원 */
+  position: sticky;
+  top: 0px;
+  list-style: none;
+  border-bottom: 2px solid #222;
+  background-color: map.get($--colors, "off-white");
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+  z-index: 1000;
+
+  header {
+    padding: 0 1.5rem;
+    width: 100%;
+
+    nav {
+      width: 100%;
+      height: $--header-height;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .links {
+        // border: 1px solid red;
+
+        .logo {
+          font-size: 1.2rem;
+          font-weight: 600;
+        }
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+  }
+}

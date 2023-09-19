@@ -1,0 +1,9 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+.container {
+   height: 100%;
+   opacity: 0.8;
+   filter:saturate(120%);
+   background-color: map.get($--colors, "desert-gold");
+}
