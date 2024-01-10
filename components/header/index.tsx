@@ -8,16 +8,12 @@ const Header = () => {
       <header>
         <nav>
           <div className={styles.links}>
-            <div className={styles.logo}>jigumulmi</div>
-            {/* <div className={styles.logo}>JIGUMULMI</div> */}
-            {/* <ul>
-              <li></li>
-            </ul> */}
+            <div className={styles.logo}>JIGUMULMI</div>
           </div>
 
           <div className={styles.buttons}>
             <SearchBar type='station' />
-            <SearchBar type='bakery' />
+            {/* <SearchBar type='bakery' /> */}
           </div>
         </nav>
       </header>

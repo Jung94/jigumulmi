@@ -43,17 +43,15 @@ const getSearchType = (type: 'bakery' | 'station') => {
 const SearchBar = ({type}: SearhBarProps) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const pathname = usePathname()
+  // const pathname = usePathname()
   const searchParams = useSearchParams()
   const searchedStation = searchParams?.get("station")
-  const searchedBakery = searchParams?.get("bakery")
   const { kakaoKeywordSearch } = useAppSelector(((state) => state.search))
 
-  const autoRef = useRef(null)
+  const autoRef = useRef<any>(null)
   const [nowIndex, setNowIndex] = useState<number>(-1)
   const [searchType] = useState<any>(() => getSearchType(type))
-  const [value, setValue] = useState<string>('')
-  const [selectedStationCode, setStationCode] = useState<string>('')
+  const [value, setValue] = useState<string>(searchedStation ? searchedStation : '')
   const [selectedStationLine, setStationLine] = useState<string>('')
   const [autoCompleteList, setAutoCompleteList] = useState<any[]>([])
 
@@ -76,24 +74,23 @@ const SearchBar = ({type}: SearhBarProps) => {
   }
 
   // set URL query parameter - search_query
-  const setUrlSearchQuery = (searchType: 'station' | 'bakery', keyword: string) => {
-    const params = new URLSearchParams(searchParams)
+  const setUrlSearchQuery = (keyword: string) => {
+    if (!searchParams) return
+    const params = new URLSearchParams()
   
     params.set('station', keyword)
     router.push(`search?${params.toString()}`)
-    // router.push(`${pathname === '/' ? '' : pathname}?${params.toString()}`)
   }
 
   const getLocationOfKeyword = () => {
-    if (!kakaoKeywordSearch) return
-
     let _value: string = ''
     if (value.trim().slice(-1) === '역') _value = value.trim()
       else _value = `${value.trim()}역`
     
 
     const getLocation = (result: any[], status: string) => {
-      if (status === window.kakao.maps.services.Status.OK) {
+      const _window = window as any
+      if (_window?.kakao && status === _window.kakao.maps.services.Status.OK) {
         const stations = result.filter((e: any) => e.category_group_name === '지하철역')
         // console.log(stations, selectedStationLine)
 
@@ -112,7 +109,7 @@ const SearchBar = ({type}: SearhBarProps) => {
     kakaoKeywordSearch(_value, getLocation)
   }
 
-  const selectAutoSearchResult = (index?: number = 0) => {
+  const selectAutoSearchResult = (index: number = 0) => {
 
     setValue(autoCompleteList[nowIndex === -1 ? index : nowIndex][`${searchType.name}_nm`] || "")
     setNowIndex(-1)
@@ -123,8 +120,7 @@ const SearchBar = ({type}: SearhBarProps) => {
   }
 
   const search = () => {
-    if (searchType.name === 'station') setUrlSearchQuery('station', value.trim())  // set URL query parameter - station
-    if (searchType.name === 'bakery') setUrlSearchQuery('bakery', value.trim())  // set URL query parameter - bakery
+    setUrlSearchQuery(value.trim())  // set URL query parameter - station
   }
 
   const handleKeyArrow = (e: React.KeyboardEvent) => {
@@ -135,7 +131,7 @@ const SearchBar = ({type}: SearhBarProps) => {
     if (key === 'Enter') {
       if (nowIndex === -1) search()  // 검색창에 있을 때
         else selectAutoSearchResult()  // 자동 검색 박스 안에 있을 때
-        
+
       setAutoCompleteList([])
     }
 
@@ -199,8 +195,9 @@ const SearchBar = ({type}: SearhBarProps) => {
   }, [value])
 
   useEffect(()=>{
+    if (!kakaoKeywordSearch || !searchedStation) return  // 지도 활성화 여부
     getLocationOfKeyword()
-  }, [searchedStation, searchedBakery])
+  }, [kakaoKeywordSearch, searchedStation])
 
 
   return (
