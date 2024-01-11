@@ -194,9 +194,9 @@ const SearchBar = ({type}: SearhBarProps) => {
   useEffect(()=>{
     setNowIndex(-1)
   }, [value])
-
+  console.log('outside', kakaoKeywordSearch, searchedStation)
   useEffect(()=>{
-    console.log(kakaoKeywordSearch, searchedStation)
+    console.log('useEffect', kakaoKeywordSearch, searchedStation)
     if (!kakaoKeywordSearch || !searchedStation) return  // 지도 활성화 여부
     getLocationOfKeyword()
   }, [kakaoKeywordSearch, searchedStation])

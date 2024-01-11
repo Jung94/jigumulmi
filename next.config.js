@@ -7,10 +7,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true
   },
-  experimental: {
-    // 기본값은 50MB입니다.
-    isrMemoryCacheSize: 0,
-  },
   images: {
     remotePatterns: [
       {
