@@ -195,8 +195,8 @@ const SearchBar = ({type}: SearhBarProps) => {
   }, [value])
 
   useEffect(()=>{
-    if (!kakaoKeywordSearch || !searchedStation) return  // 지도 활성화 여부
     console.log(kakaoKeywordSearch, searchedStation)
+    if (!kakaoKeywordSearch || !searchedStation) return  // 지도 활성화 여부
     getLocationOfKeyword()
   }, [kakaoKeywordSearch, searchedStation])
 
