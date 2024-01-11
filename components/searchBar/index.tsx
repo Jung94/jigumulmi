@@ -120,6 +120,7 @@ const SearchBar = ({type}: SearhBarProps) => {
   }
 
   const search = () => {
+    console.log('000000000')
     setUrlSearchQuery(value.trim())  // set URL query parameter - station
   }
 
