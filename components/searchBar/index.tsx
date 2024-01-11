@@ -91,7 +91,7 @@ const SearchBar = ({type}: SearhBarProps) => {
     const getLocation = (result: any[], status: string) => {
       // const _window = window as any
       // if (_window?.kakao && status === _window.kakao.maps.services.Status.OK) {
-      if (status === window.kakao.maps.services.Status.OK) {
+      if (status === new window.kakao.maps.services.Status.OK) {
         const stations = result.filter((e: any) => e.category_group_name === '지하철역')
 
         if (stations.length === 0) return console.log('지하철역이 아님')
