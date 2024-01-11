@@ -17,6 +17,7 @@ export default function SearchPage() {
   const { station_cd } = useAppSelector(((state) => state.search))
   const [ bakeries, setBakeries ] = useState<any[]>(BAKERIES)
   const [ bakery, setBakery ] = useState<any>(null)
+  console.log('---search page')
 
   // set URL query parameter - search_query
   const setUrlSearchQuery = (keyword: string) => {
