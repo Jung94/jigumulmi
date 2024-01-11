@@ -120,7 +120,7 @@ const SearchBar = ({type}: SearhBarProps) => {
   }
 
   const search = () => {
-    console.log('000000000')
+    console.log('search-----')
     setUrlSearchQuery(value.trim())  // set URL query parameter - station
   }
 
@@ -196,7 +196,6 @@ const SearchBar = ({type}: SearhBarProps) => {
   }, [value])
   console.log('outside', kakaoKeywordSearch, searchedStation)
   useEffect(()=>{
-    console.log('useEffect', kakaoKeywordSearch, searchedStation)
     if (!kakaoKeywordSearch || !searchedStation) return  // 지도 활성화 여부
     getLocationOfKeyword()
   }, [kakaoKeywordSearch, searchedStation])

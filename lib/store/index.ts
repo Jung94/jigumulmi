@@ -8,12 +8,16 @@ export interface State {
   user: string
 }
 
-export const makeStore = () =>
-  configureStore({
+export const makeStore = () => {
+  const store = configureStore({
     reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
-    devTools: process.env.NODE_ENV !== "production"
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+      serializableCheck: false
+    }),
+    // devTools: process.env.NODE_ENV !== "production"
   })
+  return store
+}
 
 const store = makeStore()
 
