@@ -89,10 +89,10 @@ const SearchBar = ({type}: SearhBarProps) => {
     
 
     const getLocation = (result: any[], status: string) => {
-      const _window = window as any
-      if (_window?.kakao && status === _window.kakao.maps.services.Status.OK) {
+      // const _window = window as any
+      // if (_window?.kakao && status === _window.kakao.maps.services.Status.OK) {
+      if (status === window.kakao.maps.services.Status.OK) {
         const stations = result.filter((e: any) => e.category_group_name === '지하철역')
-        // console.log(stations, selectedStationLine)
 
         if (stations.length === 0) return console.log('지하철역이 아님')
 
@@ -101,7 +101,7 @@ const SearchBar = ({type}: SearhBarProps) => {
         if (selectedStationLine) location = stations.filter((e: any) => selectedStationLine.includes(e.place_name.split(' ')[1]))[0]
           else location = stations[0]
 
-        // console.log(location)
+        console.log(location)
         dispatch(update_station_cd(location.id))
         dispatch(update_location({x: location.y, y: location.x}))
       }
@@ -196,6 +196,7 @@ const SearchBar = ({type}: SearhBarProps) => {
 
   useEffect(()=>{
     if (!kakaoKeywordSearch || !searchedStation) return  // 지도 활성화 여부
+    console.log(kakaoKeywordSearch, searchedStation)
     getLocationOfKeyword()
   }, [kakaoKeywordSearch, searchedStation])
 
