@@ -4,7 +4,7 @@ import React from "react"
 import {QueryClientProvider, QueryClient} from "@tanstack/react-query"
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools"
 import {Provider as Providers} from "react-redux"
-import {makeStore} from "@/lib/store"
+import {store} from "@/lib/store"
 
 const Provider = ({children}: React.PropsWithChildren) => {
   const [client] = React.useState(
@@ -22,7 +22,7 @@ const Provider = ({children}: React.PropsWithChildren) => {
 
   return (
     <QueryClientProvider client={client}>
-      <Providers store={makeStore()}>{children}</Providers>
+      <Providers store={store}>{children}</Providers>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )

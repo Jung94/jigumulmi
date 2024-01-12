@@ -8,6 +8,12 @@ import { BAKERIES } from '@/lib/json/bakery.json'
 import { update_station_cd, update_location } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 type SearhBarProps = {
   type: 'bakery' | 'station'
 }
@@ -43,10 +49,9 @@ const getSearchType = (type: 'bakery' | 'station') => {
 const SearchBar = ({type}: SearhBarProps) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
-  // const pathname = usePathname()
   const searchParams = useSearchParams()
   const searchedStation = searchParams?.get("station")
-  const { kakaoKeywordSearch } = useAppSelector(((state) => state.search))
+  const kakaoKeywordSearch = useAppSelector(((state) => state.search.kakaoKeywordSearch))
 
   const autoRef = useRef<any>(null)
   const [nowIndex, setNowIndex] = useState<number>(-1)
@@ -75,7 +80,6 @@ const SearchBar = ({type}: SearhBarProps) => {
 
   // set URL query parameter - search_query
   const setUrlSearchQuery = (keyword: string) => {
-    console.log('setUrl', searchParams)
     if (!searchParams) return
     const params = new URLSearchParams()
   
@@ -88,10 +92,7 @@ const SearchBar = ({type}: SearhBarProps) => {
     if (value.trim().slice(-1) === '역') _value = value.trim()
       else _value = `${value.trim()}역`
     
-
     const getLocation = (result: any[], status: string) => {
-      // const _window = window as any
-      // if (_window?.kakao && status === _window.kakao.maps.services.Status.OK) {
       if (status === window.kakao.maps.services.Status.OK) {
         const stations = result.filter((e: any) => e.category_group_name === '지하철역')
 
@@ -107,7 +108,7 @@ const SearchBar = ({type}: SearhBarProps) => {
         dispatch(update_location({x: location.y, y: location.x}))
       }
     }
-    kakaoKeywordSearch(_value, getLocation)
+    kakaoKeywordSearch && kakaoKeywordSearch(_value, getLocation)
   }
 
   const selectAutoSearchResult = (index: number = 0) => {
@@ -121,7 +122,6 @@ const SearchBar = ({type}: SearhBarProps) => {
   }
 
   const search = () => {
-    console.log('search-----')
     setUrlSearchQuery(value.trim())  // set URL query parameter - station
   }
 
@@ -166,7 +166,6 @@ const SearchBar = ({type}: SearhBarProps) => {
   }
 
   const getAutoCompleteItem = (e: any, index: number, type: 'station' | 'bakery') => {
-    // console.log(e)
     let children: any
     if (type === 'bakery') children = e[`${type}_nm`]
     if (type === 'station') children = (
@@ -195,10 +194,10 @@ const SearchBar = ({type}: SearhBarProps) => {
   useEffect(()=>{
     setNowIndex(-1)
   }, [value])
-  console.log('outside', kakaoKeywordSearch, searchedStation)
+  
   useEffect(()=>{
-    console.log('searchedStation', searchedStation)
-    if (!kakaoKeywordSearch || !searchedStation) return  // 지도 활성화 여부
+    if (!searchedStation) return  // 지도 활성화 여부
+    
     getLocationOfKeyword()
   }, [kakaoKeywordSearch, searchedStation])
 

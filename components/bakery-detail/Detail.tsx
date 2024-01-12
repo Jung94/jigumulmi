@@ -6,7 +6,7 @@ type Props = {
 }
 
 const BakeryDetail = ({ bakery }: Props) => {
-  console.log(bakery)
+  // console.log(bakery)
 
   return bakery && (
     <div className={styles.card_detail}>

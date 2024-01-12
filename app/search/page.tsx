@@ -14,10 +14,9 @@ export default function SearchPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const selectedBakeryId = searchParams?.get("bakery")
-  const { station_cd } = useAppSelector(((state) => state.search))
+  const station_cd = useAppSelector(((state) => state.search.station_cd))
   const [ bakeries, setBakeries ] = useState<any[]>(BAKERIES)
   const [ bakery, setBakery ] = useState<any>(null)
-  console.log('---search page')
 
   // set URL query parameter - search_query
   const setUrlSearchQuery = (keyword: string) => {
