@@ -11,7 +11,7 @@ const BakeryDetail = ({ bakery }: Props) => {
   return bakery && (
     <div className={styles.card_detail}>
       <div className={styles.card_detail_carousel}>
-        <Image fill src={bakery.image_thum} alt={bakery.bakery_nm} />
+        <Image fill src={bakery.image_thum} alt={bakery.bakery_nm} style={{objectFit: 'cover'}} />
       </div>
       <div className={styles.card_detail_content}>
         <div className={styles.title_wrap}>
