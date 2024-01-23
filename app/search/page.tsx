@@ -7,45 +7,58 @@ import BakeryCard from '@/components/card/Bakery'
 import BakeryDetail from '@/components/bakery-detail/Detail'
 
 import KakaoMap from '@/components/kakaoMap'
-import { useAppSelector } from '@/lib/store/hooks'
+import { update_station_cd } from '@/lib/store/modules/search'
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import { BAKERIES } from '@/lib/json/bakery.json'
 
 export default function SearchPage() {
   const router = useRouter()
+  const dispatch = useAppDispatch()
   const searchParams = useSearchParams()
   const selectedBakeryId = searchParams?.get("bakery")
   const station_cd = useAppSelector(((state) => state.search.station_cd))
-  const [ bakeries, setBakeries ] = useState<any[]>(BAKERIES)
+  const bakeryCode = useAppSelector(((state) => state.search.bakery_cd))
+  const bakeries = useAppSelector(((state) => state.search.bakeries))
+  // const [ bakeries, setBakeries ] = useState<any[]>(BAKERIES)
   const [ bakery, setBakery ] = useState<any>(null)
 
   // set URL query parameter - search_query
-  const setUrlSearchQuery = (keyword: string) => {
-    if (!searchParams) return
-    const params = new URLSearchParams(searchParams)
+  const setUrlSearchQuery = (keyword: string, reset?: boolean) => {
+    let params: any;
+    if (reset) params = new URLSearchParams()
+      else if (!searchParams) return
+      else params = new URLSearchParams(searchParams)
+    // const params = new URLSearchParams(searchParams)
   
     params.set('bakery', keyword)
     router.push(`search?${params.toString()}`)
   }
 
-  useEffect(()=>{
-    if (!station_cd) return
+  // useEffect(()=>{
+  //   if (!station_cd) return
 
-    let list_01: any[] = []
-    let list_02: any[] = []
-    BAKERIES.map((e: any) => {
-      const hasStationOnFirst = !!(e.stations[0].station_cd.find((v: any) => v === station_cd))
-      const hasStationOnSecond = !!(e.stations[1].station_cd.find((v: any) => v === station_cd))
-      if (hasStationOnFirst) list_01.push(e)
-      if (hasStationOnSecond) list_02.push(e)
-    })
-    setBakeries([...list_01, ...list_02])
-  }, [station_cd])
+  //   let list_01: any[] = []
+  //   let list_02: any[] = []
+  //   BAKERIES.map((e: any) => {
+  //     const hasStationOnFirst = !!(e.stations[0].station_cd.find((v: any) => v === station_cd))
+  //     const hasStationOnSecond = !!(e.stations[1].station_cd.find((v: any) => v === station_cd))
+  //     if (hasStationOnFirst) list_01.push(e)
+  //     if (hasStationOnSecond) list_02.push(e)
+  //   })
+  //   setBakeries([...list_01, ...list_02])
+  // }, [station_cd])
 
   useEffect(()=>{
     if (!selectedBakeryId) return setBakery(null)
     const targetBakery = BAKERIES.find(b => b.id === Number(selectedBakeryId))
     setBakery(targetBakery)
   }, [selectedBakeryId])
+
+  useEffect(()=>{
+    if (!bakeryCode) return
+    dispatch(update_station_cd(""))
+    setUrlSearchQuery(String(bakeryCode), true)
+  }, [bakeryCode])
 
 
   return (

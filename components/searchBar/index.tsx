@@ -5,7 +5,7 @@ import styles from './searchBar.module.scss'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { STATIONS } from '@/lib/json/subwayStation.json'
 import { BAKERIES } from '@/lib/json/bakery.json'
-import { update_station_cd, update_location } from '@/lib/store/modules/search'
+import { update_station_cd, update_location, update_bakeries } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 
 declare global {
@@ -51,6 +51,8 @@ const SearchBar = ({type}: SearhBarProps) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const searchedStation = searchParams?.get("station")
+  const stationCode = useAppSelector(((state) => state.search.station_cd))
+  const bakeryCode = useAppSelector(((state) => state.search.bakery_cd))
   const kakaoKeywordSearch = useAppSelector(((state) => state.search.kakaoKeywordSearch))
 
   const autoRef = useRef<any>(null)
@@ -59,6 +61,26 @@ const SearchBar = ({type}: SearhBarProps) => {
   const [value, setValue] = useState<string>(searchedStation ? searchedStation : '')
   const [selectedStationLine, setStationLine] = useState<string>('')
   const [autoCompleteList, setAutoCompleteList] = useState<any[]>([])
+
+  useEffect(()=>{
+    if (!stationCode) return
+
+    let list_01: any[] = []
+    let list_02: any[] = []
+    BAKERIES.map((e: any) => {
+      const hasStationOnFirst = !!(e.stations[0].station_cd.find((v: any) => v === stationCode))
+      const hasStationOnSecond = !!(e.stations[1].station_cd.find((v: any) => v === stationCode))
+      if (hasStationOnFirst) list_01.push(e)
+      if (hasStationOnSecond) list_02.push(e)
+    })
+    dispatch(update_bakeries([...list_01, ...list_02]))
+  }, [stationCode])
+
+  useEffect(()=>{
+    const bakery = BAKERIES.find((e: any) => e.id === bakeryCode)
+    // console.log(bakeryCode, bakery)
+    if (bakery) dispatch(update_bakeries([bakery]))
+  }, [bakeryCode])
 
   // enter 시
   // 1-1. 검색창에 활성화 되어 있을 때
@@ -103,7 +125,7 @@ const SearchBar = ({type}: SearhBarProps) => {
         if (selectedStationLine) location = stations.filter((e: any) => selectedStationLine.includes(e.place_name.split(' ')[1]))[0]
           else location = stations[0]
 
-        console.log(location)
+        // console.log(location)
         dispatch(update_station_cd(location.id))
         dispatch(update_location({x: location.y, y: location.x}))
       }

@@ -3,14 +3,14 @@
 import React, { useState, useEffect } from 'react'
 import styles from './kakaoMap.module.scss'
 import { BAKERIES } from '@/lib/json/bakery.json'
-import { set_kakao_places_func } from '@/lib/store/modules/search'
+import { set_kakao_places_func, update_bakery_cd } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 
 const KakaoMap = () => {
   const dispatch = useAppDispatch()
   const { location } = useAppSelector(((state) => state.search))
   const [map, setMap] = useState<any>(null)
-  const [bakeries, setBakeries] = useState<{name: string, latlng: any}[]>([])
+  const [bakeries, setBakeries] = useState<{id: number, name: string, latlng: any}[]>([])
 
   function panTo(x: string, y: string) {
     // 이동할 위도 경도 위치를 생성합니다 
@@ -44,7 +44,7 @@ const KakaoMap = () => {
         setMap(map)
 
         const positions = BAKERIES.map((e: any) => {
-          return {name: e.bakery_nm, latlng: new kakao.maps.LatLng(e.position.lat, e.position.lng)}
+          return {id: e.id, name: e.bakery_nm, latlng: new kakao.maps.LatLng(e.position.lat, e.position.lng)}
         })
         setBakeries(positions)
 
@@ -78,7 +78,10 @@ const KakaoMap = () => {
 
       // 마커에 클릭 이벤트 등록
       window.kakao.maps.event.addListener(marker, 'click', () => {
-        alert(e.name)
+        // alert(e.id);
+        dispatch(update_bakery_cd(e.id))
+        // const target = BAKERIES.find((b: any) => b.id === e.id)
+        // dispatch(update_bakeries(target.length > 0 ? target : []))
       })
     })
 
