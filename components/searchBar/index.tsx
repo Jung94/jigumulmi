@@ -73,6 +73,7 @@ const SearchBar = ({type}: SearhBarProps) => {
       if (hasStationOnFirst) list_01.push(e)
       if (hasStationOnSecond) list_02.push(e)
     })
+  // console.log(list_01, list_02)
     dispatch(update_bakeries([...list_01, ...list_02]))
   }, [stationCode])
 
