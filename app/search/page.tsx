@@ -34,20 +34,6 @@ export default function SearchPage() {
     router.push(`search?${params.toString()}`)
   }
 
-  // useEffect(()=>{
-  //   if (!station_cd) return
-
-  //   let list_01: any[] = []
-  //   let list_02: any[] = []
-  //   BAKERIES.map((e: any) => {
-  //     const hasStationOnFirst = !!(e.stations[0].station_cd.find((v: any) => v === station_cd))
-  //     const hasStationOnSecond = !!(e.stations[1].station_cd.find((v: any) => v === station_cd))
-  //     if (hasStationOnFirst) list_01.push(e)
-  //     if (hasStationOnSecond) list_02.push(e)
-  //   })
-  //   setBakeries([...list_01, ...list_02])
-  // }, [station_cd])
-
   useEffect(()=>{
     if (!selectedBakeryId) return setBakery(null)
     const targetBakery = BAKERIES.find(b => b.id === Number(selectedBakeryId))
