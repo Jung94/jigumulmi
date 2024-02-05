@@ -99,12 +99,11 @@
       gap: 0.3rem;
 
       .subway_line {
-        width: 1rem;
+        padding: 0 5px;
         height: 1rem;
         color: white;
         font-size: 10px;
-        // border-radius: 2px;
-        background-color: #00a84d;
+        border-radius: 1.5px;
 
         display: flex;
         justify-content: center;
@@ -116,3 +115,24 @@
     }
   }
 }
+
+.line_1호선 { background-color: map.get($--subway-line-bg, "1호선"); }
+.line_2호선 { background-color: map.get($--subway-line-bg, "2호선"); }
+.line_3호선 { background-color: map.get($--subway-line-bg, "3호선"); }
+.line_4호선 { background-color: map.get($--subway-line-bg, "4호선"); }
+.line_5호선 { background-color: map.get($--subway-line-bg, "5호선"); }
+.line_6호선 { background-color: map.get($--subway-line-bg, "6호선"); }
+.line_7호선 { background-color: map.get($--subway-line-bg, "7호선"); }
+.line_8호선 { background-color: map.get($--subway-line-bg, "8호선"); }
+.line_9호선 { background-color: map.get($--subway-line-bg, "9호선"); }
+.line_경의중앙선 { background-color: map.get($--subway-line-bg, "경의중앙선"); }
+.line_신분당선 { background-color: map.get($--subway-line-bg, "신분당선"); }
+.line_수인분당선 { background-color: map.get($--subway-line-bg, "수인분당선"); }
+.line_공항철도 { background-color: map.get($--subway-line-bg, "공항철도"); }
+.line_인천1호선 { background-color: map.get($--subway-line-bg, "인천1호선"); }
+.line_인천2호선 { background-color: map.get($--subway-line-bg, "인천2호선"); }
+.line_의정부경전철 { background-color: map.get($--subway-line-bg, "의정부경전철"); }
+.line_우이신설선 { background-color: map.get($--subway-line-bg, "우이신설선"); }
+.line_김포골드라인 { background-color: map.get($--subway-line-bg, "김포골드라인"); }
+.line_용인에버라인 { background-color: map.get($--subway-line-bg, "용인에버라인"); }
+.line_신림선 { background-color: map.get($--subway-line-bg, "신림선"); }

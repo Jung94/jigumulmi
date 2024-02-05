@@ -7,6 +7,12 @@ type Props = {
 }
 
 const BakeryCard = ({ bakery, onClick }: Props) => {
+  
+  const changeLineName = (name: string) => {
+    if (name.includes('호선')) return name.replace('호선', '')
+    if (name.includes('선')) return name.replace('선', '')
+  }
+
   return (
     <div className={styles.bakery_card} onClick={()=>onClick(bakery.id)}>
       <div className={styles.card_image}>
@@ -23,7 +29,7 @@ const BakeryCard = ({ bakery, onClick }: Props) => {
           </div>
         </div>
         <div className={styles.bottom}>
-          <div className={styles.subway_line}>2</div>
+          <div className={`${styles.subway_line} ${styles[`line_${bakery.stations[0].line_num}`]}`}>{changeLineName(bakery.stations[0].line_num)}</div>
           <div className={styles.subway_station}>{bakery.stations[0].station_nm}</div>
         </div>
       </div>
