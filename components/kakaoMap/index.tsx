@@ -78,10 +78,7 @@ const KakaoMap = () => {
 
       // 마커에 클릭 이벤트 등록
       window.kakao.maps.event.addListener(marker, 'click', () => {
-        // alert(e.id);
         dispatch(update_bakery_cd(e.id))
-        // const target = BAKERIES.find((b: any) => b.id === e.id)
-        // dispatch(update_bakeries(target.length > 0 ? target : []))
       })
     })
 
