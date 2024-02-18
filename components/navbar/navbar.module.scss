@@ -7,8 +7,9 @@
   }
 
   @media (width <= 1100px) {
-    position: -webkit-sticky; /* 사파리 브라우저 지원 */
-    position: sticky;
+    position: fixed;
+    left: 0;
+    right: 0;
     bottom: 0px;
     height: $--navbar-height;
     list-style: none;

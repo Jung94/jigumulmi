@@ -50,8 +50,11 @@
   }
 
   @media (width <= 1100px) {
-    // border: 1px solid red;
-    height: calc(100vh - $--header-height-mobile - $--navbar-height - 2px); // 2px : header's border-bottom
+    position: fixed;
+    top: $--header-height-mobile;
+    left: 0;
+    right: 0;
+    bottom: $--navbar-height;
 
     .map {
       // border: 1px solid blue;

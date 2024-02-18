@@ -71,13 +71,17 @@ export default function SearchPage() {
             </button>
           </div>
         }
+
       </div>
 
       {/* Mobile ver */}
       {windowSize.width <= 1100 &&
-        <BottomSheet>
-          <SearchContent bakeries={bakeries} setUrlSearchQuery={setUrlSearchQuery} />
-        </BottomSheet>
+        <>
+          <BakeryDetail bakery={bakery} />
+          <BottomSheet>
+            <SearchContent bakeries={bakeries} setUrlSearchQuery={setUrlSearchQuery} />
+          </BottomSheet>
+        </>
       }
     </>
   )
