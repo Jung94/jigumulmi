@@ -1,116 +1,232 @@
 @use "sass:map";
 @import "styles/_variables.scss";
 
-.bakery_card {
-  background-color: map.get($--colors, "off-white");
-  border: 1.5px solid #222;
-  max-height: 9rem;
-  display: flex;
-  justify-content: space-between;
-  transition: all 0.12s;
-
-  &:hover {
-    opacity: 0.95;
-
-    .card_image { opacity: 0.9; }
-  }
-
-  .card_image {
-    border-right: 1.5px solid #222;
-    position: relative;
-    width: 50%;
+@media (1100px < width) {
+  .bakery_card {
+    background-color: map.get($--colors, "off-white");
+    border: 1.5px solid #222;
+    max-height: 9rem;
+    display: flex;
+    justify-content: space-between;
     transition: all 0.12s;
-    cursor: pointer;
-
-    &::after {
-      display: block;
-      content: '';
-      padding-bottom: 75%;
-      // padding-bottom: 100%;  // 정사각형
+  
+    &:hover {
+      opacity: 0.95;
+  
+      .card_image { opacity: 0.9; }
+    }
+  
+    .card_image {
+      border-right: 1.5px solid #222;
+      position: relative;
+      width: 50%;
+      transition: all 0.12s;
+      cursor: pointer;
+  
+      &::after {
+        display: block;
+        content: '';
+        padding-bottom: 75%;
+        // padding-bottom: 100%;  // 정사각형
+      }
+    }
+    .image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .card_info_wrap {
+      padding: 0.5rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.6rem;
+      width: 100%;
+      cursor: pointer;
+  
+      .top {
+        // border: 1px solid red;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+  
+        .left {
+          // border: 1px solid red;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          
+          .card_title {
+            // border: 1px solid blue;
+            font-size: 1rem;
+            font-weight: 600;
+          }
+          .card_desc {
+            // border: 1px solid blue;
+            font-size: 0.75rem;
+            font-weight: 400;
+          }
+        }
+  
+        .right{
+          min-width: fit-content;
+  
+          .status {
+            font-size: 0.75rem;
+            border-radius: 4px;
+          }
+          .open {
+            color: #222;
+          }
+          .close {
+            color: map.get($--colors, "brick-red");
+          }
+          .status_01 {
+            padding: 0.1rem 0.3rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid #222;
+            background-color: map.get($--colors, "park-green");
+          }
+        }
+      }
+      .bottom {
+        // border: 1px solid blue;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.3rem;
+  
+        .subway_line {
+          padding: 1px 5px 0;
+          height: 1rem;
+          color: white;
+          font-size: 10px;
+          border-radius: 1.5px;
+  
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .subway_station {
+          font-size: 11px;
+        }
+      }
     }
   }
-  .image {
-    position: absolute;
-    width: 100%;
+}
+
+@media (width <= 1100px) {
+  .bakery_card {
+    background-color: map.get($--colors, "off-white");
+    border: 1.5px solid #222;
     height: 100%;
-    object-fit: cover;
-  }
-  .card_info_wrap {
-    padding: 0.5rem 0.75rem;
+    width: 15rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 0.6rem;
-    width: 100%;
-    cursor: pointer;
-
-    .top {
-      // border: 1px solid red;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-
-      .left {
-        // border: 1px solid red;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        
-        .card_title {
-          // border: 1px solid blue;
-          font-size: 1rem;
-          font-weight: 600;
-        }
-        .card_desc {
-          // border: 1px solid blue;
-          font-size: 0.75rem;
-          font-weight: 400;
-        }
-      }
-
-      .right{
-        min-width: fit-content;
-
-        .status {
-          font-size: 0.75rem;
-          border-radius: 4px;
-        }
-        .open {
-          color: #222;
-        }
-        .close {
-          color: map.get($--colors, "brick-red");
-        }
-        .status_01 {
-          padding: 0.1rem 0.3rem;
-          font-size: 0.8rem;
-          font-weight: 500;
-          border: 1px solid #222;
-          background-color: map.get($--colors, "park-green");
-        }
+    transition: all 0.12s;
+  
+    .card_image {
+      position: relative;
+      width: 100%;
+      transition: all 0.12s;
+      border-bottom: 1.5px solid #222;
+  
+      &::after {
+        display: block;
+        content: '';
+        padding-bottom: 75%;
+        // padding-bottom: 100%;  // 정사각형
       }
     }
-    .bottom {
-      // border: 1px solid blue;
+    .image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .card_info_wrap {
+      padding: 0.5rem 0.75rem;
       display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 0.3rem;
-
-      .subway_line {
-        padding: 0 5px;
-        height: 1rem;
-        color: white;
-        font-size: 10px;
-        border-radius: 1.5px;
-
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.6rem;
+      width: 100%;
+      height: 100%;
+  
+      .top {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: space-between;
+        align-items: flex-start;
+  
+        .left {
+          // border: 1px solid red;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          gap: 2px;
+          
+          .card_title {
+            // border: 1px solid blue;
+            font-size: 18px;
+            font-weight: 600;
+          }
+          .card_desc {
+            // border: 1px solid blue;
+            font-size: 14px;
+            font-weight: 400;
+          }
+        }
+  
+        .right{
+          min-width: fit-content;
+  
+          .status {
+            font-size: 0.75rem;
+            border-radius: 4px;
+          }
+          .open {
+            color: #222;
+          }
+          .close {
+            color: map.get($--colors, "brick-red");
+          }
+          .status_01 {
+            padding: 0.1rem 0.3rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid #222;
+            background-color: map.get($--colors, "park-green");
+          }
+        }
       }
-      .subway_station {
-        font-size: 11px;
+      .bottom {
+        // border: 1px solid blue;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.4rem;
+  
+        .subway_line {
+          padding: 1px 6px 0;
+          min-width: 20px;
+          height: 20px;
+          color: white;
+          font-size: 13px;
+          border-radius: 1.5px;
+  
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .subway_station {
+          padding-top: 1px;
+          color: #222;
+          font-size: 14px;
+        }
       }
     }
   }

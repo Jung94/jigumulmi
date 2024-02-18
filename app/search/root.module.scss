@@ -2,58 +2,76 @@
 @import "styles/_variables.scss";
 
 .container {
-  height: calc(100vh - $--header-height - 2px); // 2px : header's border-bottom
   background-color: map.get($--colors, "off-white");
 
   display: grid;
-  grid-template-columns: 1fr 380px;
-  // grid-template-columns: 1.618fr 1fr;
   overflow: hidden;
 
-  .map {
-    border-right: 2px solid #666;
+  @media (1100px < width) {
+    height: calc(100vh - $--header-height-pc - 2px); // 2px : header's border-bottom
+    grid-template-columns: 1fr 380px;
+
+    .map {
+      border-right: 2px solid #666;
+    }
+
+    .bakeries_wrap {
+      display: flex;
+      justify-content: flex-end;
+      background-color: map.get($--colors, "blush");
+      overflow-y: hidden;
+
+      .cards {
+        width: 380px;
+        padding: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        overflow-y: auto;
+      }
+    
+      .floating_button {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .registration_bakery {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 20rem;
+        border: 1.5px solid #222;
+        // background-color: map.get($--colors, "crystal-blue");
+        background-color: map.get($--colors, "desert-gold");
+      }
+    }
   }
 
-  .bakeries_wrap {
-    display: flex;
-    justify-content: flex-end;
-    background-color: map.get($--colors, "blush");
-    overflow-y: hidden;
-    
-    .cards {
-      width: 380px;
-      padding: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      overflow-y: auto;
+  @media (width <= 1100px) {
+    // border: 1px solid red;
+    height: calc(100vh - $--header-height-mobile - $--navbar-height - 2px); // 2px : header's border-bottom
+
+    .map {
+      // border: 1px solid blue;
     }
-  
-    .floating_button {
-      position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .registration_bakery {
-      width: 3rem;
-      height: 3rem;
-      border-radius: 20rem;
-      border: 1.5px solid #222;
-      // background-color: map.get($--colors, "crystal-blue");
-      background-color: map.get($--colors, "desert-gold");
+
+    .bakeries_wrap {
+      display: none;
     }
   }
 }
 
 .hasDetail {
-  grid-template-columns: 2fr 760px;
+  @media (1100px < width) {
+    grid-template-columns: 2fr 760px;
+  }
+  
+  @media (width <= 1100px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 // 지하철 호선 색상
 // https://namu.wiki/w/%EC%88%98%EB%8F%84%EA%B6%8C%20%EC%A0%84%EC%B2%A0%201%ED%98%B8%EC%84%A0
-
-// #0052a4 - 1호선
-// #00a84d - 2호선

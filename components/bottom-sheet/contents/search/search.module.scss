@@ -1,0 +1,23 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+.search {
+  height: $--search-height;
+  border-bottom: 1.5px solid #222;
+}
+
+.bakery_cards_wrapper {
+  height: calc($--wrapper-height - $--header-height - $--search-height);
+  background-color: map.get($--colors, "blush");
+  overflow-x: auto;
+
+  .bakery_cards {
+    padding: $--padding--mobile;
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: $--padding--mobile;
+  }
+}

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './searchBar.module.scss'
+import { useWindowSize } from '@/lib/hooks'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { STATIONS } from '@/lib/json/subwayStation.json'
 import { BAKERIES } from '@/lib/json/bakery.json'
@@ -14,11 +15,18 @@ declare global {
   }
 }
 
-type SearhBarProps = {
+type SearchBarProps = {
   type: 'bakery' | 'station'
 }
 
 const searchTypes = [
+  {
+    id: 'search', 
+    name: 'search', 
+    placeholder: '지하철역',
+    json: STATIONS,
+    icon: <svg width="21px" height="21px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M9.609 7h4.782A2.609 2.609 0 0117 9.609a.391.391 0 01-.391.391H7.39A.391.391 0 017 9.609 2.609 2.609 0 019.609 7z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 3h6a6 6 0 016 6v4a6 6 0 01-6 6H9a6 6 0 01-6-6V9a6 6 0 016-6zM16 15.01l.01-.011M8 15.01l.01-.011" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M10.5 19l-2 2.5M13.5 19l2 2.5M16.5 19l2 2.5M7.5 19l-2 2.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round"></path></svg>
+  },
   {
     id: 'station', 
     name: 'station', 
@@ -46,9 +54,10 @@ const getSearchType = (type: 'bakery' | 'station') => {
   return searchTypes.find((e: any) => e.name === type)
 }
 
-const SearchBar = ({type}: SearhBarProps) => {
+const SearchBar = ({type}: SearchBarProps) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const windowSize = useWindowSize()
   const searchParams = useSearchParams()
   const searchedStation = searchParams?.get("station")
   const stationCode = useAppSelector(((state) => state.search.station_cd))
@@ -119,7 +128,7 @@ const SearchBar = ({type}: SearhBarProps) => {
       if (status === window.kakao.maps.services.Status.OK) {
         const stations = result.filter((e: any) => e.category_group_name === '지하철역')
 
-        if (stations.length === 0) return console.log('지하철역이 아님')
+        // if (stations.length === 0) return alert('해당 검색어의 지하철역이 존재하지 않습니다.')
 
         let location: any
 
@@ -158,6 +167,7 @@ const SearchBar = ({type}: SearhBarProps) => {
         else selectAutoSearchResult()  // 자동 검색 박스 안에 있을 때
 
       setAutoCompleteList([])
+      document.querySelector("input")?.blur();  // input focus를 삭제하여 모바일 키보드 이동(return) 클릭시 키보드 닫힘
     }
 
     if (autoCompleteList.length > 0) {
@@ -227,9 +237,21 @@ const SearchBar = ({type}: SearhBarProps) => {
 
   return (
     <div className={styles.container}>
-      <input type='text' placeholder={searchType.placeholder} value={value} onChange={getValue} onKeyDown={handleKeyArrow} />
-      <div className={styles.search_icon} onClick={search}>{searchType.icon}</div>
-
+      {1100 < windowSize.width
+       ? ( // PC
+        <>
+          <input type='text' placeholder={searchType.placeholder} value={value} onChange={getValue} onKeyDown={handleKeyArrow} />
+          <div className={styles.search_icon} onClick={search}>{searchType.icon}</div>
+        </>
+       )
+       : ( // Mobile
+        <>
+          <div className={styles.search_icon} onClick={search}>{searchType.icon}</div>
+          <input type='text' placeholder={searchType.placeholder} value={value} onChange={getValue} onKeyDown={handleKeyArrow} />
+        </>
+       )
+      }
+      
       {autoCompleteList.length > 0 &&
         <ul className={styles.auto_complete} ref={autoRef}>
           {autoCompleteList.map((e: any, index: number) => getAutoCompleteItem(e, index, searchType.name)

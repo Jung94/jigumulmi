@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from "@/lib/utils/Provider"
 import Header from '@/components/header'
+import Navbar from '@/components/navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,6 +20,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         <Providers>
           <Header />
           {children}
+          <Navbar />
         </Providers>
       </body>
     </html>

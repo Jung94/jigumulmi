@@ -1,0 +1,45 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+@media (width <= 1100px) {
+  .wrapper {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc($--navbar-height + $--header-height + $--search-height - $--wrapper-height);
+    height: $--wrapper-height;
+
+    transition: transform 150ms ease-out;
+    border-top: 1.5px solid #222;
+    background-color: map.get($--colors, "off-white");
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 10px 5px;
+    z-index: 100;
+
+    .header {
+      // border: 1px solid orange;
+      height: $--header-height;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .handlebar {
+        width: 3.5rem;
+        height: 1.5px;
+        background-color: #222;
+      }
+    }
+
+    .content {
+      height: 100%;
+
+      .search {
+        height: $--search-height;
+        border-bottom: 1px solid #222;
+      }
+    }
+  }
+}
+
+@media (1100px < width) {
+  .wrapper { display: none; }
+}

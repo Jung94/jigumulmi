@@ -23,7 +23,7 @@ const Provider = ({children}: React.PropsWithChildren) => {
   return (
     <QueryClientProvider client={client}>
       <Providers store={store}>{children}</Providers>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   )
 }

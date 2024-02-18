@@ -7,7 +7,7 @@
 }
 
 .container {
-  height: calc(100vh - $--header-height - 2px); // 2px : header's border-bottom
+  height: calc(100vh - $--header-height-pc - 2px); // 2px : header's border-bottom
   background-color: map.get($--colors, "off-white");
 
   display: grid;

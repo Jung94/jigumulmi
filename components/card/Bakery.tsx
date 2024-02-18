@@ -3,7 +3,7 @@ import styles from './Bakery.module.scss'
 
 type Props = {
   bakery: any
-  onClick: (keyword: string)=>void
+  onClick: (bakeryId: number)=>void
 }
 
 const BakeryCard = ({ bakery, onClick }: Props) => {
@@ -24,9 +24,9 @@ const BakeryCard = ({ bakery, onClick }: Props) => {
             <div className={styles.card_title}>{bakery.bakery_nm}</div>
             <div className={styles.card_desc}>비건 성지순례 오세요!</div>
           </div>
-          <div className={styles.right}>
+          {/* <div className={styles.right}>
             <div className={`${styles.status} ${styles.open}`}>영업 중</div>
-          </div>
+          </div> */}
         </div>
         <div className={styles.bottom}>
           <div className={`${styles.subway_line} ${styles[`line_${bakery.stations[0].line_num}`]}`}>{changeLineName(bakery.stations[0].line_num)}</div>
