@@ -1,14 +1,16 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styles from './kakaoMap.module.scss'
 import { BAKERIES } from '@/lib/json/bakery.json'
-import { set_kakao_places_func, update_bakery_cd } from '@/lib/store/modules/search'
+import { set_kakao_places_func, update_bakery_cd, update_location } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 
 const KakaoMap = () => {
   const dispatch = useAppDispatch()
-  const { location } = useAppSelector(((state) => state.search))
+  const location = useAppSelector(((state) => state.search.location))
+  const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown))
+  const mapRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<any>(null)
   const [bakeries, setBakeries] = useState<{id: number, name: string, latlng: any}[]>([])
 
@@ -84,8 +86,19 @@ const KakaoMap = () => {
 
   }, [bakeries, map])
 
+  // 모바일 환경에서 bottom sheet 열기/닫기 이벤트에 따라 지도의 중심 이동
+  useEffect(()=>{
+    if (isShownBottomSheet) {
+      // const mapHeight = mapRef.current?.offsetHeight
+      // console.log(String(parseFloat(location.x) - 0.025), mapHeight / 5)
+      dispatch(update_location({x: String(parseFloat(location.x) - 0.025), y: location.y}))
+    } else if (isShownBottomSheet === false) {
+      dispatch(update_location({x: String(parseFloat(location.x) + 0.025), y: location.y}))
+    }
+  }, [isShownBottomSheet])
+
   return (
-    <div id='kakao_map' className={styles.container}></div>
+    <div ref={mapRef} id='kakao_map' className={styles.container}></div>
   )
 }
 

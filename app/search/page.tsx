@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useWindowSize } from '@/lib/hooks'
 import styles from './root.module.scss'
@@ -20,7 +20,6 @@ export default function SearchPage() {
   const windowSize = useWindowSize()
   const searchParams = useSearchParams()
   const selectedBakeryId = searchParams?.get("bakery")
-  const station_cd = useAppSelector(((state) => state.search.station_cd))
   const bakeryCode = useAppSelector(((state) => state.search.bakery_cd))
   const bakeries = useAppSelector(((state) => state.search.bakeries))
   const [ bakery, setBakery ] = useState<any>(null)

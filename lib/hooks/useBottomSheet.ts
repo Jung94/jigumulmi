@@ -1,4 +1,8 @@
+"use client";
+
 import { useRef, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { update_is_shown } from '../store/modules/bottom-sheet';
 
 interface BottomSheetMetrics {
   touchStart: {
@@ -13,6 +17,7 @@ interface BottomSheetMetrics {
 }
 
 const useBottomSheet = () => {
+  const dispatch = useAppDispatch();
   const navbar = 68;
   const wrapperHeight = 400; // 400  25
   const headerHeight = 25; // 32  2
@@ -24,6 +29,7 @@ const useBottomSheet = () => {
 
   const sheetRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  // const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown));
   
   const metrics = useRef<BottomSheetMetrics>({
     touchStart: {
@@ -119,12 +125,13 @@ const useBottomSheet = () => {
 
       if (canUserMoveBottomSheet()) {
         if (touchMove.movingDirection === 'down') {
+          dispatch(update_is_shown(false));
           sheetRef.current.style.setProperty('transform', 'translateY(0)');
           metrics.current = { ...metrics.current, status: "close" };
         }
     
         if (touchMove.movingDirection === 'up') {
-          // sheetRef.current.style.setProperty('transform', `translateY(${MIN_Y - MAX_Y}px)`);
+          dispatch(update_is_shown(true));
           sheetRef.current.style.setProperty('transform', `translateY(-${wrapperHeight - headerHeight - searchHeight}px)`);
           metrics.current = { ...metrics.current, status: "open" }
         }
