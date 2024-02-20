@@ -91,9 +91,9 @@ const KakaoMap = () => {
     if (isShownBottomSheet) {
       // const mapHeight = mapRef.current?.offsetHeight
       // console.log(String(parseFloat(location.x) - 0.025), mapHeight / 5)
-      dispatch(update_location({x: String(parseFloat(location.x) - 0.025), y: location.y}))
+      dispatch(update_location({x: String(parseFloat(location.x) - 0.03), y: location.y}))
     } else if (isShownBottomSheet === false) {
-      dispatch(update_location({x: String(parseFloat(location.x) + 0.025), y: location.y}))
+      dispatch(update_location({x: String(parseFloat(location.x) + 0.03), y: location.y}))
     }
   }, [isShownBottomSheet])
 
