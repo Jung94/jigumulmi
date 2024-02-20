@@ -26,7 +26,6 @@ export default function SearchPage() {
 
   // set URL query parameter - search_query
   const setUrlSearchQuery = (bakeryId: number, reset?: boolean) => {
-    console.log(bakeryId)
     let params: any;
     if (reset) params = new URLSearchParams()
       else if (!searchParams) return
