@@ -3,22 +3,27 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import styles from './Detail.module.scss'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 type Props = {
   bakery: any
 }
 
 const BakeryDetail = ({ bakery }: Props) => {
-  const [ isShownDetail, setIsShownDetail ] = useState<boolean>(true)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  useEffect(()=>{
-    if (!isShownDetail) setIsShownDetail(true)
-  }, [bakery])
+  const closeDetailOnMobile = () => {
+    if (!searchParams) return
+    const params = new URLSearchParams(searchParams)
+    params.delete("bakery")
+    router.push(`search?${params.toString()}`)
+  }
 
-  return bakery && isShownDetail && (
+  return bakery && (
     <div className={styles.card_detail}>
       <div className={styles.header}>
-        <div className={styles.icon_close} onClick={() => setIsShownDetail(false)}>
+        <div className={styles.icon_close} onClick={closeDetailOnMobile}>
           <svg width="28px" height="28px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
             <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
           </svg>
