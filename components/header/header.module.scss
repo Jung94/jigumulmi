@@ -21,7 +21,6 @@
   @media (width <= 1100px) { border-bottom: 1.5px solid #222; }
 
   header {
-    padding: 0 1.5rem;
     width: 100%;
 
     nav {
@@ -31,6 +30,8 @@
     }
 
     @media (1100px < width) {
+      padding: 0 1.5rem;
+
       .nav {
         height: $--header-height-pc;
         justify-content: space-between;
@@ -56,14 +57,18 @@
     @media (width <= 1100px) {
       .nav {
         height: $--header-height-mobile;
-        justify-content: center;
+        justify-content: space-between;
   
         .links {
-          padding: 4px 8px;
+          padding: 6px $--padding--mobile;
   
           .logo {
             font-size: 0.95rem;
             font-weight: 600;
+          }
+          .registration {
+            color: #222;
+            font-size: 14px;
           }
         }
 
