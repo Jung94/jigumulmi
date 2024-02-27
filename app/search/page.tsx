@@ -10,8 +10,8 @@ import BottomSheet from '@/components/bottom-sheet'
 import { SearchContent } from '@/components/bottom-sheet/contents'
 
 import KakaoMap from '@/components/kakaoMap'
-import { update_station_cd } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
+import { update_station_cd } from '@/lib/store/modules/search'
 import { BAKERIES } from '@/lib/json/bakery.json'
 
 export default function SearchPage() {
@@ -42,6 +42,7 @@ export default function SearchPage() {
   }, [selectedBakeryId])
 
   useEffect(()=>{
+    console.log(bakeryCode)
     if (!bakeryCode) return
     dispatch(update_station_cd(""))
     setUrlSearchQuery(bakeryCode, true)

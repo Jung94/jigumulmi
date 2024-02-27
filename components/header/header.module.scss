@@ -56,12 +56,12 @@
 
     @media (width <= 1100px) {
       .nav {
-        padding-right: $--padding--mobile;
+        padding: 8px $--padding--mobile;
         height: $--header-height-mobile;
         justify-content: space-between;
   
         .links {
-          padding: 6px $--padding--mobile;
+          padding: 6px $--padding--mobile 6px 0;
   
           .logo {
             font-size: 0.95rem;
@@ -80,9 +80,9 @@
           background-color: map.get($--colors, "blush");
         }
 
-        .buttons {
-          display: none;
-        }
+        // .buttons {
+        //   display: none;
+        // }
       }
     }
   }

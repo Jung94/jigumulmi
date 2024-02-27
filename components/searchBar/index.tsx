@@ -6,8 +6,9 @@ import { useWindowSize } from '@/lib/hooks'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { STATIONS } from '@/lib/json/subwayStation.json'
 import { BAKERIES } from '@/lib/json/bakery.json'
-import { update_station_cd, update_location, update_bakeries } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
+import { update_station_cd, update_location, update_bakeries } from '@/lib/store/modules/search'
+import { update_is_shown } from '@/lib/store/modules/bottom-sheet'
 
 declare global {
   interface Window {
@@ -32,7 +33,8 @@ const searchTypes = [
     name: 'station', 
     placeholder: '지하철역',
     json: STATIONS,
-    icon: <svg width="21px" height="21px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M9.609 7h4.782A2.609 2.609 0 0117 9.609a.391.391 0 01-.391.391H7.39A.391.391 0 017 9.609 2.609 2.609 0 019.609 7z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 3h6a6 6 0 016 6v4a6 6 0 01-6 6H9a6 6 0 01-6-6V9a6 6 0 016-6zM16 15.01l.01-.011M8 15.01l.01-.011" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M10.5 19l-2 2.5M13.5 19l2 2.5M16.5 19l2 2.5M7.5 19l-2 2.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round"></path></svg>
+    icon: <svg width="23px" height="23px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M17 17L21 21" stroke="#333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z" stroke="#333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+    // icon: <svg width="21px" height="21px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M9.609 7h4.782A2.609 2.609 0 0117 9.609a.391.391 0 01-.391.391H7.39A.391.391 0 017 9.609 2.609 2.609 0 019.609 7z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 3h6a6 6 0 016 6v4a6 6 0 01-6 6H9a6 6 0 01-6-6V9a6 6 0 016-6zM16 15.01l.01-.011M8 15.01l.01-.011" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M10.5 19l-2 2.5M13.5 19l2 2.5M16.5 19l2 2.5M7.5 19l-2 2.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round"></path></svg>
   },
   {
     id: 'bakery', 
@@ -84,12 +86,15 @@ const SearchBar = ({type}: SearchBarProps) => {
     })
   // console.log(list_01, list_02)
     dispatch(update_bakeries([...list_01, ...list_02]))
+    dispatch(update_is_shown(true))
   }, [stationCode])
 
   useEffect(()=>{
     const bakery = BAKERIES.find((e: any) => e.id === bakeryCode)
     // console.log(bakeryCode, bakery)
-    if (bakery) dispatch(update_bakeries([bakery]))
+    if (bakery) {
+      dispatch(update_bakeries([bakery]))
+    }
   }, [bakeryCode])
 
   // enter 시
@@ -137,7 +142,8 @@ const SearchBar = ({type}: SearchBarProps) => {
 
         // console.log(location)
         dispatch(update_station_cd(location.id))
-        dispatch(update_location({x: location.y, y: location.x}))
+        dispatch(update_location({x: String(parseFloat(location.y) - 0.025), y: location.x}))
+        // dispatch(update_location({x: location.y, y: location.x}))
       }
     }
     kakaoKeywordSearch && kakaoKeywordSearch(_value, getLocation)
@@ -246,8 +252,8 @@ const SearchBar = ({type}: SearchBarProps) => {
        )
        : ( // Mobile
         <>
-          <div className={styles.search_icon} onClick={search}>{searchType.icon}</div>
           <input type='text' placeholder={searchType.placeholder} value={value} onChange={getValue} onKeyDown={handleKeyArrow} />
+          <div className={styles.search_icon} onClick={search}>{searchType.icon}</div>
         </>
        )
       }

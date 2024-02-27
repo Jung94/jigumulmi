@@ -19,7 +19,7 @@ interface BottomSheetMetrics {
 const useBottomSheet = () => {
   const dispatch = useAppDispatch();
   const wrapperHeight = 360;
-  const headerHeight = 40;
+  const headerHeight = 30;
   const searchHeight = 45;
   // const MIN_Y = 200; // 바텀시트가 최대로 높이 올라갔을 때의 y 값
   const MIN_Y = innerHeight - wrapperHeight; // 바텀시트가 최대로 높이 올라갔을 때의 y 값
@@ -28,7 +28,7 @@ const useBottomSheet = () => {
 
   const sheetRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown));
+  // const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown));
   
   const metrics = useRef<BottomSheetMetrics>({
     touchStart: {
@@ -180,12 +180,6 @@ const useBottomSheet = () => {
       contentRef.current.removeEventListener('touchstart', handleTouchStart);
     }
   }, []);
-
-  useEffect(()=>{
-    console.log(isShownBottomSheet)
-    if (isShownBottomSheet) sheetRef.current?.style.setProperty('transform', `translateY(-${wrapperHeight}px)`);
-      else sheetRef.current?.style.setProperty('transform', 'translateY(0)');
-  }, [isShownBottomSheet])
   
   return { sheetRef, contentRef };
 };
