@@ -12,11 +12,21 @@ const SearchContent = ({
 }: Props) => {
   return (
     <div className={styles.bakery_cards_wrapper}>
-      <div className={styles.bakery_cards}>
-        {bakeries.map((bakery: any) => (
-          <BakeryCard key={bakery.id} bakery={bakery} onClick={setUrlSearchQuery} />
-        ))}
-      </div>
+      {bakeries.length > 0 
+        ? (
+          <div className={styles.bakery_cards}>
+            {bakeries.map((bakery: any) => (
+              <BakeryCard key={bakery.id} bakery={bakery} onClick={setUrlSearchQuery} />
+            ))}
+          </div>
+        )
+        : (
+          <div className={styles.empty_msg}>
+            <div>등록된 베이커리가 없어요.. </div>
+            <div>직접 베이커리를 등록해 주세요!</div>
+          </div>
+        )
+      }
     </div>
   );
 };

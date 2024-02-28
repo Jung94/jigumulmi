@@ -15,18 +15,18 @@ const Header = () => {
           <button className={styles.links}>
             <div className={styles.logo}>JIGUMULMI</div>
           </button>
-
-          {/* Mobile */}
-          {windowSize.width <= 1100 &&
-            <SearchBar type='station' />
-          }
-
+          
           {/* PC */}
           {1100 < windowSize.width &&
             <div className={styles.buttons}>
               <SearchBar type='station' />
               {/* <SearchBar type='bakery' /> */}
             </div>
+          }
+
+          {/* Mobile */}
+          {windowSize.width <= 1100 &&
+            <SearchBar type='station' />
           }
         </nav>
       </header>

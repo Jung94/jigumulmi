@@ -37,13 +37,14 @@ export default function SearchPage() {
 
   useEffect(()=>{
     if (!selectedBakeryId) return setBakery(null)
+    
     const targetBakery = BAKERIES.find(b => b.id === Number(selectedBakeryId))
     setBakery(targetBakery)
   }, [selectedBakeryId])
 
   useEffect(()=>{
-    console.log(bakeryCode)
     if (!bakeryCode) return
+
     dispatch(update_station_cd(""))
     setUrlSearchQuery(bakeryCode, true)
   }, [bakeryCode])
