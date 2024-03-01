@@ -6,11 +6,18 @@
 body {
   font-size: 14px;
 }
+textarea,
 button,
 input,
 a {
   all: unset;
   box-sizing: border-box;
+}
+textarea,
+input {
+  @media (width <= 1100px) {
+    font-size: 16px;
+  }
 }
 button { cursor: pointer; }
 input[type="number"]::-webkit-outer-spin-button,

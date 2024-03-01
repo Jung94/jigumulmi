@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
+import { useIsSSR } from '@/lib/hooks';
 
 const useWindowSize = () => {
+  const isSSR = useIsSSR();
   const [ windowSize, setWindowSize ] = useState<{
     width: number
     height: number
   }>({
-    width: window.innerWidth ?? 0,
-    height: window.innerHeight ?? 0
+    width: isSSR ? 0 : window.innerWidth,
+    height: isSSR ? 0 : window.innerHeight
   });
 
   const updateWindowSize = () => {
@@ -17,6 +19,7 @@ const useWindowSize = () => {
   };
 
   useEffect(() => {
+    updateWindowSize();
     window.addEventListener("resize", updateWindowSize);
     
     return () => {

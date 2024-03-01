@@ -14,6 +14,10 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import { update_station_cd } from '@/lib/store/modules/search'
 import { BAKERIES } from '@/lib/json/bakery.json'
 
+import { useModal } from '@/lib/hooks'
+import RegistrationBakeryContent from '@/components/modal/registration-bakery/Content'
+import { registerBakery } from './actions'
+
 export default function SearchPage() {
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -35,9 +39,19 @@ export default function SearchPage() {
     router.push(`search?${params.toString()}`)
   }
 
+  const handleSubmitBakery = (formData: FormData) => {
+    registerBakery(formData)
+    console.log(111)
+  }
+
+  const RegistrationBakeryModal = useModal(
+    <RegistrationBakeryContent onSubmit={handleSubmitBakery} /> 
+  )
+  const handleOpenRegistrationBakeryModal = () => { RegistrationBakeryModal.open() }
+
   useEffect(()=>{
     if (!selectedBakeryId) return setBakery(null)
-    
+
     const targetBakery = BAKERIES.find(b => b.id === Number(selectedBakeryId))
     setBakery(targetBakery)
   }, [selectedBakeryId])
@@ -66,7 +80,10 @@ export default function SearchPage() {
               ))}
             </div>
             
-            <button className={`${styles.floating_button} ${styles.registration_bakery}`}>
+            <button 
+              className={`${styles.floating_button} ${styles.registration_bakery}`}
+              onClick={handleOpenRegistrationBakeryModal}
+            >
               <svg width="30px" height="30px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M6 12h6m6 0h-6m0 0V6m0 6v6" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
             </button>
           </div>
@@ -78,11 +95,12 @@ export default function SearchPage() {
       {windowSize.width <= 1100 &&
         <>
           <BakeryDetail bakery={bakery} />
-          <BottomSheet>
+          <BottomSheet handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
             <SearchContent bakeries={bakeries} setUrlSearchQuery={setUrlSearchQuery} />
           </BottomSheet>
         </>
       }
+      {RegistrationBakeryModal.Dialog}
     </>
   )
 }

@@ -1,0 +1,68 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+@mixin keyframes($name){
+  @keyframes #{$name}{
+    @content;
+  }
+}
+@mixin animate($animation,$delay,$duration,$fillMode,$timingFunction){
+  animation-name: $animation;
+  animation-delay: $delay;
+  animation-duration: $duration;
+  animation-fill-mode: $fillMode;
+  animation-iteration-count: 1;
+  animation-timing-function: $timingFunction;
+}
+
+@mixin fade-in {
+  @include keyframes(fadeIn){
+    0%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+    }
+  }
+  @include animate(fadeIn, 0s, 0.2s, none, ease);
+}
+
+@mixin scale-in {
+  @include keyframes(scaleIn){
+    0%{
+      transform: scale(.97) translateX(-50%);
+      opacity: 0;
+    }
+    100%{
+      transform: scale(1) translateX(-50%);
+      opacity: 1;
+    }
+  }
+  @include animate(scaleIn, 0s, 0.2s, none, ease);
+}
+
+.dialog {
+  &::backdrop {
+    @include fade-in;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  // &:not([open]) {
+  //   pointer-events: none;
+  //   opacity: 0;
+  // }
+
+  @include scale-in;
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  transform-origin: left;
+  border: 1px solid map.get($--greys, "900");
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.08),0px 1px 1px rgba(0,0,0,.02),0px 8px 16px -4px rgba(0,0,0,.04),0px 24px 32px -8px rgba(0,0,0,.06);
+  overflow: hidden;
+  transition: transform .1s ease;
+  outline: none;
+}
