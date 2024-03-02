@@ -79,7 +79,7 @@ const BakeryDetail = ({ bakery }: Props) => {
           <div className={styles.main_menus}>
             <div className={styles.menu}>
               <div className={styles.checkbox}>
-                <svg width="13px" height="13px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                <svg width="11px" height="11px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                   <path d="M5 13l4 4L19 7" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
                 </svg>
               </div>
@@ -88,7 +88,7 @@ const BakeryDetail = ({ bakery }: Props) => {
             </div>
             <div className={styles.menu}>
               <div className={styles.checkbox}>
-                <svg width="13px" height="13px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                <svg width="11px" height="11px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                   <path d="M5 13l4 4L19 7" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
                 </svg>
               </div>
