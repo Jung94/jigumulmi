@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import styles from './registration-bakery.module.scss';
 import { supabase } from '@/lib/api/supabase/client';
+import { isMobile, checkOS } from '@/lib/utils/checkUserAgent';
 
 const RegistrationBakeryContent = ({
   onSubmit
@@ -29,21 +30,23 @@ const RegistrationBakeryContent = ({
   }
 
   const updateBakery = async () => {
-    // try {
-    //   const { error } = await supabase.from('test_bakery').insert({
-    //     id: 1,
-    //     bakery_name: name,
-    //     subway,
-    //     desc,
-    //     created_at: new Date().toISOString(),
-    //   })
-    //   if (error) throw error
-    //   console.log('Bakery updated!')
-    // } catch (error) {
-    //   console.log('Error updating the data!')
-    // } finally {
-    //   console.log('Updating data is finished.')
-    // }
+    try {
+      const { error } = await supabase.from('test_bakery').insert({
+        id: 1,
+        bakery_name: name,
+        subway,
+        desc,
+        is_mobile: isMobile() ? checkOS() : null,
+        user_agent: navigator.userAgent,
+        created_at: new Date().toISOString(),
+      })
+      if (error) throw error
+      console.log('Bakery updated!')
+    } catch (error) {
+      console.log('Error updating the data!')
+    } finally {
+      console.log('finished.')
+    }
   }
 
   return (
