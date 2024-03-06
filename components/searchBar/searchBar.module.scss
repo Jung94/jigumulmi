@@ -1,88 +1,22 @@
 @use "sass:map";
 @import "styles/_variables.scss";
 
-@media (1100px < width) {
-  .container {
-    position: relative;
-    padding: 0 0.5rem 0 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.25rem; // 4px
-    border: 1.5px solid #222;
-    background-color: map.get($--colors, "crystal-blue");
-  
-    input {
-      padding: 0.5rem 0.6rem;
-      width: 100%;
-      max-width: 8rem;
-      font-size: 16px;
-      font-weight: 500;
-    }
-    input::placeholder {
-      color: map.get($--colors, "off-white");
-      color: #222;
-      font-weight: 500;
-    }
-  
-    .search_icon {
-      cursor: pointer;
-    }
-  
-    .auto_complete {
-      position: absolute;
-      top: 38px;
-      left: 0;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      border: 1.5px solid #222;
-      background-color: white;
-  
-      .item {
-        padding: 0.3rem 0.4rem;
-        background-color: #ffffff;
-        cursor: default;
-      }
-      .item:hover {
-        font-weight: 600;
-        background-color: map.get($--colors, "crystal-blue");
-      }
-  
-      .station {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-  
-        .line_num {
-          font-size: 11px;
-          font-weight: 400;
-        }
-      }
-  
-      .active {
-        font-weight: 600;
-        background-color: map.get($--colors, "crystal-blue");
-      }
-    }
-  }
-}
-
-@media (width <= 1100px) {
   .container {
     position: relative;
     width: 11rem;
-    height: 100%;
+    height: 2.25rem;
     border-radius: 4px;
     background-color: map.get($--colors, "blush");
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 0.125rem;
+
+    @media (width <= 1100px) {
+      height: 100%;
+    }
   
     input {
-      // border: 1px solid blue;
       padding: 6px 8px 5.5px;
       width: 100%;
       height: 100%;
@@ -94,6 +28,7 @@
         color: map.get($--greys, "700");
       }
     }
+  
     .erase_all_text {
       // border: 1px solid red;
       min-width: 1.25rem;
@@ -101,22 +36,27 @@
       display: flex;
       justify-content: center;
       align-items: center;
-
+      cursor: pointer;
     }
+
     .search_icon {
-      // border: 1px solid green;
       padding-bottom: 1px;
       min-width: 2.35rem;
       height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
     }
+  
     .auto_complete {
       padding: 4px;
       position: absolute;
-      top: 40px;
+      top: 38px;
+      left: 0;
       width: 100%;
+      max-height: 282px;
+      overflow: auto;
       border-radius: 4px;
       border: 1.5px solid map.get($--greys, "700");
       background-color: white;
@@ -129,10 +69,11 @@
         border-radius: 4px;
         background-color: #ffffff;
         cursor: default;
-      }
-      .item:hover {
-        font-weight: 600;
-        background-color: map.get($--colors, "blush");
+
+        &:hover {
+          font-weight: 600;
+          background-color: map.get($--colors, "blush");
+        }
       }
   
       .station {
@@ -145,11 +86,10 @@
           font-weight: 400;
         }
       }
-  
+
       .active {
         font-weight: 600;
-        background-color: map.get($--colors, "crystal-blue");
+        background-color: map.get($--colors, "blush");
       }
     }
   }
-}

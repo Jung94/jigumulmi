@@ -16,12 +16,12 @@ const BakeryCard = ({ bakery, onClick }: Props) => {
   return (
     <div className={styles.bakery_card} onClick={()=>onClick(bakery.id)}>
       <div className={styles.card_image}>
-        <Image className={styles.image} fill src={bakery.image_thum} alt={bakery.bakery_nm} />
+        <Image className={styles.image} fill src={bakery.images[0]} alt={bakery.name} />
       </div>
       <div className={styles.card_info_wrap}>
         <div className={styles.top}>
           <div className={styles.left}>
-            <div className={styles.card_title}>{bakery.bakery_nm}</div>
+            <div className={styles.card_title}>{bakery.name}</div>
             <div className={styles.card_desc}>비건 성지순례 오세요!</div>
           </div>
           {/* <div className={styles.right}>
@@ -29,8 +29,8 @@ const BakeryCard = ({ bakery, onClick }: Props) => {
           </div> */}
         </div>
         <div className={styles.bottom}>
-          <div className={`${styles.subway_line} ${styles[`line_${bakery.stations[0].line_num}`]}`}>{changeLineName(bakery.stations[0].line_num)}</div>
-          <div className={styles.subway_station}>{bakery.stations[0].station_nm}</div>
+          <div className={`${styles.subway_line} ${styles[`line_${bakery.stations[0].line}`]}`}>{changeLineName(bakery.stations[0].line)}</div>
+          <div className={styles.subway_station}>{bakery.stations[0].name}</div>
         </div>
       </div>
     </div>

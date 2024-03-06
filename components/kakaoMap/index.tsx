@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import styles from './kakaoMap.module.scss'
-import { BAKERIES } from '@/lib/json/bakery.json'
-import { set_kakao_places_func, update_bakery_cd, update_location } from '@/lib/store/modules/search'
+import { set_kakao_places_func, update_bakery_cd } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 
-const KakaoMap = () => {
+const KakaoMap = ({ bakeryList }: { bakeryList: any }) => {
   const dispatch = useAppDispatch()
   const location = useAppSelector(((state) => state.search.location))
   const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown))
@@ -45,13 +44,13 @@ const KakaoMap = () => {
         const map = new window.kakao.maps.Map(mapContainer, mapOption)
         setMap(map)
 
-        const positions = BAKERIES.map((e: any) => {
-          return {id: e.id, name: e.bakery_nm, latlng: new kakao.maps.LatLng(e.position.lat, e.position.lng)}
+        const positions = bakeryList.map((e: any) => {
+          return {id: e.id, name: e.name, latlng: new kakao.maps.LatLng(e.position.lat, e.position.lng)}
         })
         setBakeries(positions)
 
         const places = new window.kakao.maps.services.Places()
-        dispatch(set_kakao_places_func(places.keywordSearch))
+        dispatch(set_kakao_places_func(places))
         
       })
     }
@@ -67,14 +66,15 @@ const KakaoMap = () => {
     if (bakeries.length === 0 || !map) return
 
     const imageSrc = 'https://ifh.cc/g/1pXKtO.png'
+    console.log(bakeries)
 
     bakeries.forEach((e: any, index: number) => {
       const imageSize = new kakao.maps.Size(22, 29)
       const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize)
       const marker = new kakao.maps.Marker({
         map: map, // 마커를 표시할 지도
-        position: bakeries[index].latlng, // 마커를 표시할 위치
-        title: bakeries[index].bakery_nm, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시된다.
+        position: e.latlng, // 마커를 표시할 위치
+        title: e.name, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시된다.
         image: markerImage
       })
 

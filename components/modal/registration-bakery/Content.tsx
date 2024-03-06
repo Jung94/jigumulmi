@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './registration-bakery.module.scss';
 import { supabase } from '@/lib/api/supabase/client';
 import { isMobile, checkOS } from '@/lib/utils/checkUserAgent';
+import Button from '@/components/button';
 
 const RegistrationBakeryContent = ({
   onSubmit
@@ -29,23 +30,26 @@ const RegistrationBakeryContent = ({
     setDesc(value)
   }
 
+  const [ loading, setLoading ] = useState(false);
+
   const updateBakery = async () => {
+    setLoading(true)
+
     try {
       const { error } = await supabase.from('test_bakery').insert({
-        id: 1,
         bakery_name: name,
         subway,
-        desc,
+        desc: desc || null,
         is_mobile: isMobile() ? checkOS() : null,
         user_agent: navigator.userAgent,
         created_at: new Date().toISOString(),
       })
       if (error) throw error
-      console.log('Bakery updated!')
+      console.log('success!')
     } catch (error) {
-      console.log('Error updating the data!')
+      console.log('failed!')
     } finally {
-      console.log('finished.')
+      setLoading(false)
     }
   }
 
@@ -65,9 +69,8 @@ const RegistrationBakeryContent = ({
           <label htmlFor='desc'>하고픈 말</label>
           <textarea id='desc' name='desc' value={desc} onChange={handleDesc} />
         </div>
-        <button type='submit' disabled={!name || !subway} formAction={updateBakery}>등록하기</button>
+        <Button loading={loading} type='submit' variant='contained' color='primary' disabled={!name || !subway} formAction={updateBakery}>등록하기</Button>
       </form>
-      {/* <button type='button' disabled={!name || !subway} >등록하기</button> */}
     </div>
   )
 }

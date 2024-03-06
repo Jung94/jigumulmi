@@ -67,11 +67,8 @@
     }
   }
   .card_detail_content {
-    // border: 1px solid blue;
-    // padding: 1rem;
     display: flex;
     flex-direction: column;
-    // gap: 0.5rem;
     background-color: map.get($--colors, "blush");
 
     .title_wrap {
@@ -80,16 +77,17 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 2px;
       background-color: map.get($--colors, "off-white");
 
       .title {
-        color: #111;
-        font-size: 1.125rem;
+        color: #222;
+        font-size: 20px;
         font-weight: 700;
       }
-      .category_main {
+      .category {
         color: #8f8f8f;
-        font-size: 0.813rem;
+        font-size: 14px;
       }
     }
     .info_wrap {
@@ -100,7 +98,7 @@
         // border: 1px solid red;
         padding: 10px 0;
         color: #333;
-        font-size: 14px;
+        font-size: 15px;
         border-bottom: 0.5px solid #d1d1d1;
         display: grid;
         grid-template-columns: 1rem 1fr;
@@ -113,11 +111,7 @@
           align-items: flex-start;
         }
 
-        .station {
-          font-size: 13px;
-        }
-
-        .status {
+        .opening_hours {
           width: 100%;
           display: flex;
           justify-content: space-between;
@@ -147,13 +141,6 @@
               align-items: center;
             }
           }
-          // .time_wrap {
-          //   font-size: 13px;
-          //   display: flex;
-          //   justify-content: flex-start;
-          //   align-items: center;
-          //   gap: 0.5rem;
-          // }
         }
       }
     }
@@ -167,9 +154,11 @@
       gap: 0.5rem;
 
       .main_menus {
+        color: #222;
+        font-size: 15px;
         display: flex;
         flex-direction: column;
-        font-size: 13px;
+        gap: 0.25rem;
 
         .menu {
           display: flex;
