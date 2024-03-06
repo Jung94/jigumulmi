@@ -1,0 +1,73 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+.button {
+  min-width: 64px;
+  font-weight: 500;
+  line-height: 1.75;
+  letter-spacing: 0.02857em;
+  user-select: none;
+  vertical-align: middle;
+  border-radius: 5px;
+  transition-duration: .12s;
+  transition-timing-function: ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+
+  &:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+}
+
+.size {
+  &_small {
+    padding: 3px 9px;
+    font-size: 0.8125rem;
+  }
+  &_medium {
+    padding: 5px 15px;
+    font-size: 0.875rem;
+    height: 2.285rem;
+  }
+  &_large {
+    padding: 7px 21px;
+    font-size: 0.9375rem;
+  }
+}
+
+.color {
+  &_primary {
+    color: #FFFFFF;
+
+    &.contained {
+      color: #FFFFFF;
+      border: 1px solid map.get($--colors, "brick-red");
+      background-color: map.get($--colors, "brick-red");
+
+      &:disabled {
+        color: #a6a6a6;
+        border: 1px solid #e0e0e0;
+        background-color: #e0e0e0;
+      }
+    }
+
+    &.outlined {
+      color: map.get($--colors, "brick-red");
+      border: 1px solid map.get($--colors, "brick-red");
+      background-color: transparent;
+
+      &:disabled {
+        color: #bdbdbd;
+        border: 1px solid #e0e0e0;
+      }
+    }
+  }
+}
+
+.loading {
+  pointer-events: none;
+  cursor: not-allowed;
+}
