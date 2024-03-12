@@ -16,12 +16,9 @@ import { update_station_cd } from '@/lib/store/modules/search'
 
 import { useModal } from '@/lib/hooks'
 import RegistrationBakeryContent from '@/components/modal/registration-bakery/Content'
-import { registerBakery } from '@/app/search/actions'
 import type { Bakery } from '@/types/bakery'
 
-// export default function Search({ bakeryList }: { bakeryList?: any }) {
 export default function Search() {
-  console.log('search-page')
   const cache = useQueryClient()
   const [ bakeryList ] = useState<Bakery[] | undefined>(()=>{
     const data = cache.getQueryData(["bakeries"])
@@ -47,15 +44,11 @@ export default function Search() {
     router.push(`search?${params.toString()}`)
   }
 
-  const handleSubmitBakery = (formData: FormData) => {
-    registerBakery(formData)
-    console.log(111)
-  }
-
   const RegistrationBakeryModal = useModal(
-    <RegistrationBakeryContent onSubmit={handleSubmitBakery} /> 
+    <RegistrationBakeryContent onClose={handleCloseRegistrationBakeryModal} /> 
   )
-  const handleOpenRegistrationBakeryModal = () => { RegistrationBakeryModal.open() }
+  function handleOpenRegistrationBakeryModal() { RegistrationBakeryModal.open() }
+  function handleCloseRegistrationBakeryModal() { RegistrationBakeryModal.close() }
 
   useEffect(()=>{
     if (!selectedBakeryId) return setBakery(null)
