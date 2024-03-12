@@ -65,4 +65,8 @@
   overflow: hidden;
   transition: transform .1s ease;
   outline: none;
+
+  @media (width <= 370px) {
+    width: 100%;
+  }
 }
