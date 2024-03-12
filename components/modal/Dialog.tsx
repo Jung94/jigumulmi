@@ -3,12 +3,13 @@ import styles from './modal.module.scss';
 
 type DialogProps = {
   component: React.ReactNode
+  style?: any
 }
 
 const Dialog = forwardRef<HTMLDialogElement, DialogProps>((function Dialog(props, ref) {
 
   return (
-    <dialog ref={ref} className={styles.dialog}>
+    <dialog ref={ref} className={styles.dialog} style={props.style}>
       {props.component}
     </dialog>
   );
