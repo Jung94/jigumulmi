@@ -16,7 +16,7 @@ type Props = {
   disabled?: boolean
   loading?: boolean
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>void
-  formAction?: ()=>void
+  formAction?: (formData: FormData)=>void
   style?: any
 }
 
