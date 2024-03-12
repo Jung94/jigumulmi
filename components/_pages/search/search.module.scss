@@ -37,13 +37,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       }
       .registration_bakery {
         width: 3rem;
         height: 3rem;
         border-radius: 20rem;
         border: 1.5px solid #222;
-        // background-color: map.get($--colors, "crystal-blue");
         background-color: map.get($--colors, "desert-gold");
       }
     }
