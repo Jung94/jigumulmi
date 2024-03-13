@@ -39,7 +39,13 @@ const RegistrationBakeryContent = ({
     {top: '30%'}
   )
   function handleOpenSuccessModal() { SuccessModal.open() }
-  function handleCloseSuccessModal() { SuccessModal.close() }
+  function handleCloseSuccessModal() {
+    setName("")
+    setSubway("")
+    setDesc("")
+    SuccessModal.close()
+    onClose()
+  }
 
   const updateBakery = async () => {
     handleOpenSuccessModal()
@@ -51,9 +57,9 @@ const RegistrationBakeryContent = ({
     const data = {
       name: name,
       station_name_1: subway,
-      user_feedback: desc || null,
-      is_mobile: isMobile() ? checkOS() : null,
-      created_at: today.toISOString(),
+      // user_feedback: desc || null,
+      // is_mobile: isMobile() ? checkOS() : null,
+      // created_at: today.toISOString(),
     }
 
     try {

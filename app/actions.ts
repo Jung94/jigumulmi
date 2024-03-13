@@ -10,6 +10,7 @@ export async function getBakeryList() {
     .select('*')
 
   if (error) console.log("error", error)
+  console.log(data)
 
   let res: Bakery[] = []
   
