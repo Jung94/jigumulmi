@@ -31,7 +31,7 @@ export default function Search() {
   const selectedBakeryId = searchParams?.get("bakery")
   const bakeryCode = useAppSelector(((state) => state.search.bakery_cd))
   const bakeries = useAppSelector(((state) => state.search.bakeries))
-  const [ bakery, setBakery ] = useState<any>(null)
+  const [ bakery, setBakery ] = useState<Bakery>(null)
 
   // set URL query parameter - search_query
   const setUrlSearchQuery = (bakeryId: number, reset?: boolean) => {
@@ -68,7 +68,7 @@ export default function Search() {
     <>
       <div className={`${styles.container} ${bakery && styles.hasDetail}`}>
         <div className={styles.map}>
-          <KakaoMap bakeryList={bakeryList} />
+          <KakaoMap bakeryList={bakeryList} bakeryCode={bakery ? bakery.id : null} />
         </div>
         {/* PC ver */}
         {1100 < windowSize.width &&

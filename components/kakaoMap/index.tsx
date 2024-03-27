@@ -5,9 +5,13 @@ import styles from './kakaoMap.module.scss'
 import { set_kakao_places_func, update_bakery_cd } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 
-const KakaoMap = ({ bakeryList }: { bakeryList: any }) => {
+let selectedMarker: any = null;
+let markers: any[] = [];
+
+const KakaoMap = ({ bakeryList, bakeryCode }: { bakeryList: any, bakeryCode: number | null }) => {
   const dispatch = useAppDispatch()
   const location = useAppSelector(((state) => state.search.location))
+  // const bakeryCode = useAppSelector(((state) => state.search.bakery_cd))
   const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown))
   const mapRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<any>(null)
@@ -64,27 +68,86 @@ const KakaoMap = ({ bakeryList }: { bakeryList: any }) => {
 
   useEffect(()=>{
     if (bakeries.length === 0 || !map) return
+    console.log('change bakery code')
 
-    const imageSrc = 'https://ifh.cc/g/1pXKtO.png'
-    console.log(bakeries)
+    // const normalImage = 'https://ifh.cc/g/TyJnVh.png' // inactive marker - black border
+    // const normalImage = 'https://ifh.cc/g/9gS2ma.png' // inactive marker - desert-gold bgColor
+    // const normalImage = 'https://ifh.cc/g/7GbARo.png' // inactive marker - brick-red border(좀 더 밝음)
+    const normalImage = 'https://ifh.cc/g/CYpq7M.png' // inactive marker - brick-red border(톤다운, 차분함) - brick-red border(좀 더 밝음)
+    const activeImage = 'https://ifh.cc/g/1pXKtO.png' // active marker
 
     bakeries.forEach((e: any, index: number) => {
-      const imageSize = new kakao.maps.Size(22, 29)
-      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize)
+      const imageSize = new kakao.maps.Size(24, 32)
+      const imageSizeActive = new kakao.maps.Size(32, 42)
+      const markerImage = new kakao.maps.MarkerImage(normalImage, imageSize)
+      const markerImageActive = new kakao.maps.MarkerImage(activeImage, imageSizeActive)
       const marker = new kakao.maps.Marker({
         map: map, // 마커를 표시할 지도
         position: e.latlng, // 마커를 표시할 위치
-        title: e.name, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시된다.
-        image: markerImage
+        title: e.id, // 마커의 타이틀
+        image: e.id === bakeryCode ? markerImageActive : markerImage,
+        zIndex: e.id === bakeryCode ? 1 : 0
       })
+
+      if (e.id === bakeryCode) selectedMarker = marker;
 
       // 마커에 클릭 이벤트 등록
       window.kakao.maps.event.addListener(marker, 'click', () => {
+        // https://apis.map.kakao.com/web/sample/multipleMarkerEvent2/
+        if (!selectedMarker || selectedMarker !== marker) {
+
+          // 클릭된 마커 객체가 null이 아니면
+          // 클릭된 마커의 이미지를 기본 이미지로 변경하고
+          if (!!selectedMarker) {
+            selectedMarker.setImage(markerImage);
+            selectedMarker.setZIndex(0);
+          }
+
+          // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+          marker.setImage(markerImageActive);
+          marker.setZIndex(1);
+        }
+
+        // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+        selectedMarker = marker;
+
         dispatch(update_bakery_cd(e.id))
       })
+
+      markers.push(marker)
     })
 
   }, [bakeries, map])
+
+  useEffect(()=>{
+    if (bakeries.length === 0 || !map) return
+    console.log(bakeryCode)
+    if (bakeryCode) {
+      const imageSize = new kakao.maps.Size(24, 32)
+      const imageSizeActive = new kakao.maps.Size(32, 42)
+      const normalImage = 'https://ifh.cc/g/CYpq7M.png'
+      const activeImage = 'https://ifh.cc/g/1pXKtO.png'
+      const markerImage = new kakao.maps.MarkerImage(normalImage, imageSize)
+      const markerImageActive = new kakao.maps.MarkerImage(activeImage, imageSizeActive)
+      const marker = markers.find(e => e.Gb === String(bakeryCode))
+
+      if (!!selectedMarker) {
+        selectedMarker.setImage(markerImage);
+        selectedMarker.setZIndex(0);
+      }
+      marker.setImage(markerImageActive);
+      marker.setZIndex(1);
+      selectedMarker = marker;
+    }
+    if (!bakeryCode && !!selectedMarker) {
+      const imageSize = new kakao.maps.Size(24, 32)
+      const normalImage = 'https://ifh.cc/g/CYpq7M.png'
+      const markerImage = new kakao.maps.MarkerImage(normalImage, imageSize)
+      selectedMarker.setImage(markerImage);
+      selectedMarker.setZIndex(0);
+      selectedMarker = null;
+    }
+  }, [bakeryCode])
 
   // 모바일 환경에서 bottom sheet 열기/닫기 이벤트에 따라 지도의 중심 이동
   // useEffect(()=>{
