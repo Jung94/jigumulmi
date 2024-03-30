@@ -15,6 +15,7 @@ const RegistrationBakeryContent = ({
 }) => {
   const [ name, setName ] = useState('');
   const [ subway, setSubway ] = useState('');
+  const [ menus, setMenus ] = useState<string[]>(['']);
   const [ desc, setDesc ] = useState('');
 
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,9 +28,28 @@ const RegistrationBakeryContent = ({
     setSubway(value)
   }
 
+  const handleMenus = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const { value }: { value: string } = e.target as HTMLInputElement;
+    setMenus((prev: string[]) => {
+      prev[index] = value
+      return [...prev]
+    })
+  }
+
   const handleDesc = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value }: { value: string } = e.target as HTMLTextAreaElement;
     setDesc(value)
+  }
+
+  const handleAddMenuInput = () => {
+    setMenus((prev: string[]) => [...prev, ''])
+  }
+
+  const handleDeleteMenuInput = (index: number) => {
+    setMenus((prev: string[]) => {
+      prev.splice(index, 1)
+      return [...prev]
+    })
   }
 
   const [ loading, setLoading ] = useState(false);
@@ -51,15 +71,11 @@ const RegistrationBakeryContent = ({
     handleOpenSuccessModal()
     setLoading(true)
 
-    const offset = new Date().getTimezoneOffset() * 60000;
-    const today = new Date(Date.now() - offset);
-
     const data = {
       name: name,
       station_name_1: subway,
       // user_feedback: desc || null,
       // is_mobile: isMobile() ? checkOS() : null,
-      // created_at: today.toISOString(),
     }
 
     try {
@@ -92,7 +108,22 @@ const RegistrationBakeryContent = ({
           <input type='text' id='subway' name='subway' value={subway} onChange={handleSubway} />
         </div>
         <div className={styles.input_wrapper}>
-          <label htmlFor='desc'>하고픈 말</label>
+          <label htmlFor='menu'>메뉴</label>
+          {menus.map((menu: string, index: number) => {
+            if (index === 0) return <input key={String(index)} type='text' id='menu' name={`menu-${index}`} value={menu} onChange={e => handleMenus(e, index)} />
+              else {
+                return (
+                  <div key={String(index)} className={styles.extra_menu_input_wrapper}>
+                    <input type='text' id='menu' name={`menu-${index}`} value={menu} onChange={e => handleMenus(e, index)} />
+                    <button type='button' className={`${styles.button_menu} ${styles.delete_menu_input}`} onClick={() => handleDeleteMenuInput(index)}>-</button>
+                  </div>
+                )
+              }
+          })}
+          <button type='button' disabled={menus.length >= 5} className={`${styles.button_menu} ${styles.add_menu_input}`} onClick={handleAddMenuInput}>메뉴 추가하기</button>
+        </div>
+        <div className={styles.input_wrapper}>
+          <label htmlFor='desc'>하고 싶은 말</label>
           <textarea id='desc' name='desc' value={desc} onChange={handleDesc} />
         </div>
         <Button loading={loading} type='submit' variant='contained' color='primary' disabled={!name || !subway} formAction={updateBakery}>등록하기</Button>
