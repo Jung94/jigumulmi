@@ -16,10 +16,10 @@ export const getAPI = async (apiURL: string, params?: any) => {
   }
 }
 
-export const postAPI = async (data: {apiURL: string; body?: any}) => {
-  console.log("\x1B[1m[postAPI] ", data)
+export const postAPI = async ({ apiURL, body }: { apiURL: string; body?: any }) => {
+  console.log("\x1B[1m[postAPI] ", {apiURL, body})
   try {
-    const response = await Axios.post(data.apiURL, data.body)
+    const response = await Axios.post(apiURL, body)
     return response
   } catch (error: any) {
     return error.response
@@ -35,10 +35,10 @@ export const putAPI = async (data: any) => {
   }
 }
 
-export const deleteAPI = async (data: any) => {
-  console.log("\x1B[1m[deleteAPI] ", data)
+export const deleteAPI = async ({ apiURL, data }: { apiURL: string; data?: any }) => {
+  console.log("\x1B[1m[deleteAPI] ", {apiURL, data})
   try {
-    const response = await Axios.delete(data.apiURL)
+    const response = await Axios.delete(apiURL, { data })
     return response
   } catch (error: any) {
     return error.response
