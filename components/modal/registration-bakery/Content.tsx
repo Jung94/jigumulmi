@@ -12,8 +12,8 @@ const RegistrationBakeryContent = ({
 }: {
   onClose: ()=>void
 }) => {
-  const places = useGetPlaces(1);
-  console.log(places?.data)
+  // const places = useGetPlaces(1);
+  // console.log(places?.data)
   const [ name, setName ] = useState('');
   const [ subway, setSubway ] = useState('');
   const [ menus, setMenus ] = useState<string[]>(['']);
@@ -77,6 +77,7 @@ const RegistrationBakeryContent = ({
   }
 
   const updateBakery = async () => {
+    handleOpenSuccessModal()
     // setLoading(true)
 
     // const data = {
