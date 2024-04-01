@@ -1,0 +1,18 @@
+import { useQuery } from "@tanstack/react-query";
+import { getAPI } from "@/lib/api";
+import { APIsearch } from "@/lib/api/search";
+
+const useGetPlaces = (subwayStationId?: number) => {
+  const project = useQuery(
+    [APIsearch.getPlaces, subwayStationId],
+    () => getAPI(
+      APIsearch.getPlaces,
+      { subwayStationId: subwayStationId ?? null }
+    ), {
+      // enabled: isSearched
+    })
+  return project
+}
+
+export default useGetPlaces
+
