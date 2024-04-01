@@ -29,7 +29,7 @@
     align-items: center;
 
      &:hover {
-      background-color: map.get($--colors, "gray-400");
+      background-color: map.get($--colors, "gray-300");
      }
   }
 
@@ -54,6 +54,15 @@
         padding-left: 3px;
         color: map.get($--greys, "900");
         font-size: 13px;
+        display: flex;
+        align-items: center;
+
+        .mark__must_do {
+          color: map.get($--colors, "brick-red");
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+        }
       }
 
       input {
@@ -99,6 +108,12 @@
       }
       .delete_menu_input {
         width: 3rem;
+      }
+
+      .noti {
+        // color: map.get($--colors, "gray-600");
+        color: map.get($--colors, "brick-red");
+        font-size: 11.5px;
       }
     }
   }

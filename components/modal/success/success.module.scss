@@ -3,7 +3,7 @@
 
 .container {
   padding: 1.25rem;
-  width: 15rem;
+  width: 19rem;
   height: 24.5rem;
   height: fit-content;
   background-color: map.get($--colors, "off-white");
@@ -12,8 +12,17 @@
   gap: 1rem;
 
   .title {
-    margin: 0 auto 1rem;
+    margin: 0 auto;
     font-size: 20px;
     font-weight: 600;
+  }
+  .without_content {
+    margin: 0.5rem auto 1rem;
+  }
+
+  .content {
+    margin: 0 0 0.25rem;
+    color: #232323;
+    font-size: 13.5px;
   }
 }
