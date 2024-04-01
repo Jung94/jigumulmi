@@ -11,7 +11,6 @@ let markers: any[] = [];
 const KakaoMap = ({ bakeryList, bakeryCode }: { bakeryList: any, bakeryCode: number | null }) => {
   const dispatch = useAppDispatch()
   const location = useAppSelector(((state) => state.search.location))
-  // const bakeryCode = useAppSelector(((state) => state.search.bakery_cd))
   const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown))
   const mapRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<any>(null)
@@ -68,9 +67,6 @@ const KakaoMap = ({ bakeryList, bakeryCode }: { bakeryList: any, bakeryCode: num
 
 
   const getMarkerImages = useCallback(() => {
-    // const normalImage = 'https://ifh.cc/g/TyJnVh.png' // inactive marker - black border
-    // const normalImage = 'https://ifh.cc/g/7GbARo.png' // inactive marker - brick-red border(좀 더 밝음)
-    // const normalImage = 'https://ifh.cc/g/CYpq7M.png' // inactive marker - brick-red border(톤다운, 차분함) - brick-red border(좀 더 밝음)
     const normalImage = 'https://ifh.cc/g/9gS2ma.png' // inactive marker - desert-gold bgColor
     const activeImage = 'https://ifh.cc/g/1pXKtO.png' // active marker
     const imageSize = new kakao.maps.Size(24, 32)
