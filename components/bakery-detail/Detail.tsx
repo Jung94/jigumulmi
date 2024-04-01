@@ -2,7 +2,9 @@
 
 import Image from 'next/image'
 import styles from './Detail.module.scss'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useWindowSize } from '@/lib/hooks'
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
+import { update_is_shown_detail } from '@/lib/store/modules/search'
 import type { Bakery } from '@/types/bakery'
 
 type Props = {
@@ -10,17 +12,15 @@ type Props = {
 }
 
 const BakeryDetail = ({ bakery }: Props) => {
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const dispatch = useAppDispatch()
+  const windowSize = useWindowSize()
+  const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
 
   const closeDetailOnMobile = () => {
-    if (!searchParams) return
-    const params = new URLSearchParams(searchParams)
-    params.delete("bakery")
-    router.push(`search?${params.toString()}`)
+    dispatch(update_is_shown_detail(false))
   }
 
-  return bakery && (
+  return bakery && (windowSize.width <= 1100 ? isShownDetail : true) && (
     <div className={styles.card_detail}>
       <div className={styles.header}>
         <div className={styles.icon_close} onClick={closeDetailOnMobile}>

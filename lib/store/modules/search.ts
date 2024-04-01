@@ -8,6 +8,7 @@ interface SearchState {
   bakeries: any[] | null,
   station_cd: string, // 지하철역 검색 코드
   bakery_cd: number, // 베이커리 검색 코드
+  isShownDetail: boolean, // 상세 페이지 여부
 }
 
 const initialState: SearchState = {
@@ -17,6 +18,7 @@ const initialState: SearchState = {
   bakeries: null,
   station_cd: "",
   bakery_cd: 0,
+  isShownDetail: false
 }
 
 const searchSlice = createSlice({
@@ -39,8 +41,11 @@ const searchSlice = createSlice({
     update_bakery_cd: (state, action: PayloadAction<number>)=>{
       state.bakery_cd = action.payload
     },
+    update_is_shown_detail: (state, action: PayloadAction<boolean>)=>{
+      state.isShownDetail = action.payload
+    },
   }
 })
 
-export const {set_kakao_places_func, update_location, update_bakeries, update_station_cd, update_bakery_cd} = searchSlice.actions
+export const {set_kakao_places_func, update_location, update_bakeries, update_station_cd, update_bakery_cd, update_is_shown_detail} = searchSlice.actions
 export default searchSlice.reducer

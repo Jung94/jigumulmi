@@ -13,6 +13,8 @@ import KakaoMap from '@/components/kakaoMap'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import { update_station_cd } from '@/lib/store/modules/search'
+import { update_is_shown } from '@/lib/store/modules/bottom-sheet'
+import { update_is_shown_detail } from '@/lib/store/modules/search'
 
 import { useModal } from '@/lib/hooks'
 import RegistrationBakeryContent from '@/components/modal/registration-bakery/Content'
@@ -34,7 +36,7 @@ export default function Search() {
   const [ bakery, setBakery ] = useState<Bakery>(null)
 
   // set URL query parameter - search_query
-  const setUrlSearchQuery = (bakeryId: number, reset?: boolean) => {
+  const setUrlSearchQuery = (bakeryId: number, reset?: boolean) => {  
     let params: any;
     if (reset) params = new URLSearchParams()
       else if (!searchParams) return
@@ -42,6 +44,11 @@ export default function Search() {
   
     params.set('bakery', bakeryId)
     router.push(`search?${params.toString()}`)
+  }
+
+  const handleClickBakeryCard = (bakeryId: number) => {
+    setUrlSearchQuery(bakeryId, true)
+    dispatch(update_is_shown_detail(true))
   }
 
   const RegistrationBakeryModal = useModal(
@@ -53,8 +60,11 @@ export default function Search() {
   useEffect(()=>{
     if (!selectedBakeryId) return setBakery(null)
 
-    const targetBakery = bakeryList?.find(b => b.id === Number(selectedBakeryId))
+    const targetBakery = bakeryList?.find((b: Bakery) => b.id === Number(selectedBakeryId))
     setBakery(targetBakery)
+    dispatch(update_is_shown(true)) // bottom-sheet
+
+    if (1100 < windowSize.width) dispatch(update_is_shown_detail(true))
   }, [selectedBakeryId])
 
   useEffect(()=>{
@@ -77,10 +87,10 @@ export default function Search() {
             <div className={styles.cards}>
               {bakeries
                 ? bakeries.map((bakery: any) => (
-                    <BakeryCard key={bakery.id} bakery={bakery} onClick={setUrlSearchQuery} />
+                    <BakeryCard key={bakery.id} bakery={bakery} onClick={handleClickBakeryCard} />
                   ))
                 : bakeryList?.map((bakery: any) => (
-                  <BakeryCard key={bakery.id} bakery={bakery} onClick={setUrlSearchQuery} />
+                  <BakeryCard key={bakery.id} bakery={bakery} onClick={handleClickBakeryCard} />
                 ))
             }
             </div>
@@ -101,7 +111,7 @@ export default function Search() {
         <>
           <BakeryDetail bakery={bakery} />
           <BottomSheet handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
-            <SearchContent bakeries={bakeries ?? bakeryList} setUrlSearchQuery={setUrlSearchQuery} />
+            <SearchContent bakeries={bakeries ?? bakeryList} handleClickBakeryCard={handleClickBakeryCard} />
           </BottomSheet>
         </>
       }
