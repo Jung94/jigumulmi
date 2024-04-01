@@ -3,12 +3,12 @@ import BakeryCard from '@/components/card/Bakery';
 
 type Props = {
   bakeries: any
-  setUrlSearchQuery: (bakeryId: number)=>void
+  handleClickBakeryCard: (bakeryId: number)=>void
 };
 
 const SearchContent = ({
   bakeries,
-  setUrlSearchQuery
+  handleClickBakeryCard
 }: Props) => {
   return (
     <div className={styles.bakery_cards_wrapper}>
@@ -16,7 +16,7 @@ const SearchContent = ({
         ? (
           <div className={styles.bakery_cards}>
             {bakeries.map((bakery: any) => (
-              <BakeryCard key={bakery.id} bakery={bakery} onClick={setUrlSearchQuery} />
+              <BakeryCard key={bakery.id} bakery={bakery} onClick={handleClickBakeryCard} />
             ))}
           </div>
         )
