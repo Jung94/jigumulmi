@@ -5,15 +5,12 @@ import styles from './registration-bakery.module.scss';
 import Button from '@/components/button';
 import { useModal } from '@/lib/hooks';
 import SuccessContent from '@/components/modal/success/Content';
-import { useGetPlaces } from '@/domain/search/query';
 
 const RegistrationBakeryContent = ({
   onClose
 }: {
   onClose: ()=>void
 }) => {
-  // const places = useGetPlaces(1);
-  // console.log(places?.data)
   const [ name, setName ] = useState('');
   const [ subway, setSubway ] = useState('');
   const [ menus, setMenus ] = useState<string[]>(['']);
