@@ -2,7 +2,7 @@ import axios from "axios"
 import { postAPI } from "@/lib/api"
 import { getCookie, setCookie, deleteCookie } from "cookies-next"
 
-const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_API_URL : process.env.NEXT_PUBLIC_API_URL_DEV
+export const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_API_URL : process.env.NEXT_PUBLIC_API_URL_DEV
 export const Axios = axios.create({ baseURL })
 
 const handleTokens = (accessToken: string | undefined, refreshToken: string | undefined) => {
