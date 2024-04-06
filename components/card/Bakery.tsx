@@ -8,9 +8,12 @@ type Props = {
 
 const BakeryCard = ({ bakery, onClick }: Props) => {
   
-  const changeLineName = (name: string) => {
-    if (name.includes('호선')) return name.replace('호선', '')
-    if (name.includes('선')) return name.replace('선', '')
+  const changeLineName = (subwayLineName: string) => {
+    const nameList = subwayLineName.split('')
+
+    if (nameList[0] === '0') subwayLineName = nameList.splice(1).join('')
+    if (subwayLineName.includes('호선')) return subwayLineName.replace('호선', '')
+    if (subwayLineName.includes('선')) return subwayLineName.replace('선', '')
   }
 
   return (
@@ -29,8 +32,10 @@ const BakeryCard = ({ bakery, onClick }: Props) => {
           </div> */}
         </div>
         <div className={styles.bottom}>
-          <div className={`${styles.subway_line} ${styles[`line_${bakery.stations[0].line}`]}`}>{changeLineName(bakery.stations[0].line)}</div>
-          <div className={styles.subway_station}>{bakery.stations[0].name}</div>
+          <div className={`${styles.subway_line} ${styles[`line_${bakery.subwayStation.lineNumber}`]}`}>
+            {changeLineName(bakery.subwayStation.lineNumber)}
+          </div>
+          <div className={styles.subway_station}>{bakery.subwayStation.stationName}</div>
         </div>
       </div>
     </div>
