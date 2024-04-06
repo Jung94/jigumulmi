@@ -1,39 +1,43 @@
 'use server'
 
-import { createClient } from '@/lib/api/supabase/server'
+import { getAPI } from "@/lib/api";
+import { APIsearch } from '@/lib/api/search'
 import type { Bakery } from '@/types/bakery'
 
-export async function getBakeryList() {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('bakeries')
-    .select('*')
-
-  if (error) console.log("error", error)
-  console.log(data)
-
-  let res: Bakery[] = []
+export async function getPlaceList() {
+  // const res = await fetch()
+  const res = await getAPI(
+    APIsearch.getPlaceList,
+    { subwayStationId: null }
+  )
   
-  for (let bakery of data!) {
-    let _bakery: Bakery = {
-      id: bakery.id,
-      name: bakery.name,
-      category: bakery.category,
-      material: bakery.material ? [...bakery.material.split(', ')] : [],
-      address: bakery.address,
-      phone: bakery.phone,
-      menus: bakery.menus ? [...bakery.menus.split(', ')] : [],
-      stations: [{name: bakery.station_name_1, line: bakery.station_line_1}, {name: bakery.station_name_2, line: bakery.station_line_2}],
-      position: {lat: bakery.position_lat, lng: bakery.position_lng},
-      opening_hours: {월: bakery.opening_hour_mon, 화: bakery.opening_hour_tue, 수: bakery.opening_hour_wed, 목: bakery.opening_hour_thu, 금: bakery.opening_hour_fri, 토: bakery.opening_hour_sat, 일: bakery.opening_hour_sun},
-      description: bakery.description,
-      naver_link: bakery.link,
-      images: [bakery.image_1],
-    }
-    // if (bakery.position) bakery.position = JSON.parse(bakery.position)
+  if (res.status !== 200) throw new Error('Failed: getPlaceList')
 
-    res.push(_bakery)
+  let placeList: Bakery[] = []
+  
+  for (let place of res.data) {
+    let _bakery: Bakery = {
+      id: place.id,
+      name: place.name,
+      category: place.category,
+      material: place.material 
+        ? [...place.material.split(', ')] 
+        : [],
+      address: place.address,
+      phone: place.phone ?? '',
+      menus: place.menuList 
+        ? [...place.menuList.map((place: {id: number, name: string}) => place.name)] 
+        : [],
+      subwayStation: {id: place.subwayStation.id, stationName: place.subwayStation.stationName, lineNumber: place.subwayStation.lineNumber},
+      position: {lat: place.position.latitude, lng: place.position.longitude},
+      openingHour: {월: place.openingHour.openingHourMon, 화: place.openingHour.openingHourTue, 수: place.openingHour.openingHourWed, 목: place.openingHour.openingHourThu, 금: place.openingHour.openingHourFri, 토: place.openingHour.openingHourSat, 일: place.openingHour.openingHourSun},
+      additionalInfo: place.additionalInfo,
+      placeUrl: place.placeUrl,
+      images: [place.mainImageUrl],
+    }
+
+    placeList.push(_bakery)
   }
 
-  return { data: res }
+  return { data: placeList }
 }

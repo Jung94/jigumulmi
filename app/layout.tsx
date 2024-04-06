@@ -6,7 +6,7 @@ import Header from '@/components/header'
 import Navbar from '@/components/navbar'
 import getQueryClient from '@/lib/utils/getQueryClient'
 import { Hydrate, dehydrate } from '@tanstack/react-query'
-import { getBakeryList } from '@/app/actions'
+import { getPlaceList } from '@/app/actions'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
   const queryClient = getQueryClient()
-  await queryClient.prefetchQuery(["bakeries"], () => getBakeryList())
+  await queryClient.prefetchQuery(["bakeries"], () => getPlaceList())
   const dehydratedState = dehydrate(queryClient)
 
   return (
