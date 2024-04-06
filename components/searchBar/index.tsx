@@ -75,7 +75,7 @@ const getSearchType = (type: 'bakery' | 'station') => {
 const SearchBar = ({type}: SearchBarProps) => {
   const cache = useQueryClient()
   const [ bakeryList ] = useState<Bakery[] | undefined>(()=>{
-    const data = cache.getQueryData(["bakeries"])
+    const data = cache.getQueryData(["places"])
     return data ? data.data : []
   })
   const dispatch = useAppDispatch()

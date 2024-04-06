@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
   const queryClient = getQueryClient()
-  await queryClient.prefetchQuery(["bakeries"], () => getPlaceList())
+  await queryClient.prefetchQuery(["places"], () => getPlaceList())
   const dehydratedState = dehydrate(queryClient)
 
   return (

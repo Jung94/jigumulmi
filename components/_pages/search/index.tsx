@@ -19,11 +19,14 @@ import { update_is_shown_detail } from '@/lib/store/modules/search'
 import { useModal } from '@/lib/hooks'
 import RegistrationBakeryContent from '@/components/modal/registration-bakery/Content'
 import type { Bakery } from '@/types/bakery'
+import { useGetPlaces } from '@/domain/search/query'
 
 export default function Search() {
+  const places = useGetPlaces();
+  console.log(places?.data)
   const cache = useQueryClient()
   const [ bakeryList ] = useState<Bakery[] | undefined>(()=>{
-    const data = cache.getQueryData(["bakeries"])
+    const data = cache.getQueryData(["places"])
     return data ? data.data : []
   })
   const router = useRouter()
