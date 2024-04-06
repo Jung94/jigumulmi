@@ -4,9 +4,9 @@ import { APIsearch } from "@/lib/api/search";
 
 const useGetPlaces = (subwayStationId?: number) => {
   const project = useQuery(
-    [APIsearch.getPlaces, subwayStationId],
+    [APIsearch.getPlaceList, subwayStationId],
     () => getAPI(
-      APIsearch.getPlaces,
+      APIsearch.getPlaceList,
       { subwayStationId: subwayStationId ?? null }
     ), {
       // enabled: isSearched
