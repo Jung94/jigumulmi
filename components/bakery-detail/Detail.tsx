@@ -60,7 +60,7 @@ const BakeryDetail = ({ bakery }: Props) => {
               <div className={styles.opening_hours}>
                 {/* <div className={styles.current_status}>영업 중</div>
                 <div className={styles.time}>22시까지</div> */}
-                {Object.entries(bakery.opening_hours).map((h: any, idx: number) =>
+                {Object.entries(bakery.openingHour).map((h: any, idx: number) =>
                   <div key={String(idx)} className={styles.time_wrap}>
                     <div className={styles.day}>
                       {h[0]}
@@ -93,7 +93,7 @@ const BakeryDetail = ({ bakery }: Props) => {
             })}
           </div>
           <div className={styles.content}>
-            {bakery.description}
+            {bakery.additionalInfo}
           </div>
         </div>
       </div>

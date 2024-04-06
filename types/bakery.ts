@@ -6,10 +6,10 @@ export type Bakery = {
   address: string
   phone: string
   menus: string[]
-  stations: { name: string, line: string }[]  // [홍대입구, 신촌]
+  subwayStation: { id: number, stationName: string, lineNumber: string }
   position: { lat: number, lng: number }
-  opening_hours: { 월: string, 화: string, 수: string, 목: string, 금: string, 토: string, 일: string }
-  description: string
-  naver_link: string
+  openingHour: { 월: string, 화: string, 수: string, 목: string, 금: string, 토: string, 일: string }
+  additionalInfo: string
+  placeUrl: string
   images: string[]
 } | null
