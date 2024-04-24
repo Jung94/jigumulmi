@@ -2,14 +2,13 @@
 
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './searchBar.module.scss'
-import { useQueryClient } from '@tanstack/react-query'
 import { useWindowSize } from '@/lib/hooks'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { STATIONS } from '@/lib/json/subwayStation.json'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import { update_location, update_bakeries } from '@/lib/store/modules/search'
 import { update_is_shown } from '@/lib/store/modules/bottom-sheet'
-import type { Bakery } from '@/types/bakery'
+import { useGetPlaceSubway } from '@/domain/search/query'
 
 declare global {
   interface Window {
@@ -19,21 +18,6 @@ declare global {
 
 type SearchBarProps = {
   type: 'bakery' | 'station'
-}
-
-type KakaoSearchResult = {
-  address_name: string
-  category_group_code: string
-  category_group_name: string
-  category_name: string
-  distance: string
-  id: string
-  phone: string
-  place_name: string
-  place_url: string
-  road_address_name: string
-  x: string
-  y: string
 }
 
 const searchTypes = [
@@ -72,130 +56,78 @@ const getSearchType = (type: 'bakery' | 'station') => {
   return searchTypes.find((e: any) => e.name === type)
 }
 
+type AutoCompletedSubway = { id: number, lineNumber: string, stationName: string }
+
 const SearchBar = ({type}: SearchBarProps) => {
-  const cache = useQueryClient()
-  const [ bakeryList ] = useState<Bakery[] | undefined>(()=>{
-    const data = cache.getQueryData(["places"])
-    return data ? data.data : []
-  })
-  const dispatch = useAppDispatch()
   const router = useRouter()
   const windowSize = useWindowSize()
   const searchParams = useSearchParams()
-  const stationParam = searchParams?.get("station")
-  const bakeryCode = useAppSelector(((state) => state.search.bakery_cd))
-  const kakaoKeywordSearch = useAppSelector(((state) => state.search.kakaoKeywordSearch))
+  const stationName = searchParams?.get("stationName") // string | null
 
   const inputRef = useRef<HTMLInputElement>(null)
   const autoRef = useRef<any>(null)
   const [nowIndex, setNowIndex] = useState<number>(-1)
   const [searchType] = useState<any>(() => getSearchType(type))
-  const [value, setValue] = useState<string>(stationParam ?? '')
-  const [selectedStationLine, setStationLine] = useState<string>('')  // ex. 공항철도, 03호선, ...
-  const [autoCompleteList, setAutoCompleteList] = useState<any[]>([])
+  const [value, setValue] = useState<string>(stationName ?? '')
+  const { data: autoCompletedSubwayList } = useGetPlaceSubway(value)
+  // stationId == null와 stationId == undefined와 stationId === null || stationId === undefined와 같음 - https://helloworldjavascript.net/pages/160-null-undefined.html
 
-  const handleChangeInput = (e: any) => {
+  const [shownOptionList, setShownOptionList] = useState<boolean>(false)
+  const [autoCompleteList, setAutoCompleteList] = useState<AutoCompletedSubway[]>([])
+
+  const handleFocus = () => setShownOptionList(true)
+
+  // 지하철역 검색 키워드 자동완성
+  useEffect(()=>{
+    if (!autoCompletedSubwayList || autoCompletedSubwayList.status !== 200) return
+    
+    setAutoCompleteList(autoCompletedSubwayList.data)
+  }, [autoCompletedSubwayList])
+
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
-
-    if (e.target.value.length < 1) return setAutoCompleteList([])
-
-    const value = e.target.value.trim()
-    const matchedStations = value 
-      ? STATIONS.filter((station: any) => station[`${searchType.name}_nm`].includes(value))
-      : []
-    setAutoCompleteList(matchedStations)
-    console.log(matchedStations)
   }
 
-  // set URL query parameter - search_query
-  const updateUrlSearchQuery = (keyword: string) => {
-    // if (!searchParams) return
+  // update query parameter
+  const updateQueryStation = (stationId: number, stationName: string) => {
     const params = new URLSearchParams()
   
-    params.set('station', keyword)
+    params.set('stationId', String(stationId))
+    params.set('stationName', stationName)
     router.push(`search?${params.toString()}`)
   }
-
-  const getLocationOfKeyword = () => {
-    let _value: string = ''
-    _value = value.trim()
-    if (value.trim().slice(-1) === '역') _value = value.trim()
-      else _value = `${value.trim()}역`
-    
-    const getLocation = (result: KakaoSearchResult[], status: string) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        let location: KakaoSearchResult | undefined
-        const stations = result.filter((e: KakaoSearchResult) => e.category_group_code === 'SW8')  // SW8: 지하철역
-        
-        if (selectedStationLine) {  // 자동검색결과에서 선택한 옵션이 있는지 여부
-          location = stations.filter((e: KakaoSearchResult) => selectedStationLine.includes(e.place_name.split(' ')[1]))[0]
-        } else {
-          location = stations[0]
-        }
-        // console.log('kakao-search-result:', stations)
-        // console.log('line:', selectedStationLine)
-        // console.log('location:', location)
-        if (!location) return  // ex. 강릉역 검색 시
-        const locationY = 1100 < windowSize.width ? location.y : String(parseFloat(location.y) - 0.025)
-        dispatch(update_location({x: locationY, y: location.x}))
-
-        // --- 베이커리 리스트 만들기
-        const placeName = location.place_name.split(' ')  // 압구정역 3호선
-        const subwayName = placeName[0]  // 압구정역
-        let list_01: any[] = []
-        let list_02: any[] = []
-        
-        if (!bakeryList) return
-        bakeryList.map((e: Bakery) => {
-          // const hasStationOnFirst = !!(e.stations[0].station_cd.find((v: any) => v === location?.id))
-          // const hasStationOnSecond = !!(e.stations[1].station_cd.find((v: any) => v === location?.id))
-          const hasStationOnFirst = !!(subwayName.includes(e.stations[0].name))
-          const hasStationOnSecond = !!(subwayName.includes(e.stations[1].name))
-
-          if (hasStationOnFirst) list_01.push(e)
-          if (hasStationOnSecond) list_02.push(e)
-        })
-        dispatch(update_bakeries([...list_01, ...list_02]))
-        dispatch(update_is_shown(true))
-      }
-    }
-    kakaoKeywordSearch && kakaoKeywordSearch(_value, getLocation)
-  }
-
+  
   // implement when the auto-search keyword is selected
-  const selectAutoSearchResult = (index?: number) => {
+  const selectAutoSearchResult = (stationId?: number) => {
     // 클릭 이벤트가 우선. 만약 방향키로 활성화된 옵션과 실제 클릭한 옵션이 다르다면 어떻게 될까? 무조건 클릭이 우선이 된다.
-    setValue(autoCompleteList[index ?? nowIndex][`${searchType.name}_nm`] || "")
+    if (stationId) { // 자동 검색 리스트 중 한 개 클릭한 경우
+      const { id, stationName } = autoCompleteList.find(v => v.id === stationId)!
+      setValue(stationName)
+      updateQueryStation(id, stationName)
+    } else {
+      const { id, stationName } = autoCompleteList[nowIndex]
+      setValue(stationName)
+      updateQueryStation(id, stationName)
+    }
+    
     setNowIndex(-1)
-
-    console.log(autoCompleteList[index ?? nowIndex].line_num)
-    setStationLine(autoCompleteList[index ?? nowIndex].line_num)
-    setAutoCompleteList([])
+    setShownOptionList(false)
 
     // PC - auto-search가 클릭(엔터)되어도 한 번 더 검색하기 때문에 focus가 되어야 합니다.
     // Mobile - auto-search가 클릭(엔터)되면 곧바로 검색되는 것이 자연스럽기 때문에 blur 되어야 합니다.
     if (1100 < windowSize.width) {
-      inputRef.current?.focus()
+      // inputRef.current?.focus()
     } else {
-      search()
       inputRef.current?.blur()
     }
   }
 
-  const search = () => {
-    if(stationParam === value.trim()) getLocationOfKeyword()  // 현재 station query와 검색 키워드가 같아도 검색이 가능하게 합니다.
-      else updateUrlSearchQuery(value.trim())  // update URL query parameter - station
-  }
-
   const handleKeyArrow = (e: React.KeyboardEvent) => {
     const { key, nativeEvent } = e
-    setStationLine('')
     if (nativeEvent.isComposing || !value) return 
 
     if (key === 'Enter') {
       if (nowIndex === -1) {  // 검색창에 있을 때
-        search()
-
         if (windowSize.width <= 1100) inputRef.current?.blur()  // 모바일 - 키보드 이동(return) 클릭시 키보드 닫힘(input focus를 삭제)
       } else selectAutoSearchResult()  // 자동 검색 박스 안에 있을 때
 
@@ -230,72 +162,47 @@ const SearchBar = ({type}: SearchBarProps) => {
     }
   }
 
-  const getAutoCompleteItem = (e: any, index: number, type: 'station' | 'bakery') => {
-    let children: any
-    if (type === 'bakery') children = e[`${type}_nm`]
-    if (type === 'station') children = (
-      <>
-        <div>{e[`${type}_nm`]}</div>
-        <div className={styles.line_num}>{e.line_num}</div>
-      </>
-    )
-
-    return (
-      <li 
-        key={String(index)} 
-        className={`
-          ${styles.item} 
-          ${searchType.name === 'station' && styles.station}
-          ${searchType.name === 'bakery' && styles.bakery}
-          ${nowIndex === index && styles.active}
-        `}
-        onClick={() => selectAutoSearchResult(index)}
-      >
-        {children}
-      </li>
-    )
-  }
-
   const eraseAllText = () => {
     setValue('')  // erase input value
     setAutoCompleteList([])  // empty auto searched list
     inputRef.current?.focus()
   }
-
-  useEffect(()=>{
-    const bakery = bakeryList?.find((e: any) => e.id === bakeryCode)
-    
-    if (bakery) {
-      dispatch(update_bakeries([bakery]))
-    }
-  }, [bakeryCode])
   
   useEffect(()=>{
     setNowIndex(-1)
   }, [value])
-  
-  useEffect(()=>{
-    if (!stationParam) return  // 지도 활성화 여부
-    
-    getLocationOfKeyword()
-  }, [kakaoKeywordSearch, stationParam])
 
 
   return (
     <div className={styles.container}>
-      <input ref={inputRef} type='text' placeholder={searchType.placeholder} value={value} onChange={handleChangeInput} onKeyDown={handleKeyArrow} />
-      {value &&
+      <input ref={inputRef} type='text' placeholder={searchType.placeholder} value={value} onChange={handleChangeInput} onKeyDown={handleKeyArrow} onFocus={handleFocus} />
+      {!!value &&
         <div className={styles.erase_all_text} onClick={eraseAllText}>
           <svg width="19px" height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000" strokeWidth="1.5">
             <path fillRule="evenodd" clipRule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM9.70164 8.64124C9.40875 8.34835 8.93388 8.34835 8.64098 8.64124C8.34809 8.93414 8.34809 9.40901 8.64098 9.7019L10.9391 12L8.64098 14.2981C8.34809 14.591 8.34809 15.0659 8.64098 15.3588C8.93388 15.6517 9.40875 15.6517 9.70164 15.3588L11.9997 13.0607L14.2978 15.3588C14.5907 15.6517 15.0656 15.6517 15.3585 15.3588C15.6514 15.0659 15.6514 14.591 15.3585 14.2981L13.0604 12L15.3585 9.7019C15.6514 9.40901 15.6514 8.93414 15.3585 8.64124C15.0656 8.34835 14.5907 8.34835 14.2978 8.64124L11.9997 10.9393L9.70164 8.64124Z" fill="#b7a890"></path>
           </svg>
         </div>
       }
-      <div className={styles.search_icon} onClick={search}>{searchType.icon}</div>
+      {/* <div className={styles.search_icon}>{searchType.icon}</div> */}
       
-      {autoCompleteList.length > 0 &&
+      {shownOptionList && autoCompleteList.length > 0 &&
         <ul className={styles.auto_complete} ref={autoRef}>
-          {autoCompleteList.map((e: any, index: number) => getAutoCompleteItem(e, index, searchType.name)
+          {autoCompleteList.map((e: any, index: number) => {
+            return (
+              <li 
+                key={String(index)} 
+                className={`
+                  ${styles.item} 
+                  ${styles.station} 
+                  ${nowIndex === index && styles.active}
+                `}
+                onClick={() => selectAutoSearchResult(e.id)}
+              >
+                <div>{e.stationName}</div>
+                {/* <div className={styles.line_num}>{e.lineNumber}</div> */}
+              </li>
+            )
+          }
           )}
         </ul>
       }
@@ -304,5 +211,3 @@ const SearchBar = ({type}: SearchBarProps) => {
 }
 
 export default React.memo(SearchBar)
-
-

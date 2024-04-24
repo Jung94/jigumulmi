@@ -3,11 +3,19 @@
 import { useRef, useEffect } from 'react';
 import Dialog from '@/components/modal/Dialog';
 
-const useModal = (component: React.ReactNode, style?: any) => {
+type Options = {
+  disabledBackdropClosing?: boolean
+  style?: any
+}
+
+const useModal = (
+  content: React.ReactNode, 
+  { disabledBackdropClosing, style }: Options={}
+) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   // forwardRef로 컴포넌트 분리 필요
-  const create = () => <Dialog ref={dialogRef} component={component} style={style} />;
+  const create = () => <Dialog ref={dialogRef} component={content} style={style} />;
 
   const open = () => {
     dialogRef.current?.showModal();
@@ -19,7 +27,7 @@ const useModal = (component: React.ReactNode, style?: any) => {
 
   useEffect(()=>{
     dialogRef.current?.addEventListener("click", (e: any) => {
-      if (!!(dialogRef.current === e.target)) close();
+      if (!!(dialogRef.current === e.target) && !disabledBackdropClosing) close();
     })
   }, [])
 

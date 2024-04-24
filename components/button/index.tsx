@@ -1,11 +1,8 @@
 "use client"
 
-import React, { useEffect, useRef } from 'react';
-import Image from 'next/image';
+import React, { useRef } from 'react';
 import styles from './button.module.scss';
-// import Spinner from 'public/icons/loading-spinner-white.svg';
 import Spinner from '@/public/icons/LoadingSpinnerWhite';
-import LoadingSpinner from '@/components/icon/loading-spinner';
 
 type Props = {
   children: React.ReactNode

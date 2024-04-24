@@ -1,3 +1,5 @@
-import useGetPlaces from './useGetPlaces';
+import useGetPlaceList from './useGetPlaceList';
+import useGetPlaceDetail from './useGetPlaceDetail';
+import useGetPlaceSubway from './useGetPlaceSubway';
 
-export { useGetPlaces }
+export { useGetPlaceList, useGetPlaceDetail, useGetPlaceSubway };

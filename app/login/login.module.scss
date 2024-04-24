@@ -1,0 +1,92 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+@mixin keyframes($name){
+  @keyframes #{$name}{
+    @content;
+  }
+}
+@mixin animate($animation,$delay,$duration,$fillMode,$timingFunction){
+  animation-name: $animation;
+  animation-delay: $delay;
+  animation-duration: $duration;
+  animation-fill-mode: $fillMode;
+  animation-iteration-count: 1;
+  animation-timing-function: $timingFunction;
+}
+
+@mixin fade-in {
+  @include keyframes(fadeIn){
+    0%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+    }
+  }
+  @include animate(fadeIn, 0s, 0.3s, none, ease);
+}
+
+.container {
+  padding: 0 12px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9000;
+  background-color: map.get($--colors, "off-white");
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+
+  .is_loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .fade_in {
+    @include fade-in;
+  }
+
+  .desc {
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  button, .login {
+    position: relative;
+    padding: 0.6rem 3rem;
+    min-width: fit-content;
+    width: 15rem;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 5px;
+    background-color: #FEE500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .symbol {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+    }
+  }
+}

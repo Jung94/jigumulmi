@@ -4,11 +4,12 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import styles from './kakaoMap.module.scss'
 import { set_kakao_places_func, update_bakery_cd } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
+import type { PlaceSummary } from '@/types/place'
 
 let selectedMarker: any = null;
 let markers: any[] = [];
 
-const KakaoMap = ({ bakeryList, bakeryCode }: { bakeryList: any, bakeryCode: number | null }) => {
+const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCode: number | null }) => {
   const dispatch = useAppDispatch()
   const location = useAppSelector(((state) => state.search.location))
   const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown))
@@ -47,8 +48,8 @@ const KakaoMap = ({ bakeryList, bakeryCode }: { bakeryList: any, bakeryCode: num
         const map = new window.kakao.maps.Map(mapContainer, mapOption)
         setMap(map)
 
-        const positions = bakeryList.map((e: any) => {
-          return {id: e.id, name: e.name, latlng: new kakao.maps.LatLng(e.position.lat, e.position.lng)}
+        const positions = placeList.map((place: PlaceSummary) => {
+          return {id: place.id, name: place.name, latlng: new kakao.maps.LatLng(place.position.latitude, place.position.longitude)}
         })
         setBakeries(positions)
 
@@ -87,11 +88,11 @@ const KakaoMap = ({ bakeryList, bakeryCode }: { bakeryList: any, bakeryCode: num
         map: map, // 마커를 표시할 지도
         position: e.latlng, // 마커를 표시할 위치
         title: e.id, // 마커의 타이틀
-        image: e.id === bakeryCode ? markerImageActive : markerImage,
-        zIndex: e.id === bakeryCode ? 1 : 0
+        image: e.id === placeCode ? markerImageActive : markerImage,
+        zIndex: e.id === placeCode ? 1 : 0
       })
 
-      if (e.id === bakeryCode) selectedMarker = marker;
+      if (e.id === placeCode) selectedMarker = marker;
 
       // 마커에 클릭 이벤트 등록
       window.kakao.maps.event.addListener(marker, 'click', () => {
@@ -125,8 +126,8 @@ const KakaoMap = ({ bakeryList, bakeryCode }: { bakeryList: any, bakeryCode: num
     if (bakeries.length === 0 || !map) return
     const { markerImage, markerImageActive } = getMarkerImages()
 
-    if (bakeryCode) {
-      const marker = markers.find(e => e.Gb === String(bakeryCode))
+    if (placeCode) {
+      const marker = markers.find(e => e.Gb === String(placeCode))
 
       if (!!selectedMarker) {
         selectedMarker.setImage(markerImage);
@@ -136,12 +137,12 @@ const KakaoMap = ({ bakeryList, bakeryCode }: { bakeryList: any, bakeryCode: num
       marker.setZIndex(1);
       selectedMarker = marker;
     }
-    if (!bakeryCode && !!selectedMarker) {
+    if (!placeCode && !!selectedMarker) {
       selectedMarker.setImage(markerImage);
       selectedMarker.setZIndex(0);
       selectedMarker = null;
     }
-  }, [bakeryCode])
+  }, [placeCode])
 
   // 모바일 환경에서 bottom sheet 열기/닫기 이벤트에 따라 지도의 중심 이동
   // useEffect(()=>{

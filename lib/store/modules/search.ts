@@ -1,5 +1,4 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit'
-import { BAKERIES } from '@/lib/json/bakery.json'
 
 interface SearchState {
   kakaoKeywordSearch: any,
@@ -7,7 +6,7 @@ interface SearchState {
   location: {x: string, y: string},
   bakeries: any[] | null,
   station_cd: string, // 지하철역 검색 코드
-  bakery_cd: number, // 베이커리 검색 코드
+  bakery_cd: number | null, // 베이커리 검색 코드
   isShownDetail: boolean, // 상세 페이지 여부
 }
 
@@ -17,7 +16,7 @@ const initialState: SearchState = {
   location: {x: '', y: ''},
   bakeries: null,
   station_cd: "",
-  bakery_cd: 0,
+  bakery_cd: null,
   isShownDetail: false
 }
 
@@ -38,7 +37,7 @@ const searchSlice = createSlice({
     update_station_cd: (state, action: PayloadAction<string>)=>{
       state.station_cd = action.payload
     },
-    update_bakery_cd: (state, action: PayloadAction<number>)=>{
+    update_bakery_cd: (state, action: PayloadAction<number | null>)=>{
       state.bakery_cd = action.payload
     },
     update_is_shown_detail: (state, action: PayloadAction<boolean>)=>{

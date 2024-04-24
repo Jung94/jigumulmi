@@ -5,6 +5,11 @@ export const APIsearch = {
    */
   getPlaceList: "/place",
   /**
+   * @description 장소 세부 정보 조회
+   * @method get
+   */
+  getPlaceDetail: (placeId: number) => `/place/detail/${placeId}`,
+  /**
    * @description 장소 등록 신청
    * @method post
    */

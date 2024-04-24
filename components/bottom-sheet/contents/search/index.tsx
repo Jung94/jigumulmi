@@ -1,22 +1,23 @@
 import styles from './search.module.scss';
 import BakeryCard from '@/components/card/Bakery';
+import type { PlaceSummary } from '@/types/place';
 
 type Props = {
-  bakeries: any
-  handleClickBakeryCard: (bakeryId: number)=>void
+  placeList: PlaceSummary[]
+  handleClickPlaceCard: (placeId: number)=>void
 };
 
 const SearchContent = ({
-  bakeries,
-  handleClickBakeryCard
+  placeList,
+  handleClickPlaceCard
 }: Props) => {
   return (
     <div className={styles.bakery_cards_wrapper}>
-      {bakeries.length > 0 
+      {placeList.length > 0 
         ? (
           <div className={styles.bakery_cards}>
-            {bakeries.map((bakery: any) => (
-              <BakeryCard key={bakery.id} bakery={bakery} onClick={handleClickBakeryCard} />
+            {placeList.map((place: PlaceSummary) => (
+              <BakeryCard key={place.id} place={place} onClick={handleClickPlaceCard} />
             ))}
           </div>
         )

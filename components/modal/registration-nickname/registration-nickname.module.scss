@@ -1,0 +1,82 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+.container {
+  position: relative;
+  padding: 1.5rem 1.25rem 1.25rem;
+  width: 20rem;
+  height: fit-content;
+  max-height: 70vh;
+  overflow-y: auto;
+  background-color: map.get($--colors, "off-white");
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  @media (width <= 370px) {
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  .close_button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 2px;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+     &:hover {
+      background-color: map.get($--colors, "gray-300");
+     }
+  }
+
+  .desc {
+    margin: 0 auto;
+    // font-size: 20px;
+    // font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    gap: 1.25rem;
+
+    .input_wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+
+      label {
+        padding-left: 3px;
+        color: map.get($--greys, "900");
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+
+        .mark__must_do {
+          color: map.get($--colors, "brick-red");
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+
+      input {
+        padding: 0 8px;
+        width: 100%;
+        height: 2.25rem;
+        border-radius: 5px;
+        background-color: map.get($--colors, "blush");
+      }
+    }
+  }
+}

@@ -1,12 +1,14 @@
 import Image from 'next/image'
 import styles from './Bakery.module.scss'
+import type { PlaceSummary } from '@/types/place'
 
 type Props = {
-  bakery: any
-  onClick: (bakeryId: number)=>void
+  place: PlaceSummary
+  onClick: (placeId: number)=>void
 }
 
-const BakeryCard = ({ bakery, onClick }: Props) => {
+const BakeryCard = ({ place, onClick }: Props) => {
+  // console.log(place)
   
   const changeLineName = (subwayLineName: string) => {
     const nameList = subwayLineName.split('')
@@ -16,15 +18,15 @@ const BakeryCard = ({ bakery, onClick }: Props) => {
     if (subwayLineName.includes('선')) return subwayLineName.replace('선', '')
   }
 
-  return (
-    <div className={styles.bakery_card} onClick={()=>onClick(bakery.id)}>
+  return place && (
+    <div className={styles.bakery_card} onClick={()=>onClick(place.id)}>
       <div className={styles.card_image}>
-        <Image className={styles.image} fill src={bakery.images[0]} alt={bakery.name} />
+        <Image className={styles.image} fill src={place.images[0]} alt={place.name} />
       </div>
       <div className={styles.card_info_wrap}>
         <div className={styles.top}>
           <div className={styles.left}>
-            <div className={styles.card_title}>{bakery.name}</div>
+            <div className={styles.card_title}>{place.name}</div>
             <div className={styles.card_desc}>비건 성지순례 오세요!</div>
           </div>
           {/* <div className={styles.right}>
@@ -32,10 +34,10 @@ const BakeryCard = ({ bakery, onClick }: Props) => {
           </div> */}
         </div>
         <div className={styles.bottom}>
-          <div className={`${styles.subway_line} ${styles[`line_${bakery.subwayStation.lineNumber}`]}`}>
-            {changeLineName(bakery.subwayStation.lineNumber)}
+          <div className={`${styles.subway_line} ${styles[`line_${place.subwayStation.lineNumber}`]}`}>
+            {changeLineName(place.subwayStation.lineNumber)}
           </div>
-          <div className={styles.subway_station}>{bakery.subwayStation.stationName}</div>
+          <div className={styles.subway_station}>{place.subwayStation.stationName}</div>
         </div>
       </div>
     </div>

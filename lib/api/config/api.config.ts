@@ -3,7 +3,7 @@ import { postAPI } from "@/lib/api"
 import { getCookie, setCookie, deleteCookie } from "cookies-next"
 
 export const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_API_URL : process.env.NEXT_PUBLIC_API_URL_DEV
-export const Axios = axios.create({ baseURL })
+export const Axios = axios.create({ baseURL, withCredentials: true })
 
 const handleTokens = (accessToken: string | undefined, refreshToken: string | undefined) => {
   if (accessToken && refreshToken) {
@@ -14,13 +14,15 @@ const handleTokens = (accessToken: string | undefined, refreshToken: string | un
 
 Axios.interceptors.request.use(
   async (config) => {
-    const accessToken = getCookie("_LB_AT")
-    const refreshToken = getCookie("_LB_RT")
+    config.headers["ngrok-skip-browser-warning"] = "thankYou"
+    // config.withCredentials = true
+    // const accessToken = getCookie("_LB_AT")
+    // const refreshToken = getCookie("_LB_RT")
     
-    if (accessToken && refreshToken) {
-      config.headers['access-token'] = `Bearer ${accessToken}`
-      config.headers['refresh-token'] = `Bearer ${refreshToken}`
-    }
+    // if (accessToken && refreshToken) {
+    //   config.headers['access-token'] = `Bearer ${accessToken}`
+    //   config.headers['refresh-token'] = `Bearer ${refreshToken}`
+    // }
     return config
   },
   async (error) => {
@@ -30,32 +32,31 @@ Axios.interceptors.request.use(
 
 Axios.interceptors.response.use(
   async (response) => {
-    const headers = response.headers
-    handleTokens(headers['access-token'], headers['refresh-token'])
+    // const headers = response.headers
+    // handleTokens(headers['access-token'], headers['refresh-token'])
     return response
   },
   async (error) => {
     const res = error.response
     console.log(res)
-    if (res.status === 401) {
-      alert(res.data.detail)
-      deleteCookie("_LB_AT")
-      deleteCookie("_LB_RT")
-      deleteCookie("_LB_group")
-      window.location.href = '/'
-      return
-    } else if (res.status === 499) {
-      const resToken = await postAPI({apiURL: '/account/reissued/token', body: {}})
-      if (resToken.status === 201) {
-        const headers = resToken.headers
-        handleTokens(headers['access-token'], headers['refresh-token'])
+    // if (res.status === 401) {
+    //   alert(res.data.detail)
+    //   deleteCookie("_LB_AT")
+    //   deleteCookie("_LB_RT")
+    //   deleteCookie("_LB_group")
+    //   window.location.href = '/'
+    //   return
+    // } else if (res.status === 499) {
+    //   const resToken = await postAPI({apiURL: '/account/reissued/token', body: {}})
+    //   if (resToken.status === 201) {
+    //     const headers = resToken.headers
+    //     handleTokens(headers['access-token'], headers['refresh-token'])
 
-        const originalRequest = error.config;
-        return Axios(originalRequest)
-      }
-    } else if (res.status === 422) {
-      // alert('422')
-    }
+    //     const originalRequest = error.config;
+    //     return Axios(originalRequest)
+    //   }
+    // } else if (res.status === 422) {
+    // }
     return Promise.reject(error)
   }
 )

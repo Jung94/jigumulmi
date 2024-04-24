@@ -1,6 +1,54 @@
-const LoadingSpinnerWhite = () => {
+const LoadingSpinnerWhite = ({ size="20px", color="#fff" }: { size?: string, color?: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><g><rect width="2" height="5" x="11" y="1" fill="white" opacity="0.14"/><rect width="2" height="5" x="11" y="1" fill="white" opacity="0.29" transform="rotate(30 12 12)"/><rect width="2" height="5" x="11" y="1" fill="white" opacity="0.43" transform="rotate(60 12 12)"/><rect width="2" height="5" x="11" y="1" fill="white" opacity="0.57" transform="rotate(90 12 12)"/><rect width="2" height="5" x="11" y="1" fill="white" opacity="0.71" transform="rotate(120 12 12)"/><rect width="2" height="5" x="11" y="1" fill="white" opacity="0.86" transform="rotate(150 12 12)"/><rect width="2" height="5" x="11" y="1" fill="white" transform="rotate(180 12 12)"/><animateTransform attributeName="transform" calcMode="discrete" dur="1.125s" repeatCount="indefinite" type="rotate" values="0 12 12;30 12 12;60 12 12;90 12 12;120 12 12;150 12 12;180 12 12;210 12 12;240 12 12;270 12 12;300 12 12;330 12 12;360 12 12"/></g></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" width={size} height={size} style={{shapeRendering: "auto", display: "block", background: "transparent"}} xmlnsXlink="http://www.w3.org/1999/xlink"><g><g transform="rotate(0 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.9166666666666666s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(30 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.8333333333333334s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(60 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.75s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(90 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.6666666666666666s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(120 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.5833333333333334s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(150 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.5s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(180 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.4166666666666667s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(210 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.3333333333333333s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(240 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.25s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(270 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.16666666666666666s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(300 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.08333333333333333s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(330 50 50)">
+      <rect x="46" y="1.5" rx="0" ry="0" width="8" height="23" fill={color}>
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="0s" repeatCount="indefinite"></animate>
+      </rect>
+    </g></g></svg>
   )
 }
 

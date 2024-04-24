@@ -12,45 +12,53 @@ import { SearchContent } from '@/components/bottom-sheet/contents'
 import KakaoMap from '@/components/kakaoMap'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
-import { update_station_cd } from '@/lib/store/modules/search'
 import { update_is_shown } from '@/lib/store/modules/bottom-sheet'
-import { update_is_shown_detail } from '@/lib/store/modules/search'
+import { update_is_shown_detail, update_bakery_cd } from '@/lib/store/modules/search'
 
 import { useModal } from '@/lib/hooks'
 import RegistrationBakeryContent from '@/components/modal/registration-bakery/Content'
-import type { Bakery } from '@/types/bakery'
-import { useGetPlaces } from '@/domain/search/query'
+import type { PlaceSummary } from '@/types/place'
+import { useGetPlaceList, useGetPlaceDetail } from '@/domain/search/query'
+import { convertPlaceList } from '@/app/search/_utils/convertPlaceList'
 
 export default function Search() {
-  const places = useGetPlaces();
-  console.log(places?.data)
-  const cache = useQueryClient()
-  const [ bakeryList ] = useState<Bakery[] | undefined>(()=>{
-    const data = cache.getQueryData(["places"])
-    return data ? data.data : []
-  })
   const router = useRouter()
+  const cache = useQueryClient()
   const dispatch = useAppDispatch()
   const windowSize = useWindowSize()
   const searchParams = useSearchParams()
-  const selectedBakeryId = searchParams?.get("bakery")
+  const stationId = searchParams?.get("stationId") // string | null
+  const selectedPlace = searchParams?.get("place") // string | null
   const bakeryCode = useAppSelector(((state) => state.search.bakery_cd))
-  const bakeries = useAppSelector(((state) => state.search.bakeries))
-  const [ bakery, setBakery ] = useState<Bakery>(null)
+  const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
+
+  const [ bakeryList, setBakeryList ] = useState<PlaceSummary[]>(cache.getQueryData(["places"]) ?? [])
+  const [ allThePlaces ] = useState<PlaceSummary[]>(cache.getQueryData(["places"]) ?? [])
+  const { data: places } = useGetPlaceList({ 
+    subwayStationId: stationId != null ? Number(stationId) : undefined,
+    placeId: bakeryCode ?? undefined
+  })
+
+  const [ detail, setDetail ] = useState(null)
+  const { data: placeDetail, isFetching } = useGetPlaceDetail(selectedPlace ? Number(selectedPlace) : 0)
 
   // set URL query parameter - search_query
-  const setUrlSearchQuery = (bakeryId: number, reset?: boolean) => {  
-    let params: any;
-    if (reset) params = new URLSearchParams()
-      else if (!searchParams) return
-      else params = new URLSearchParams(searchParams)
+  const setUrlSearchQuery = (type: 'card' | 'marker', placeId: number) => {  
+    if (!searchParams) return
+
+    const params = new URLSearchParams(searchParams)
+    
+    if (type === 'marker') {
+      params.delete('stationId')
+    }
   
-    params.set('bakery', bakeryId)
+    params.set('place', String(placeId))
     router.push(`search?${params.toString()}`)
   }
 
-  const handleClickBakeryCard = (bakeryId: number) => {
-    setUrlSearchQuery(bakeryId, true)
+  // 검색 결과 리스트에서 카드 클릭
+  const handleClickPlaceCard = (bakeryId: number) => {
+    setUrlSearchQuery('card', bakeryId)
     dispatch(update_is_shown_detail(true))
   }
 
@@ -60,42 +68,59 @@ export default function Search() {
   function handleOpenRegistrationBakeryModal() { RegistrationBakeryModal.open() }
   function handleCloseRegistrationBakeryModal() { RegistrationBakeryModal.close() }
 
+    // 쿼리 스트림 place 변경 시 동작
   useEffect(()=>{
-    if (!selectedBakeryId) return setBakery(null)
+    console.log(selectedPlace)
+    if (!selectedPlace) {
+      setDetail(null)
+      dispatch(update_is_shown_detail(false))
+      return
+    }
 
-    const targetBakery = bakeryList?.find((b: Bakery) => b.id === Number(selectedBakeryId))
-    setBakery(targetBakery)
     dispatch(update_is_shown(true)) // bottom-sheet
 
     if (1100 < windowSize.width) dispatch(update_is_shown_detail(true))
-  }, [selectedBakeryId])
+  }, [selectedPlace])
 
+  // 지도 마커 클릭했을 때 동작
   useEffect(()=>{
     if (!bakeryCode) return
 
-    dispatch(update_station_cd(""))
-    setUrlSearchQuery(bakeryCode, true)
+    setUrlSearchQuery('marker', bakeryCode)
   }, [bakeryCode])
 
-  return (
+  useEffect(()=>{
+    if (!stationId) return
+    if (bakeryCode) dispatch(update_bakery_cd(null))
+  }, [stationId])
+
+  useEffect(()=>{
+    const placeList = places?.data
+    if (!placeList?.length) return
+
+    setBakeryList(convertPlaceList(placeList))
+  }, [places])
+
+  useEffect(()=>{
+    if (!placeDetail?.data?.id) return
+
+    setDetail(placeDetail.data)
+  }, [placeDetail])
+
+  return allThePlaces && (
     <>
-      <div className={`${styles.container} ${bakery && styles.hasDetail}`}>
+      <div className={`${styles.container} ${isShownDetail && detail && styles.hasDetail}`}>
         <div className={styles.map}>
-          <KakaoMap bakeryList={bakeryList} bakeryCode={bakery ? bakery.id : null} />
+          <KakaoMap placeList={allThePlaces} placeCode={selectedPlace ? Number(selectedPlace) : null} />
         </div>
         {/* PC ver */}
         {1100 < windowSize.width &&
           <div className={styles.bakeries_wrap}>
-            <BakeryDetail bakery={bakery} />
+            <BakeryDetail place={detail} loading={isFetching} />
             <div className={styles.cards}>
-              {bakeries
-                ? bakeries.map((bakery: any) => (
-                    <BakeryCard key={bakery.id} bakery={bakery} onClick={handleClickBakeryCard} />
-                  ))
-                : bakeryList?.map((bakery: any) => (
-                  <BakeryCard key={bakery.id} bakery={bakery} onClick={handleClickBakeryCard} />
-                ))
-            }
+              {bakeryList.map((place: PlaceSummary) => (
+                <BakeryCard key={place.id} place={place} onClick={handleClickPlaceCard} />
+              ))}
             </div>
             
             <button 
@@ -112,9 +137,9 @@ export default function Search() {
       {/* Mobile ver */}
       {windowSize.width <= 1100 &&
         <>
-          <BakeryDetail bakery={bakery} />
+          {/* <BakeryDetail bakery={bakery} /> */}
           <BottomSheet handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
-            <SearchContent bakeries={bakeries ?? bakeryList} handleClickBakeryCard={handleClickBakeryCard} />
+            <SearchContent placeList={bakeryList} handleClickPlaceCard={handleClickPlaceCard} />
           </BottomSheet>
         </>
       }

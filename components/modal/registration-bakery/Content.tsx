@@ -62,7 +62,7 @@ const RegistrationBakeryContent = ({
       </div>}
       onClose={handleCloseSuccessModal} 
     />,
-    {top: '30%'}
+    {style: {top: '30%'}}
   )
   function handleOpenSuccessModal() { SuccessModal.open() }
   function handleCloseSuccessModal() {

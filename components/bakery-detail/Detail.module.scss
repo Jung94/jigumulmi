@@ -1,35 +1,76 @@
 @use "sass:map";
 @import "styles/_variables.scss";
 
-@keyframes openDetailOfBakery {
+@keyframes fade-in {
   0% {opacity: 0;}
   100% {opacity: 1;}
 }
 
-.card_detail {
+@keyframes show-loading {
+  0% {
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 0);
+  }
+  100% {
+    pointer-events: all;
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+}
 
+@keyframes hide-loading {
+  0% {
+    pointer-events: all;
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 0);
+  }
+}
+
+.wrapper {
   @media (1100px < width) {
+    position: relative;
     width: 380px;
     border-right: 1px solid #555;
-    animation: openDetailOfBakery 0.5s ease-out 0.1s 1 alternate both;
+    animation: fade-in 0.5s ease-out 0.1s 1 alternate both;
   }
-
+  
   @media (width <= 1100px) {
-    // border: 1px solid red;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 1100;
-    animation: openDetailOfBakery 0.15s ease-out 0.05s 1 alternate both;
+    animation: fade-in 0.15s ease-out 0.05s 1 alternate both;
+  }
+  
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+  }
+  .show_loading {
+    animation: show-loading 0.7s ease-out 0s 1 alternate both;
+  }
+  .hide_loading {
+    animation: hide-loading 0.7s ease-out 0s 1 alternate both;
   }
 
   opacity: 0;
-  overflow-y: auto;
   background-color: map.get($--colors, "off-white");
-  // background-color: green;
-  // animation: name duration timing-function delay iteration-count direction fill-mode;
+  
+  .content {
+    height: 100%;
+    overflow-y: auto;
+  }
 
   .header {
     @media (1100px < width) {

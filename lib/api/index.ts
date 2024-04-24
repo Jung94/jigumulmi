@@ -16,10 +16,10 @@ export const getAPI = async (apiURL: string, params?: any) => {
   }
 }
 
-export const postAPI = async ({ apiURL, body }: { apiURL: string; body?: any }) => {
-  console.log("\x1B[1m[postAPI] ", {apiURL, body})
+export const postAPI = async ({ apiURL, body, config }: { apiURL: string, body?: any, config?: any }) => {
+  console.log("\x1B[1m[postAPI] ", {apiURL, body, config})
   try {
-    const response = await Axios.post(apiURL, body)
+    const response = await Axios.post(apiURL, body, config)
     return response
   } catch (error: any) {
     return error.response
