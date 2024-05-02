@@ -36,7 +36,7 @@ export default function Search() {
   const [ allThePlaces ] = useState<PlaceSummary[]>(cache.getQueryData(["places"]) ?? [])
   const { data: places } = useGetPlaceList({ 
     subwayStationId: stationId != null ? Number(stationId) : undefined,
-    placeId: bakeryCode ?? undefined
+    placeId: bakeryCode ?? (selectedPlace ? Number(selectedPlace) : undefined)
   })
 
   const [ detail, setDetail ] = useState(null)
@@ -78,9 +78,9 @@ export default function Search() {
     }
 
     dispatch(update_is_shown(true)) // bottom-sheet
-
+    
     if (1100 < windowSize.width) dispatch(update_is_shown_detail(true))
-  }, [selectedPlace])
+  }, [selectedPlace, windowSize.width])
 
   // 지도 마커 클릭했을 때 동작
   useEffect(()=>{
@@ -106,6 +106,7 @@ export default function Search() {
 
     setDetail(placeDetail.data)
   }, [placeDetail])
+  
 
   return allThePlaces && (
     <>

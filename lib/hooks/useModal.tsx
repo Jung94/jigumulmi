@@ -5,12 +5,13 @@ import Dialog from '@/components/modal/Dialog';
 
 type Options = {
   disabledBackdropClosing?: boolean
+  disabledEscKey?: boolean
   style?: any
 }
 
 const useModal = (
   content: React.ReactNode, 
-  { disabledBackdropClosing, style }: Options={}
+  { disabledBackdropClosing, disabledEscKey, style }: Options={}
 ) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
@@ -28,7 +29,13 @@ const useModal = (
   useEffect(()=>{
     dialogRef.current?.addEventListener("click", (e: any) => {
       if (!!(dialogRef.current === e.target) && !disabledBackdropClosing) close();
-    })
+    });
+
+    if (disabledEscKey) {
+      dialogRef.current?.addEventListener('cancel', (event) => {
+        event.preventDefault();
+      });
+    }
   }, [])
 
   return { Dialog: create(), open, close };

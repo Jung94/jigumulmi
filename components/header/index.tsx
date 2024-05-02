@@ -22,14 +22,13 @@ const UserButton = ({ onOpen }: { onOpen: ()=>void }) => {
   )
 }
 
-const UserPopup = ({ userNickname, onClose }: { userNickname?: string, onClose: ()=>void }) => {
+export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, onClose: ()=>void }) => {
   const router = useRouter()
   const logout = usePostLogout()
   const modifyNickname = usePutNickname()
   const nicknameRef = useRef<HTMLInputElement>(null)
   const [ nickname, setNickname ] = useState<string>(userNickname ?? "")
   const [ status, setStatus ] = useState<'disabled' | 'active' | 'loading' | 'success' | 'error'>('disabled')
-  console.log(nickname)
 
   // 닉네임 수정
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {

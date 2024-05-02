@@ -60,7 +60,7 @@
   }
 
   .desc {
-    font-size: 13px;
+    font-size: 14px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -70,11 +70,11 @@
 
   button, .login {
     position: relative;
-    padding: 0.6rem 3rem;
+    padding: 0.75rem 3rem ;
     min-width: fit-content;
-    width: 15rem;
+    width: 17rem;
     color: rgba(0, 0, 0, 0.85);
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     border-radius: 5px;
     background-color: #FEE500;

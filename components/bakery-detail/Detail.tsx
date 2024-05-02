@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import styles from './Detail.module.scss'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
+import Review from '@/components/bakery-detail/components/review/review'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import { update_is_shown_detail } from '@/lib/store/modules/search'
 import type { Place } from '@/types/place'
@@ -24,6 +25,7 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading: boolea
     dispatch(update_is_shown_detail(false))
   }
 
+  // console.log(place)
 
   return place && isShownDetail && (
     <div className={styles.wrapper}>
@@ -49,7 +51,8 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading: boolea
               <div className={styles.title}>{place.name}</div>
               <div className={styles.category}>{place.category}</div>
             </div>
-            <div className={styles.info_wrap}>
+            
+            <div className={styles.section}>
               <div className={styles.info}>
                 <div className={styles.left} style={{margin: "0 0 0 -1px"}}>
                   <svg width="17px" height="17px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
@@ -59,9 +62,13 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading: boolea
                 </div>
                 <div className={styles.right}>
                   <div className={styles.address}>{place.address}</div>
-                  {/* <div className={styles.station}>2호선 홍대입구</div> */}
                 </div>
               </div>
+            </div>
+
+            <div className={styles.divider}></div>
+
+            <div className={styles.section}>
               <div className={styles.info}>
                 <div className={styles.left}>
                   <svg width="15px" height="15px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
@@ -77,7 +84,7 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading: boolea
                         </div>
                         <div className={styles.time}>
                           <div className={styles.start}>{h[1].split(" - ")[0]}</div>
-                          {h[1].split(" - ")[1] && <div className={styles.divider}>~</div>}
+                          {h[1].split(" - ")[1] && <div>~</div>}
                           <div className={styles.end}>{h[1].split(" - ")[1]}</div>
                         </div>
                       </div>
@@ -86,7 +93,11 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading: boolea
                 </div>
               </div>
             </div>
-            <div className={styles.content_wrap}>
+
+            <div className={styles.divider}></div>
+
+            <div className={styles.section}>
+              <div className={styles.title}>메뉴</div>
               <div className={styles.main_menus}>
                 {place.menuList.map((menu: {id: number, name: string}) => {
                   return (
@@ -97,7 +108,6 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading: boolea
                         </svg>
                       </div>
                       <div className={styles.menu_nm}>{menu.name}</div>
-                      {/* <div className={styles.price}>6,000원</div> */}
                     </div>
                   )
                 })}
@@ -106,46 +116,10 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading: boolea
                 {place.additionalInfo}
               </div>
             </div>
-            <div className={styles.content_wrap}>
-              <div className={styles.main_menus}>
-                {place.menuList.map((menu: {id: number, name: string}) => {
-                  return (
-                    <div key={menu.id} className={styles.menu}>
-                      <div className={styles.checkbox}>
-                        <svg width="11px" height="11px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
-                          <path d="M5 13l4 4L19 7" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                        </svg>
-                      </div>
-                      <div className={styles.menu_nm}>{menu.name}</div>
-                      {/* <div className={styles.price}>6,000원</div> */}
-                    </div>
-                  )
-                })}
-              </div>
-              <div className={styles.additional_info}>
-                {place.additionalInfo}
-              </div>
-            </div>
-            <div className={styles.content_wrap}>
-              <div className={styles.main_menus}>
-                {place.menuList.map((menu: {id: number, name: string}) => {
-                  return (
-                    <div key={menu.id} className={styles.menu}>
-                      <div className={styles.checkbox}>
-                        <svg width="11px" height="11px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
-                          <path d="M5 13l4 4L19 7" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                        </svg>
-                      </div>
-                      <div className={styles.menu_nm}>{menu.name}</div>
-                      {/* <div className={styles.price}>6,000원</div> */}
-                    </div>
-                  )
-                })}
-              </div>
-              <div className={styles.additional_info}>
-                {place.additionalInfo}
-              </div>
-            </div>
+
+            <div className={styles.divider}></div>
+
+            <Review placeId={place.id} data={place.overallReview} />
           </div>
         </div>
       }

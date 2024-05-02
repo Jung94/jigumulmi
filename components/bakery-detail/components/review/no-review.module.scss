@@ -1,0 +1,19 @@
+@use "sass:map";
+@import "styles/_variables.scss";
+
+.wrapper {
+  padding: 1rem;
+  border-radius: 7px;
+  background-color: map.get($--colors, gray-300);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  .text_wrapper {
+    color: #232323;
+    text-align: center;
+    line-height: 1.5;
+  }
+}

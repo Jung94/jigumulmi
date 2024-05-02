@@ -11,7 +11,10 @@ export type Place = {
   additionalInfo: string
   mainImageUrl: string
   // images: string[]
+  overallReview: OverallReview
 }
+
+export type OverallReview = { totalCount: number, averageRating: number, statistics: {1: number, 2: number, 3: number, 4: number, 5: number} }
 
 export type PlaceSummary = {
   id: number
