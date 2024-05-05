@@ -115,6 +115,10 @@
   flex-direction: column;
   gap: 0.5rem;
 
+  @media (width <= 1100px) {
+    top: 2.5rem;
+  }
+
   .wrapper_modification_nickname {
     display: flex;
     justify-content: space-between;
@@ -141,6 +145,11 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      @media (width <= 1100px) { 
+        font-size: 15px;
+        width: 10rem;
+      }
 
       &:disabled {
         background-color: transparent;
