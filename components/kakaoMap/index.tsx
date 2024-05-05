@@ -54,7 +54,7 @@ const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCo
 
   const getMarkerImages = useCallback(() => {
     const normalImage = 'https://ifh.cc/g/9gS2ma.png' // inactive marker - desert-gold bgColor
-    const activeImage = 'https://ifh.cc/g/1pXKtO.png' // active marker
+    const activeImage = 'https://ifh.cc/g/PV5ZBA.png' // active marker
     const imageSize = new kakao.maps.Size(24, 32)
     const imageSizeActive = new kakao.maps.Size(32, 42)
     const markerImage = new kakao.maps.MarkerImage(normalImage, imageSize)
