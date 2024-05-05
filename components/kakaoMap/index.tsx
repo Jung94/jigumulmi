@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import styles from './kakaoMap.module.scss'
-import { set_kakao_places_func, update_bakery_cd } from '@/lib/store/modules/search'
+import { set_kakao_map_func, set_kakao_places_func, update_marker } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import type { PlaceSummary } from '@/types/place'
 
@@ -11,25 +11,9 @@ let markers: any[] = [];
 
 const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCode: number | null }) => {
   const dispatch = useAppDispatch()
-  const location = useAppSelector(((state) => state.search.location))
-  const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown))
   const mapRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<any>(null)
   const [bakeries, setBakeries] = useState<{id: number, name: string, latlng: any}[]>([])
-
-  function panTo(x: string, y: string) {
-    // 이동할 위도 경도 위치를 생성합니다 
-    var moveLatLon = new window.kakao.maps.LatLng(x, y)
-    
-    // 지도 중심을 부드럽게 이동시킵니다
-    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-    map.panTo(moveLatLon);            
-  }
-
-  useEffect(()=>{
-    if (!location.x || !location.y) return
-    panTo(location.x, location.y)
-  }, [location])
 
   useEffect(()=>{
     const kakaoMapScript = document.createElement('script')
@@ -47,6 +31,7 @@ const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCo
 
         const map = new window.kakao.maps.Map(mapContainer, mapOption)
         setMap(map)
+        dispatch(set_kakao_map_func(map))
 
         const positions = placeList.map((place: PlaceSummary) => {
           return {id: place.id, name: place.name, latlng: new kakao.maps.LatLng(place.position.latitude, place.position.longitude)}
@@ -114,7 +99,10 @@ const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCo
         // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
         selectedMarker = marker;
 
-        dispatch(update_bakery_cd(e.id))
+        dispatch(update_marker({
+          placeId: e.id,
+          position: {x: e.latlng.La, y:e.latlng.Ma}
+        }))
       })
 
       markers.push(marker)

@@ -18,8 +18,9 @@
       font-size: 15px;
 
       span {
-        color: map.get($--colors, gray-1000);
-        color: rgba(0, 0, 0, 0.8);
+        color: map.get($--colors, gray-900);
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 14px;
       }
     }
   }

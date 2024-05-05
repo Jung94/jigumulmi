@@ -182,7 +182,6 @@ const useBottomSheet = () => {
   }, []);
 
   useEffect(()=>{
-    console.log(isShownBottomSheet)
     if (isShownBottomSheet) sheetRef.current?.style.setProperty('transform', `translateY(-${wrapperHeight}px)`);
       else sheetRef.current?.style.setProperty('transform', 'translateY(0)');
   }, [isShownBottomSheet])

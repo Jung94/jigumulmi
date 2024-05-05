@@ -5,6 +5,7 @@ import Button from '@/components/button'
 import { useModal } from '@/lib/hooks'
 import RequestLoginContent from '@/components/modal/request-login/Content'
 import RegistrationReviewContent from '@/components/modal/registration-review/Content'
+import { checkIsLogin } from '@/domain/account/query/useGetUserDetail'
 
 export default function NoReview() {
   const RequestLoginModal = useModal(
@@ -18,6 +19,7 @@ export default function NoReview() {
 
   const RegistrationReviewModal = useModal(
     <RegistrationReviewContent
+      type='post'
       onClose={handleCloseRegistrationReviewModal} 
     />,
     {style: {top: '30%'}}
@@ -25,9 +27,11 @@ export default function NoReview() {
   function handleOpenRegistrationReviewModal() { RegistrationReviewModal.open() }
   function handleCloseRegistrationReviewModal() { RegistrationReviewModal.close()}
 
-  const handleOpenModal = () => {
-    handleOpenRequestLoginModal()
-    // handleOpenRegistrationReviewModal()
+  const handleOpenModal = async () => {
+    const response = await checkIsLogin()
+
+    if (response.status === 200) handleOpenRegistrationReviewModal()
+      else handleOpenRequestLoginModal()
   }
 
   return (

@@ -28,12 +28,12 @@
 }
 
 .container {
-  padding: 0 12px;
+  padding: 0 10px 3rem;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0;
+  bottom: 0;
   z-index: 9000;
   background-color: map.get($--colors, "off-white");
 
@@ -66,6 +66,11 @@
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+
+    .text {
+      text-align: center;
+      word-break: keep-all;
+    }
   }
 
   button, .login {

@@ -13,13 +13,28 @@ import KakaoMap from '@/components/kakaoMap'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import { update_is_shown } from '@/lib/store/modules/bottom-sheet'
-import { update_is_shown_detail, update_bakery_cd } from '@/lib/store/modules/search'
+import { update_is_shown_detail, update_marker } from '@/lib/store/modules/search'
 
 import { useModal } from '@/lib/hooks'
 import RegistrationBakeryContent from '@/components/modal/registration-bakery/Content'
 import type { PlaceSummary } from '@/types/place'
 import { useGetPlaceList, useGetPlaceDetail } from '@/domain/search/query'
 import { convertPlaceList } from '@/app/search/_utils/convertPlaceList'
+
+type KakaoSearchResult = {
+  address_name: string
+  category_group_code: string
+  category_group_name: string
+  category_name: string
+  distance: string
+  id: string
+  phone: string
+  place_name: string
+  place_url: string
+  road_address_name: string
+  x: string
+  y: string
+}
 
 export default function Search() {
   const router = useRouter()
@@ -28,18 +43,22 @@ export default function Search() {
   const windowSize = useWindowSize()
   const searchParams = useSearchParams()
   const stationId = searchParams?.get("stationId") // string | null
+  const stationName = searchParams?.get("stationName") // string | null
   const selectedPlace = searchParams?.get("place") // string | null
-  const bakeryCode = useAppSelector(((state) => state.search.bakery_cd))
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
+  const marker = useAppSelector(((state) => state.search.marker))
+  const kakaoMap = useAppSelector(((state) => state.search.kakaoMap))
+  const kakaoKeywordSearch = useAppSelector(((state) => state.search.kakaoKeywordSearch))
 
   const [ bakeryList, setBakeryList ] = useState<PlaceSummary[]>(cache.getQueryData(["places"]) ?? [])
   const [ allThePlaces ] = useState<PlaceSummary[]>(cache.getQueryData(["places"]) ?? [])
   const { data: places } = useGetPlaceList({ 
     subwayStationId: stationId != null ? Number(stationId) : undefined,
-    placeId: bakeryCode ?? (selectedPlace ? Number(selectedPlace) : undefined)
+    placeId: marker?.placeId ?? (selectedPlace ? Number(selectedPlace) : undefined)
   })
 
   const [ detail, setDetail ] = useState(null)
+  const handleResetDetail = () => setDetail(null)
   const { data: placeDetail, isFetching } = useGetPlaceDetail(selectedPlace ? Number(selectedPlace) : 0)
 
   // set URL query parameter - search_query
@@ -50,6 +69,10 @@ export default function Search() {
     
     if (type === 'marker') {
       params.delete('stationId')
+    } else if (type === 'card') {
+      if (!params.has('stationId')) {
+        params.set('stationId', "")
+      }
     }
   
     params.set('place', String(placeId))
@@ -68,9 +91,38 @@ export default function Search() {
   function handleOpenRegistrationBakeryModal() { RegistrationBakeryModal.open() }
   function handleCloseRegistrationBakeryModal() { RegistrationBakeryModal.close() }
 
+  function panTo(x: number, y: number) {
+    // 이동할 위도 경도 위치를 생성합니다 
+    var moveLatLon = new window.kakao.maps.LatLng(x, y)
+    
+    // 지도 중심을 부드럽게 이동시킵니다
+    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    kakaoMap.panTo(moveLatLon);
+  }
+
+  const getLocationOfKeyword = (value: string) => {
+    if (value.trim().slice(-1) === '역') value = value.trim()
+      else value = `${value.trim()}역`
+    
+    const getLocation = (result: KakaoSearchResult[], status: string) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        let location: KakaoSearchResult | undefined
+        const stations = result.filter((e: KakaoSearchResult) => e.category_group_code === 'SW8')  // SW8: 지하철역
+        
+        location = stations[0]
+
+        if (!location) return  // ex. 강릉역 검색 시
+        const locationY = 1100 < windowSize.width ? location.y : String(parseFloat(location.y) - 0.025)
+
+        panTo(Number(locationY), Number(location.x))
+        dispatch(update_is_shown(true))
+      }
+    }
+    kakaoKeywordSearch && kakaoKeywordSearch(value, getLocation)
+  }
+
     // 쿼리 스트림 place 변경 시 동작
   useEffect(()=>{
-    console.log(selectedPlace)
     if (!selectedPlace) {
       setDetail(null)
       dispatch(update_is_shown_detail(false))
@@ -82,17 +134,26 @@ export default function Search() {
     if (1100 < windowSize.width) dispatch(update_is_shown_detail(true))
   }, [selectedPlace, windowSize.width])
 
-  // 지도 마커 클릭했을 때 동작
   useEffect(()=>{
-    if (!bakeryCode) return
-
-    setUrlSearchQuery('marker', bakeryCode)
-  }, [bakeryCode])
+    if (!window.kakao || !kakaoMap || !stationName) return 
+    
+    getLocationOfKeyword(stationName)
+  }, [stationName, window.kakao, kakaoMap])
 
   useEffect(()=>{
     if (!stationId) return
-    if (bakeryCode) dispatch(update_bakery_cd(null))
+
+    if (marker) {
+      dispatch(update_marker(null))
+    }
   }, [stationId])
+
+  // 지도 마커 클릭했을 때 동작
+  useEffect(()=>{
+    if (!marker) return
+
+    setUrlSearchQuery('marker', marker.placeId)
+  }, [marker])
 
   useEffect(()=>{
     const placeList = places?.data
@@ -105,8 +166,11 @@ export default function Search() {
     if (!placeDetail?.data?.id) return
 
     setDetail(placeDetail.data)
+
+    return () => {
+      handleResetDetail()
+    }
   }, [placeDetail])
-  
 
   return allThePlaces && (
     <>
@@ -138,7 +202,8 @@ export default function Search() {
       {/* Mobile ver */}
       {windowSize.width <= 1100 &&
         <>
-          {/* <BakeryDetail bakery={bakery} /> */}
+          {!isFetching && <BakeryDetail place={detail} handleResetDetail={handleResetDetail} />}
+          
           <BottomSheet handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
             <SearchContent placeList={bakeryList} handleClickPlaceCard={handleClickPlaceCard} />
           </BottomSheet>

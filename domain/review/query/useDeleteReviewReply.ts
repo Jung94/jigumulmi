@@ -6,7 +6,7 @@ export default function useDeleteReviewReply ({reviewReplyId, onSuccess}: { revi
   const response = useMutation(
     [APIreview.deleteReply(reviewReplyId)],
     () => 
-    deleteAPI({apiURL: APIreview.deleteReply(reviewReplyId), data: { reviewReplyId }}),
+    deleteAPI({apiURL: APIreview.deleteReply(reviewReplyId)}),
     {
       onSuccess: async (data) => {
         console.log(data)

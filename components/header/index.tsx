@@ -130,8 +130,8 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
           
         </div>
         <div className={styles.wrapper_buttons}>
-          <Button style={{width: '100%', height: '2rem', fontSize: '12px'}} onClick={handleOpenFeedback}>건의 사항</Button>
-          <Button variant='outlined' style={{width: '100%', height: '2rem', fontSize: '12px'}} onClick={userNickname ? handleLogout : handleLogin}>
+          {/* <Button style={{width: '100%', height: '2rem', fontSize: '13px'}} onClick={handleOpenFeedback}>건의 사항</Button> */}
+          <Button style={{width: '100%', height: '2rem', fontSize: '13px'}} onClick={userNickname ? handleLogout : handleLogin}>
             {userNickname ? '로그아웃' : '로그인'}
           </Button>
         </div>
@@ -144,7 +144,6 @@ const Header = () => {
   const windowSize = useWindowSize()
   const { data: userDetail } = useGetUserDetail()
   const nickname: string | undefined = userDetail?.data?.nickname
-  console.log('userDetail:', nickname)
   const [ shownUserModal, setShownUserModal ] = useState(false)
 
   const openUserModal = () => setShownUserModal(true)
@@ -174,7 +173,11 @@ const Header = () => {
 
           {/* Mobile */}
           {windowSize.width <= 1100 &&
-            <SearchBar type='station' />
+            <div className={styles.buttons}>
+              <SearchBar type='station' />
+              <UserButton onOpen={openUserModal} />
+              {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
+            </div>
           }
         </nav>
       </header>

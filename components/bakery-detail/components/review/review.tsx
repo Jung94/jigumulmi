@@ -14,7 +14,7 @@ import type { OverallReview } from '@/types/place';
 
 export default function Review({ placeId, data }: { placeId: number, data: OverallReview }) {
   const { data: review } = useGetReview(placeId);
-  console.log(review)
+  console.log(review, data)
 
   const RequestLoginModal = useModal(
     <RequestLoginContent
@@ -27,6 +27,7 @@ export default function Review({ placeId, data }: { placeId: number, data: Overa
 
   const RegistrationReviewModal = useModal(
     <RegistrationReviewContent
+      type='post'
       onClose={handleCloseRegistrationReviewModal} 
     />,
     {disabledBackdropClosing: true, style: {top: '30%'}}
@@ -41,20 +42,24 @@ export default function Review({ placeId, data }: { placeId: number, data: Overa
       else handleOpenRequestLoginModal()
   }
 
-  return (
+  return review?.data && (
     <div className={styles.section}>
       <div className={styles.header_wrapper}>
-        <div className={styles.title}>리뷰 <span>{data.totalCount}</span></div>
+        <div className={styles.title}>리뷰 <span>{!data.totalCount ? '' : data.totalCount}</span></div>
         <Button
           variant='outlined'
-          style={{padding: '0px', width: '4.75rem', height: '1.65rem', fontSize: '12px', fontWeight: '400'}}
+          style={{padding: '0px', width: '4.2rem', height: '1.65rem', fontSize: '12px', fontWeight: '400'}}
           onClick={handleOpenModal}
-        >리뷰 남기기</Button>
+        >리뷰 작성</Button>
       </div>
-      {/* <NoComment /> */}
-      <RatingSection data={data}/>
-      {review?.data &&
-        <ReviewListSection reviewList={review.data} />
+      {review.data.length > 0
+        ? (<>
+          <RatingSection data={data}/>
+          {review.data &&
+            <ReviewListSection reviewList={review.data} />
+          }
+        </>)
+        : <NoComment />
       }
 
       {RequestLoginModal.Dialog}

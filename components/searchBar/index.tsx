@@ -5,9 +5,6 @@ import styles from './searchBar.module.scss'
 import { useWindowSize } from '@/lib/hooks'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { STATIONS } from '@/lib/json/subwayStation.json'
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
-import { update_location, update_bakeries } from '@/lib/store/modules/search'
-import { update_is_shown } from '@/lib/store/modules/bottom-sheet'
 import { useGetPlaceSubway } from '@/domain/search/query'
 
 declare global {

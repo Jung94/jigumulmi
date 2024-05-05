@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import Button from '@/components/button';
 import { useModal } from '@/lib/hooks';
 import SuccessContent from '@/components/modal/success/Content';
+import RequestLoginContent from '@/components/modal/request-login/Content';
 import { usePostRegisterReview } from '@/domain/review/query';
 
 import { useQueryClient } from '@tanstack/react-query';
@@ -31,7 +32,7 @@ const RegistrationReviewContent = ({
   onClose
 }: {
   type: 'post' | 'put'
-  reviewId: number
+  reviewId?: number
   curRating?: number
   curReview?: string
   onClose: ()=>void
@@ -79,7 +80,12 @@ const RegistrationReviewContent = ({
   async function handleCloseSuccessModal() {
     await queryClient.refetchQueries([placeDetailQueryKey(Number(selectedPlace))])
     await queryClient.refetchQueries([APIreview.review])
-    await queryClient.refetchQueries([APIreview.reply, reviewId])
+
+    if (!!reviewId) {
+      await queryClient.refetchQueries([APIreview.reply, reviewId])
+    } else {
+      await queryClient.refetchQueries([APIreview.reply])
+    }
 
     if (type === 'post') {
       setReview('')
@@ -89,6 +95,15 @@ const RegistrationReviewContent = ({
     SuccessModal.close()
     onClose()
   }
+
+  const RequestLoginModal = useModal(
+    <RequestLoginContent
+      onClose={handleCloseRequestLoginModal} 
+    />,
+    {style: {top: '30%'}}
+  )
+  function handleOpenRequestLoginModal() { RequestLoginModal.open() }
+  function handleCloseRequestLoginModal() { RequestLoginModal.close()}
 
   const mutatePostReview = async () => {
     setLoading(true)
@@ -113,6 +128,7 @@ const RegistrationReviewContent = ({
   }
 
   const mutatePutReview = () => {
+    if (!reviewId) return
     setLoading(true)
 
     putReview.mutate(

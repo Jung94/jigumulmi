@@ -5,7 +5,6 @@ const SuccessContent = ({
   title,
   content,
   onClick,
-  on
 }: { 
   title: string
   content?: any

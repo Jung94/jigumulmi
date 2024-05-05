@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import { update_is_shown_detail } from '@/lib/store/modules/search'
 import type { Place } from '@/types/place'
 
-const PlaceDetail = ({ place, loading }: { place?: Place | null, loading: boolean }) => {
+const PlaceDetail = ({ place, loading, handleResetDetail }: { place?: Place | null, loading?: boolean, handleResetDetail?: ()=>void }) => {
   const dispatch = useAppDispatch()
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   const getOpeningHour = (v: string) => {
@@ -22,6 +22,7 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading: boolea
   }
 
   const closeDetailOnMobile = () => {
+    handleResetDetail && handleResetDetail()
     dispatch(update_is_shown_detail(false))
   }
 

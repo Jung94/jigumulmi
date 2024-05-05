@@ -108,6 +108,10 @@
     }
   }
 
+  &_deleted {
+    color: map.get($--colors, gray-600);
+    font-size: 13px;
+  }
   &_content {
     font-size: 13px;
     word-break: break-all;
@@ -124,7 +128,8 @@
 
   &_footer {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
+    justify-content: flex-end;
     align-items: flex-end;
 
     button {
@@ -293,10 +298,10 @@
   }
 
   textarea {
-    padding: 6px;
+    padding: 4px 6px;
     width: 100%;
-    min-height: 1.83rem;
-    height: 1.83rem;
+    min-height: 1.7rem;
+    height: 1.7rem;
     border-radius: 5px;
     background-color: map.get($--colors, "blush");
 
@@ -308,7 +313,7 @@
   .wrapper_status {
     min-width: 2.5rem;
     width: 2.5rem;
-    height: 1.83rem;
+    height: 1.7rem;
     color: map.get($--colors, "brick-red");
     font-size: 12px;
     border-radius: 3px;

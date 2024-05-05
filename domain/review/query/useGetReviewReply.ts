@@ -6,7 +6,7 @@ export default function useGetReviewReply ({ reviewId, shown, replyCount }: { re
   const response = useQuery(
     [APIreview.reply, reviewId],
     () => getAPI(APIreview.reply, { reviewId }), {
-      enabled: !!(reviewId !== 0 && shown && replyCount !== 0)
+      enabled: !!(reviewId !== 0 && shown)
     })
   return response
 }

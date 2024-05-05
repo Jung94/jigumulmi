@@ -26,7 +26,7 @@ const RequestLoginContent = ({
         </svg>
       </button>
       <div className={styles.title}>
-        로그인이 필요합니다
+        로그인
       </div>
       <div className={styles.desc}>
         <div className={styles.text}>3초 만에 간편 소셜 로그인 후</div>

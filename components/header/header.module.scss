@@ -29,6 +29,13 @@
       align-items: center;
     }
 
+    .buttons {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     @media (1100px < width) {
       padding: 0 1.25rem;
 
@@ -46,10 +53,6 @@
         }
   
         .buttons {
-          position: relative;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
           gap: 1rem;
         }
       }
@@ -68,6 +71,10 @@
             font-size: 0.95rem;
             font-weight: 600;
           }
+        }
+
+        .buttons {
+          gap: 0.75rem;
         }
       }
     }

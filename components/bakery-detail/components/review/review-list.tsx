@@ -7,6 +7,7 @@ import Check from '@/public/icons/Check';
 import XMark from '@/public/icons/XMark';
 import Spinner from '@/public/icons/LoadingSpinnerWhite';
 import { useModal } from '@/lib/hooks';
+import RequestLoginContent from '@/components/modal/request-login/Content';
 import RegistrationReviewContent from '@/components/modal/registration-review/Content';
 import DeletionReviewContent from '@/components/modal/deletion-review/Content';
 
@@ -39,17 +40,41 @@ type Review = {
   replyCount: number
   isEditable: boolean
   reviewedAt: string
+  deletedAt: string
   member: {
     id: number
     email: string
     nickname: string
     createdAt: string
+    deregisteredAt: string
   }
 }
 
 const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
+  const queryClient = useQueryClient();
   const [ isModifying, setIsModifying ] = useState<boolean>(false);
-  const handleModify = () => setIsModifying(false)
+  const handleModify = () => setIsModifying(false);
+
+  const successDeletionReviewReply = async () => {
+    await queryClient.refetchQueries([APIreview.review])
+    await queryClient.refetchQueries([APIreview.reply])
+    handleCloseDeletionReviewReplyModal()
+  };
+
+  const deleteReviewReply = useDeleteReviewReply({
+    reviewReplyId: reviewReply.id,
+    onSuccess: successDeletionReviewReply
+  });
+
+  const DeletionReviewReplyModal = useModal(
+    <DeletionReviewContent
+      title='답글을 삭제하시겠어요?'
+      onClick={()=>deleteReviewReply.mutate()}
+    />,
+    {style: {top: '30%'}}
+  );
+  function handleOpenDeletionReviewReplyModal() { DeletionReviewReplyModal.open() };
+  function handleCloseDeletionReviewReplyModal() { DeletionReviewReplyModal.close()};
 
   return (
     <div className={styles.re_review_card}>
@@ -62,7 +87,7 @@ const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
               <button className={styles.re_review_card_header_left_modification} onClick={()=>setIsModifying(prev => !prev)}>
                 {isModifying ? '취소' : '수정'}
               </button>
-              <button className={styles.re_review_card_header_left_deletion}>삭제</button>
+              <button className={styles.re_review_card_header_left_deletion} onClick={handleOpenDeletionReviewReplyModal}>삭제</button>
             </>
           }
         </div>
@@ -74,7 +99,7 @@ const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
         : <div className={styles.re_review_card_content}>{reviewReply.content}</div>
       }
 
-      <div className={styles.re_review_card_footer}>
+      {/* <div className={styles.re_review_card_footer}>
         <button className={styles.re_review_card_footer_heart}>
           <svg width="18px" height="18px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
             <path d="M22 8.86222C22 10.4087 21.4062 11.8941 20.3458 12.9929C17.9049 15.523 15.5374 18.1613 13.0053 20.5997C12.4249 21.1505 11.5042 21.1304 10.9488 20.5547L3.65376 12.9929C1.44875 10.7072 1.44875 7.01723 3.65376 4.73157C5.88044 2.42345 9.50794 2.42345 11.7346 4.73157L11.9998 5.00642L12.2648 4.73173C13.3324 3.6245 14.7864 3 16.3053 3C17.8242 3 19.2781 3.62444 20.3458 4.73157C21.4063 5.83045 22 7.31577 22 8.86222Z" stroke="#E8674D" strokeWidth="1.5" strokeLinejoin="round">
@@ -82,7 +107,9 @@ const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
           </svg>
           <span>13</span>
         </button>
-      </div>
+      </div> */}
+
+      {DeletionReviewReplyModal.Dialog}
     </div>
   );
 };
@@ -125,7 +152,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
   function handleOpenDeletionReviewModal() { DeletionReviewModal.open() };
   function handleCloseDeletionReviewModal() { DeletionReviewModal.close()};
 
-  const { data: reviewReplyList, isFetching, isLoading } = useGetReviewReply({ 
+  const { data: reviewReplyList, isLoading } = useGetReviewReply({ 
     reviewId: review.id, 
     shown: shownReReview, 
     replyCount: review.replyCount 
@@ -141,37 +168,43 @@ const ReviewCard = ({ review }: { review: Review }) => {
         </div>
         <div className={styles.review_card_header_created_at}>{review.reviewedAt}</div>
       </div>
-      <div className={styles.review_card_rating}>
-        <div>
-          <span>평점:&nbsp;</span>
-          <span className={styles.review_card_rating_number}>{review.rating}점</span>
+      {!review.deletedAt &&
+        <div className={styles.review_card_rating}>
+          <div>
+            <span>평점:&nbsp;</span>
+            <span className={styles.review_card_rating_number}>{review.rating}점</span>
+          </div>
+          {review.isEditable &&
+            <div className={styles.review_card_rating_buttons}>
+              <button className={styles.review_card_rating_buttons_modification} onClick={handleOpenRegistrationReviewModal}>수정</button>
+              <button className={styles.review_card_rating_buttons_deletion} onClick={handleOpenDeletionReviewModal}>삭제</button>
+            </div>
+          }
+          {review.isEditable && isModifying &&
+            <div className={`${styles.review_card_rating_buttons} ${styles.review_card_rating_buttons_self}`}>
+              <button className={styles.review_card_rating_buttons_cancel} onClick={()=>setIsModifying(false)}>취소</button>
+              <button className={styles.review_card_rating_buttons_save}>저장</button>
+            </div>
+          }
         </div>
-        {review.isEditable &&
-          <div className={styles.review_card_rating_buttons}>
-            <button className={styles.review_card_rating_buttons_modification} onClick={handleOpenRegistrationReviewModal}>수정</button>
-            <button className={styles.review_card_rating_buttons_deletion} onClick={handleOpenDeletionReviewModal}>삭제</button>
-          </div>
-        }
-        {review.isEditable && isModifying &&
-          <div className={`${styles.review_card_rating_buttons} ${styles.review_card_rating_buttons_self}`}>
-            <button className={styles.review_card_rating_buttons_cancel} onClick={()=>setIsModifying(false)}>취소</button>
-            <button className={styles.review_card_rating_buttons_save}>저장</button>
-          </div>
-        }
-      </div>
-      {isModifying
-        ? <textarea>{review.content}</textarea>
-        : <div className={styles.review_card_content}>{review.content}</div>
+      }
+      
+      {review.deletedAt
+        ? <div className={styles.review_card_deleted}>삭제된 리뷰입니다.</div>
+        : (isModifying
+          ? <textarea>{review.content}</textarea>
+          : <div className={styles.review_card_content}>{review.content}</div>
+        )
       }
       
       <div className={styles.review_card_footer}>
-        <button className={styles.review_card_footer_heart}>
+        {/* <button className={styles.review_card_footer_heart}>
           <svg width="20px" height="20px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
             <path d="M22 8.86222C22 10.4087 21.4062 11.8941 20.3458 12.9929C17.9049 15.523 15.5374 18.1613 13.0053 20.5997C12.4249 21.1505 11.5042 21.1304 10.9488 20.5547L3.65376 12.9929C1.44875 10.7072 1.44875 7.01723 3.65376 4.73157C5.88044 2.42345 9.50794 2.42345 11.7346 4.73157L11.9998 5.00642L12.2648 4.73173C13.3324 3.6245 14.7864 3 16.3053 3C17.8242 3 19.2781 3.62444 20.3458 4.73157C21.4063 5.83045 22 7.31577 22 8.86222Z" stroke="#E8674D" strokeWidth="1.5" strokeLinejoin="round">
             </path>
           </svg>
           <span>13</span>
-        </button>
+        </button> */}
         {shownReReview
           ? (
             <button className={styles.review_card_footer_comment_button} onClick={()=>setShownReReview(false)}>
@@ -185,8 +218,8 @@ const ReviewCard = ({ review }: { review: Review }) => {
           : (
             <button className={styles.review_card_footer_comment_button} onClick={()=>setShownReReview(true)}>
               {!!(review.replyCount)
-                ? <span>{review.replyCount}개의 답글이 달렸어요</span>
-                : <span>답글을 작성해 보아요</span>
+                ? <span>{review.replyCount}개의 답글</span>
+                : <span>답글 작성</span>
               }
               <svg width="18px" height="18px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                 <path d="M6 9L12 15L18 9" stroke="hsl(0,0%,40%)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -224,6 +257,15 @@ const ReviewReplyForm = ({ reviewId=0, reviewReplyId=0, method, content='', muta
   const [ reply, setReply ] = useState(content);
   const [ status, setStatus ] = useState<'disabled' | 'active' | 'loading' | 'success' | 'error'>(content ? 'active' : 'disabled');
 
+  const RequestLoginModal = useModal(
+    <RequestLoginContent
+      onClose={handleCloseRequestLoginModal} 
+    />,
+    {style: {top: '30%'}}
+  )
+  function handleOpenRequestLoginModal() { RequestLoginModal.open() }
+  function handleCloseRequestLoginModal() { RequestLoginModal.close()}
+
   // 답글 작성 및 수정
   const handleChangeReply = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     textareaRef.current.style.height = 'auto'; //height 초기화
@@ -244,12 +286,13 @@ const ReviewReplyForm = ({ reviewId=0, reviewReplyId=0, method, content='', muta
           console.log(data)
           if (data.status === 201) {
             await queryClient.refetchQueries([APIreview.review])
-            await queryClient.refetchQueries([APIreview.reply, reviewId])
+            await queryClient.refetchQueries([APIreview.reply])
             setReply('')
             setStatus('success')
-          } else {
-            setStatus('error')
+          } else if (data.status === 403) {
+            handleOpenRequestLoginModal()
           }
+          setStatus('error')
         },
         onError(error, variables, context) {
           setStatus('error')
@@ -341,6 +384,7 @@ const ReviewReplyForm = ({ reviewId=0, reviewReplyId=0, method, content='', muta
           <XMark color='hsl(358,75%,59%)' />
         </div>
       }
+      {RequestLoginModal.Dialog}
     </div>
   );
 };
