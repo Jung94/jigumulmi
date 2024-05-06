@@ -8,6 +8,8 @@ import Button from '@/components/button';
 import { useModal } from '@/lib/hooks';
 import SuccessContent from '@/components/modal/success/Content';
 import { usePutNickname } from '@/domain/account/query';
+import { useQueryClient } from '@tanstack/react-query';
+import { APIaccount } from "@/lib/api/account";
 
 const RegistrationNicknameContent = ({
   defaultNickname="",
@@ -15,6 +17,7 @@ const RegistrationNicknameContent = ({
   defaultNickname: string
 }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const modifyNickname = usePutNickname();
   const [ nickname, setNickname ] = useState(defaultNickname);
 
@@ -60,6 +63,7 @@ const RegistrationNicknameContent = ({
           setLoading(false)
 
           if (data.status === 201) {
+            await queryClient.refetchQueries([APIaccount.getUserDetail])
             handleOpenSuccessModal()
           }
         },
