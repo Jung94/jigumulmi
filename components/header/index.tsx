@@ -5,6 +5,7 @@ import Image from 'next/image'
 import styles from './header.module.scss'
 import { useWindowSize } from '@/lib/hooks'
 import { useRouter } from 'next/navigation'
+import { useModal } from '@/lib/hooks'
 import SearchBar from '@/components/searchBar'
 import Logo from '@/public/jigumulmi_logo.png'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
@@ -12,6 +13,7 @@ import User from '@/public/icons/User'
 import Check from '@/public/icons/Check'
 import XMark from '@/public/icons/XMark'
 import Button from '@/components/button'
+import DeregistrationContent from '@/components/modal/deregistration/Content'
 import { usePostLogout, usePutNickname, useGetUserDetail } from '@/domain/account/query'
 
 const UserButton = ({ onOpen }: { onOpen: ()=>void }) => {
@@ -59,6 +61,13 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
       }
     )
   }
+
+  // 회원 탈퇴
+  const DeregistrationModal = useModal(
+    <DeregistrationContent />,
+    { disabledBackdropClosing: true, style: {top: '30%'} }
+  )
+  function handleOpenDeregistrationModal() { DeregistrationModal.open() }
 
   // 건의 사항 모달 열기
   const handleOpenFeedback = () => {
@@ -134,8 +143,12 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
           <Button style={{width: '100%', height: '2rem', fontSize: '13px'}} onClick={userNickname ? handleLogout : handleLogin}>
             {userNickname ? '로그아웃' : '로그인'}
           </Button>
+          {userNickname &&
+            <Button variant='outlined' style={{width: '100%', height: '2rem', fontSize: '13px'}} onClick={handleOpenDeregistrationModal}>회원 탈퇴</Button>
+          }
         </div>
       </div>
+      {DeregistrationModal.Dialog}
     </>
   )
 }
@@ -163,22 +176,28 @@ const Header = () => {
           </button>
           
           {/* PC */}
-          {1100 < windowSize.width &&
+          {/* {1100 < windowSize.width &&
             <div className={styles.buttons}>
               <SearchBar type='station' />
               <UserButton onOpen={openUserModal} />
               {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
             </div>
-          }
+          } */}
 
           {/* Mobile */}
-          {windowSize.width <= 1100 &&
+          {/* {windowSize.width <= 1100 &&
             <div className={styles.buttons}>
               <SearchBar type='station' />
               <UserButton onOpen={openUserModal} />
               {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
             </div>
-          }
+          } */}
+
+          <div className={styles.buttons}>
+            <SearchBar type='station' />
+            <UserButton onOpen={openUserModal} />
+            {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
+          </div>
         </nav>
       </header>
     </div>

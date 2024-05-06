@@ -45,7 +45,7 @@ export default function LoginPage() {
     const { status, data } = await checkRegistered(code)
     
     if (status === 201) {
-      queryClient.invalidateQueries([APIaccount.getUserDetail])
+      // queryClient.invalidateQueries([APIaccount.getUserDetail])
       setIsLoading(false)
 
       if (data.hasRegistered) { // 기존 회원

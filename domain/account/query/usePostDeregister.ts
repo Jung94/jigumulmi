@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { postAPI } from "@/lib/api";
 import { APIaccount } from "@/lib/api/account";
 
-const usePostDeregister = () => {
+export default function usePostDeregister () {
   const response = useMutation(
     [APIaccount.deregister],
     () => postAPI({apiURL: APIaccount.deregister}),
@@ -10,8 +10,7 @@ const usePostDeregister = () => {
       onSuccess: async (data) => {
         console.log(data)
         if (data.status === 201) {
-          
-          // document.location.reload()
+          document.location.reload()
         }
       },
       onError: (error, variables, context) => {
@@ -20,6 +19,4 @@ const usePostDeregister = () => {
     })
   return response
 }
-
-export default usePostDeregister
 
