@@ -59,7 +59,7 @@ const RegistrationNicknameContent = ({
       { nickname },
       {
         onSuccess: async (data) => {
-          console.log(data)
+          console.log('updateNickname, success', data)
           setLoading(false)
 
           if (data.status === 201) {
@@ -68,6 +68,7 @@ const RegistrationNicknameContent = ({
           }
         },
         onError(error, variables, context) {
+          console.log('updateNickname', error)
           setLoading(false)
           alert('닉네임 등록에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.')
         },

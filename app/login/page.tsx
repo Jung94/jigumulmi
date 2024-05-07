@@ -40,9 +40,10 @@ export default function LoginPage() {
   }
 
   const kakaoLoginRedirectURL = async (code: string) => {
-    console.log('kakaoLoginRedirectURL')
+    const REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL_ORIGIN
 
-    const { status, data } = await checkRegistered(code)
+    if (!code || !REDIRECT_URI) return
+    const { status, data } = await checkRegistered(code, decodeURI(REDIRECT_URI))
     
     if (status === 201) {
       queryClient.invalidateQueries([APIaccount.getUserDetail])
