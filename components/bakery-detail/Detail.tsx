@@ -26,8 +26,6 @@ const PlaceDetail = ({ place, loading, handleResetDetail }: { place?: Place | nu
     dispatch(update_is_shown_detail(false))
   }
 
-  // console.log(place)
-
   return place && isShownDetail && (
     <div className={styles.wrapper}>
       <div className={`${styles.loading} ${loading ? styles.show_loading : styles.hide_loading}`}>

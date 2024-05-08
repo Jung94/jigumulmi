@@ -172,6 +172,18 @@ export default function Search() {
     }
   }, [placeDetail])
 
+  useEffect(()=>{
+    const handleShownDetailOnMobile = () => {
+      if (windowSize.width <= 1100) dispatch(update_is_shown_detail(false))
+    }
+    window.addEventListener('popstate', handleShownDetailOnMobile)
+    // setTimeout(()=>{
+    //   window.addEventListener('popstate', handleShownDetailOnMobile)
+    // }, 2000)
+
+    return () => window.removeEventListener('popstate', handleShownDetailOnMobile)
+  }, [])
+
   return allThePlaces && (
     <>
       <div className={`${styles.container} ${isShownDetail && detail && styles.hasDetail}`}>
