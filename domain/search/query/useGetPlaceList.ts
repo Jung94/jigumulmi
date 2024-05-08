@@ -15,7 +15,7 @@ export default function useGetPlaceList ({
     [APIsearch.getPlaceList, subwayStationId, placeId],
     () => getAPI(
       APIsearch.getPlaceList,
-      { subwayStationId: subwayStationId ?? null, placeId: placeId ?? null }
+      { subwayStationId: subwayStationId !== 0 ? (subwayStationId ?? null) : null, placeId: placeId ?? null }
     ), {
       enabled: !(subwayStationId && placeId)
     })
