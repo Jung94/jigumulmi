@@ -11,8 +11,7 @@ export default function NoReview() {
   const RequestLoginModal = useModal(
     <RequestLoginContent
       onClose={handleCloseRequestLoginModal} 
-    />,
-    {style: {top: '30%'}}
+    />
   )
   function handleOpenRequestLoginModal() { RequestLoginModal.open() }
   function handleCloseRequestLoginModal() { RequestLoginModal.close()}
@@ -21,8 +20,7 @@ export default function NoReview() {
     <RegistrationReviewContent
       type='post'
       onClose={handleCloseRegistrationReviewModal} 
-    />,
-    {style: {top: '30%'}}
+    />
   )
   function handleOpenRegistrationReviewModal() { RegistrationReviewModal.open() }
   function handleCloseRegistrationReviewModal() { RegistrationReviewModal.close()}

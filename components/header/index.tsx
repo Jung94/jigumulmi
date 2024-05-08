@@ -65,7 +65,7 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
   // 회원 탈퇴
   const DeregistrationModal = useModal(
     <DeregistrationContent />,
-    { disabledBackdropClosing: true, style: {top: '30%'} }
+    { disabledBackdropClosing: true, style: {top: '45%'} }
   )
   function handleOpenDeregistrationModal() { DeregistrationModal.open() }
 
@@ -143,9 +143,9 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
           <Button style={{width: '100%', height: '2rem', fontSize: '13px'}} onClick={userNickname ? handleLogout : handleLogin}>
             {userNickname ? '로그아웃' : '로그인'}
           </Button>
-          {userNickname &&
+          {/* {userNickname &&
             <Button variant='outlined' style={{width: '100%', height: '2rem', fontSize: '13px'}} onClick={handleOpenDeregistrationModal}>회원 탈퇴</Button>
-          }
+          } */}
         </div>
       </div>
       {DeregistrationModal.Dialog}

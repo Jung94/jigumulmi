@@ -19,8 +19,7 @@ export default function Review({ placeId, data }: { placeId: number, data: Overa
   const RequestLoginModal = useModal(
     <RequestLoginContent
       onClose={handleCloseRequestLoginModal} 
-    />,
-    {style: {top: '30%'}}
+    />
   )
   function handleOpenRequestLoginModal() { RequestLoginModal.open() }
   function handleCloseRequestLoginModal() { RequestLoginModal.close()}
@@ -30,7 +29,7 @@ export default function Review({ placeId, data }: { placeId: number, data: Overa
       type='post'
       onClose={handleCloseRegistrationReviewModal} 
     />,
-    {disabledBackdropClosing: true, style: {top: '30%'}}
+    {disabledBackdropClosing: true}
   )
   function handleOpenRegistrationReviewModal() { RegistrationReviewModal.open() }
   function handleCloseRegistrationReviewModal() { RegistrationReviewModal.close()}

@@ -74,7 +74,7 @@ const RegistrationReviewContent = ({
       title='등록이 완료되었어요!' 
       onClose={handleCloseSuccessModal} 
     />,
-    {disabledBackdropClosing: true, style: {top: '30%'}}
+    {disabledBackdropClosing: true}
   )
   function handleOpenSuccessModal() { SuccessModal.open() }
   async function handleCloseSuccessModal() {
@@ -99,8 +99,7 @@ const RegistrationReviewContent = ({
   const RequestLoginModal = useModal(
     <RequestLoginContent
       onClose={handleCloseRequestLoginModal} 
-    />,
-    {style: {top: '30%'}}
+    />
   )
   function handleOpenRequestLoginModal() { RequestLoginModal.open() }
   function handleCloseRequestLoginModal() { RequestLoginModal.close()}

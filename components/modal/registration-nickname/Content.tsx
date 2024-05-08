@@ -37,10 +37,7 @@ const RegistrationNicknameContent = ({
       title='등록이 완료되었어요!' 
       onClose={handleCloseSuccessModal} 
     />,
-    {
-      disabledBackdropClosing: true,
-      style: {top: '30%'}
-    }
+    { disabledBackdropClosing: true }
   )
   function handleOpenSuccessModal() { SuccessModal.open() }
 

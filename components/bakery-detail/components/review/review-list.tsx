@@ -70,8 +70,7 @@ const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
     <DeletionReviewContent
       title='답글을 삭제하시겠어요?'
       onClick={()=>deleteReviewReply.mutate()}
-    />,
-    {style: {top: '30%'}}
+    />
   );
   function handleOpenDeletionReviewReplyModal() { DeletionReviewReplyModal.open() };
   function handleCloseDeletionReviewReplyModal() { DeletionReviewReplyModal.close()};
@@ -127,7 +126,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
       curReview={review.content}
       onClose={handleCloseRegistrationReviewModal} 
     />,
-    {disabledBackdropClosing: true, disabledEscKey: true, style: {top: '30%'}}
+    {disabledBackdropClosing: true, disabledEscKey: true}
   );
   function handleOpenRegistrationReviewModal() { RegistrationReviewModal.open() };
   function handleCloseRegistrationReviewModal() { RegistrationReviewModal.close()};
@@ -147,7 +146,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
       title='댓글을 삭제하시겠어요?'
       onClick={()=>deleteReview.mutate()}
     />,
-    {style: {top: '30%'}}
+    {style: {top: '45%'}}
   );
   function handleOpenDeletionReviewModal() { DeletionReviewModal.open() };
   function handleCloseDeletionReviewModal() { DeletionReviewModal.close()};
@@ -260,8 +259,7 @@ const ReviewReplyForm = ({ reviewId=0, reviewReplyId=0, method, content='', muta
   const RequestLoginModal = useModal(
     <RequestLoginContent
       onClose={handleCloseRequestLoginModal} 
-    />,
-    {style: {top: '30%'}}
+    />
   )
   function handleOpenRequestLoginModal() { RequestLoginModal.open() }
   function handleCloseRequestLoginModal() { RequestLoginModal.close()}
