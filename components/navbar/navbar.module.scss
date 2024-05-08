@@ -2,11 +2,11 @@
 @import "styles/_variables.scss";
 
 .navbar {
-  @media (1100px < width) {
+  @media (min-width: 1101px) {
     display: none;
   }
 
-  @media (width <= 1100px) {
+  @media (max-width: 1100px) {
     position: fixed;
     left: 0;
     right: 0;

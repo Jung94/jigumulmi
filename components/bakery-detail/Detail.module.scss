@@ -29,14 +29,14 @@
 }
 
 .wrapper {
-  @media (1100px < width) {
+  @media (min-width: 1101px) {
     position: relative;
     width: 380px;
     border-right: 1px solid #555;
     animation: fade-in 0.5s ease-out 0.1s 1 alternate both;
   }
   
-  @media (width <= 1100px) {
+  @media (max-width: 1100px) {
     position: fixed;
     top: 0;
     left: 0;
@@ -74,10 +74,10 @@
   }
 
   .header {
-    @media (1100px < width) {
+    @media (min-width: 1101px) {
       display: none;
     }
-    @media (width <= 1100px) {
+    @media (max-width: 1100px) {
       padding: 0 calc($--padding--mobile - 4px);
       height: $--header-height-mobile;
       border-bottom: 1px solid #222;
@@ -100,10 +100,10 @@
     width: 100%;
     aspect-ratio: 3 / 2;
 
-    @media (1100px < width) {
+    @media (min-width: 1101px) {
       max-width: 380px;
     }
-    @media (width <= 1100px) {
+    @media (max-width: 1100px) {
       max-width: 100%;
       border-bottom: 1px solid #222;
     }

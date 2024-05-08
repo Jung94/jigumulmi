@@ -163,44 +163,24 @@ const Header = () => {
   const closeUserModal = () => setShownUserModal(false)
 
   return (
-    <div className={styles.container}>
-      <header>
-        <nav className={styles.nav}>
-          <button className={styles.links}>
-            {1100 < windowSize.width &&
-              <Image src={Logo} width={100} height={25} alt='logo' style={{marginTop: '4px'}} ></Image>
-            }
-            {windowSize.width <= 1100 &&
-              <Image src={Logo} width={85} height={22} alt='logo' style={{marginTop: '8px'}} ></Image>
-            }
-          </button>
-          
-          {/* PC */}
-          {/* {1100 < windowSize.width &&
-            <div className={styles.buttons}>
-              <SearchBar type='station' />
-              <UserButton onOpen={openUserModal} />
-              {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
-            </div>
-          } */}
+    <header className={styles.header}>
+      <nav className={styles.nav}>
+        <button className={styles.links}>
+          {1100 < windowSize.width &&
+            <Image src={Logo} width={100} height={25} alt='logo' style={{marginTop: '4px'}} ></Image>
+          }
+          {windowSize.width <= 1100 &&
+            <Image src={Logo} width={85} height={22} alt='logo' style={{marginTop: '8px'}} ></Image>
+          }
+        </button>
 
-          {/* Mobile */}
-          {/* {windowSize.width <= 1100 &&
-            <div className={styles.buttons}>
-              <SearchBar type='station' />
-              <UserButton onOpen={openUserModal} />
-              {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
-            </div>
-          } */}
-
-          <div className={styles.buttons}>
-            <SearchBar type='station' />
-            <UserButton onOpen={openUserModal} />
-            {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
-          </div>
-        </nav>
-      </header>
-    </div>
+        <div className={styles.buttons}>
+          <SearchBar type='station' />
+          <UserButton onOpen={openUserModal} />
+          {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
+        </div>
+      </nav>
+    </header>
   )
 }
 

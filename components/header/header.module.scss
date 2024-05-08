@@ -1,14 +1,15 @@
 @use "sass:map";
 @import "styles/_variables.scss";
 
-.container {
-  @media (1100px < width) {
+.header {
+  @media (min-width: 1101px) {
     position: -webkit-sticky; /* 사파리 브라우저 지원 */
     position: sticky;
   }
-  @media (width <= 1100px) {
+  @media (max-width: 1100px) {
     position: fixed;
   }
+  
   top: 0px;
   left: 0px;
   right: 0px;
@@ -17,66 +18,40 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
   z-index: 1100;
 
-  @media (1100px < width) { border-bottom: 2px solid #222; }
-  @media (width <= 1100px) { border-bottom: 1.5px solid #222; }
+  @media (min-width: 1101px) { border-bottom: 2px solid #222; }
+  @media (max-width: 1100px) { border-bottom: 1.5px solid #222; }
 
-  header {
+  nav {
+    padding: 0 1.25rem;
     width: 100%;
+    height: $--header-height-pc;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
 
-    nav {
-      width: 100%;
-      display: flex;
-      align-items: center;
-    }
-
-    .buttons {
-      position: relative;
-      display: flex;
+    @media (max-width: 1100px) {
+      padding: 8px $--padding--mobile;
+      height: $--header-height-mobile;
       justify-content: space-between;
-      align-items: center;
-    }
 
-    @media (1100px < width) {
-      padding: 0 1.25rem;
-
-      .nav {
-        height: $--header-height-pc;
-        justify-content: space-between;
-  
-        .links {
-          // border: 1px solid red;
-  
-          .logo {
-            font-size: 1.125rem;
-            font-weight: 600;
-          }
-        }
-  
-        .buttons {
-          gap: 1rem;
-        }
+      .links {
+        padding: 6px $--padding--mobile 6px 0;
       }
+    } 
+  }
+
+  .buttons {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    // @media (min-width: 1101px) {
+    @media (min-width: 1101px) {
+      gap: 1rem;
     }
-
-    @media (width <= 1100px) {
-      .nav {
-        padding: 8px $--padding--mobile;
-        height: $--header-height-mobile;
-        justify-content: space-between;
-  
-        .links {
-          padding: 6px $--padding--mobile 6px 0;
-  
-          .logo {
-            font-size: 0.95rem;
-            font-weight: 600;
-          }
-        }
-
-        .buttons {
-          gap: 0.75rem;
-        }
-      }
+    @media (max-width: 1100px) {
+      gap: 0.75rem;
     }
   }
 }
@@ -115,7 +90,7 @@
   flex-direction: column;
   gap: 0.5rem;
 
-  @media (width <= 1100px) {
+  @media (max-width: 1100px) {
     top: 2.5rem;
   }
 
@@ -146,7 +121,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
 
-      @media (width <= 1100px) { 
+      @media (max-width: 1100px) { 
         font-size: 15px;
         width: 9rem;
       }
