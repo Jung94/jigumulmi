@@ -3,9 +3,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import styles from './header.module.scss'
+import { useQueryClient } from '@tanstack/react-query'
 import { useWindowSize } from '@/lib/hooks'
 import { useRouter } from 'next/navigation'
 import { useModal } from '@/lib/hooks'
+import { APIaccount } from "@/lib/api/account"
 import SearchBar from '@/components/searchBar'
 import Logo from '@/public/jigumulmi_logo.png'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
@@ -27,6 +29,7 @@ const UserButton = ({ onOpen }: { onOpen: ()=>void }) => {
 export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, onClose: ()=>void }) => {
   const router = useRouter()
   const logout = usePostLogout()
+  const queryClient = useQueryClient()
   const modifyNickname = usePutNickname()
   const nicknameRef = useRef<HTMLInputElement>(null)
   const [ nickname, setNickname ] = useState<string>(userNickname ?? "")
@@ -51,6 +54,7 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
         onSuccess: async (data) => {
           console.log(data)
           if (data.status === 201) {
+            queryClient.refetchQueries([APIaccount.getUserDetail])
             setStatus('success')
           }
         },
