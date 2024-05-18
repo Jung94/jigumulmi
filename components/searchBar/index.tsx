@@ -73,6 +73,7 @@ const SearchBar = ({type}: SearchBarProps) => {
   const [autoCompleteList, setAutoCompleteList] = useState<AutoCompletedSubway[]>([])
 
   const handleFocus = () => setShownOptionList(true)
+  const handleBlur = () => {}
 
   // 지하철역 검색 키워드 자동완성
   useEffect(()=>{
@@ -109,13 +110,15 @@ const SearchBar = ({type}: SearchBarProps) => {
     
     setNowIndex(-1)
     setShownOptionList(false)
+    inputRef.current?.blur()
 
     // PC - auto-search가 클릭(엔터)되어도 한 번 더 검색하기 때문에 focus가 되어야 합니다.
     // Mobile - auto-search가 클릭(엔터)되면 곧바로 검색되는 것이 자연스럽기 때문에 blur 되어야 합니다.
     if (1100 < windowSize.width) {
       // inputRef.current?.focus()
+
     } else {
-      inputRef.current?.blur()
+      // inputRef.current?.blur()
     }
   }
 
@@ -169,10 +172,25 @@ const SearchBar = ({type}: SearchBarProps) => {
     setNowIndex(-1)
   }, [value])
 
+  useEffect(()=>{
+    const handleClick = (e: MouseEvent) => {
+      if (inputRef.current) {
+        if (inputRef.current.contains(e.target as Node)) {
+          setShownOptionList(true)
+        } else if (autoRef.current && !autoRef.current.contains(e.target as Node)) {
+          setShownOptionList(false)
+          inputRef.current.blur()
+        }
+      }
+    };
+    window.addEventListener('mousedown', handleClick);
+    return () => window.removeEventListener('mousedown', handleClick);
+  }, [inputRef, autoRef])
+
 
   return (
-    <div className={styles.container}>
-      <input ref={inputRef} type='text' placeholder={searchType.placeholder} value={value} onChange={handleChangeInput} onKeyDown={handleKeyArrow} onFocus={handleFocus} />
+    <div className={styles.container} >
+      <input ref={inputRef} type='text' placeholder={searchType.placeholder} value={value} onChange={handleChangeInput} onKeyDown={handleKeyArrow} />
       {!!value &&
         <div className={styles.erase_all_text} onClick={eraseAllText}>
           <svg width="19px" height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000" strokeWidth="1.5">
@@ -194,6 +212,7 @@ const SearchBar = ({type}: SearchBarProps) => {
                   ${nowIndex === index && styles.active}
                 `}
                 onClick={() => selectAutoSearchResult(e.id)}
+                onMouseDown={e => e.preventDefault()}
               >
                 <div>{e.stationName}</div>
                 {/* <div className={styles.line_num}>{e.lineNumber}</div> */}

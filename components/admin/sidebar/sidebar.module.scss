@@ -1,0 +1,21 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.sidebar {
+  position: relative;
+  padding: 0.8rem 1rem;
+  display: flex;
+  flex-direction: column;
+
+  .logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding: 0.4rem 1.05rem;
+    height: 3rem;
+    margin-bottom: 2.45rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

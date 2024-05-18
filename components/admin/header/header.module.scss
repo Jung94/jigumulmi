@@ -1,0 +1,13 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.header {
+  height: 100%;
+  padding: 1rem 2rem;
+
+  display: flex;
+  justify-content: space-between;
+
+  .left_box {
+  }
+}

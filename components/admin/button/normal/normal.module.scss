@@ -1,0 +1,67 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.button {
+  padding: 9.5px 12px 9px;
+  height: 42px;
+  min-width: fit-content;
+  font-size: 14px;
+  border-radius: 6px;
+  transition-duration: .15s;
+  transition-timing-function: ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.normal {
+  color: #FFFFFF;
+  border: 1px solid #171717;
+  background-color: #171717;
+  &:hover {
+    border: 1px solid #383838;
+    background-color: #383838;
+  }
+}
+
+.primary {
+  color: #FFFFFF;
+  // border: 1px solid #0070F3;
+  // background-color: #0070F3;
+
+  border: 1px solid map.get($--colors, "blue-700");
+  background-color: map.get($--colors, "blue-700");
+  &:hover {
+    border: 1px solid #1a83fa;
+    background-color: #1a83fa;
+  }
+}
+
+.empty {
+  color: #171717;
+  border: 1px solid map.get($--colors, "gray_3");
+  background-color: #FFFFFF;
+  &:hover {
+    border: 1px solid #e8e8e8;
+    background-color: map.get($--colors, "gray_2");
+  }
+}
+
+.deletion {
+  color: #ffffff;
+  border: 1px solid map.get($--colors, "red-800");
+  background-color: map.get($--colors, "red-800");
+  &:hover {
+    border: 1px solid map.get($--colors, "red-700");
+    background-color: map.get($--colors, "red-700");
+  }
+}
+
+.disabled {
+  color: #8F8F8F;
+  border: 1px solid map.get($--colors, "gray_3");
+  background-color: #F2F2F2;
+  pointer-events: none;
+  cursor: not-allowed;
+}

@@ -1,5 +1,5 @@
 @use "sass:map";
-@import "styles/_variables.scss";
+@import "styles/variables.scss";
 
 @mixin keyframes($name){
   @keyframes #{$name}{
@@ -29,12 +29,7 @@
 
 .container {
   padding: 0 10px 3rem;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9000;
+  height: 100vh;
   background-color: map.get($--colors, "off-white");
 
   display: flex;

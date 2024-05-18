@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/lib/utils/Provider'
 import Header from '@/components/header'
-import Navbar from '@/components/navbar'
 import getQueryClient from '@/lib/utils/getQueryClient'
 import { Hydrate, dehydrate } from '@tanstack/react-query'
 import { getPlaceList } from '@/app/actions'
@@ -25,9 +24,8 @@ export default async function RootLayout({children}: {children: React.ReactNode}
       <body className={inter.className}>
         <Providers>
           <Hydrate state={dehydratedState}>
-            <Header />
+            {/* <Header /> */}
             {children}
-            {/* <Navbar /> */}
           </Hydrate>
         </Providers>
       </body>

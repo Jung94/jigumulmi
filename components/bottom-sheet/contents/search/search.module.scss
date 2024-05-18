@@ -1,5 +1,5 @@
 @use "sass:map";
-@import "styles/_variables.scss";
+@import "styles/variables.scss";
 
 .bakery_cards_wrapper {
   height: calc($--wrapper-height - $--header-height);
