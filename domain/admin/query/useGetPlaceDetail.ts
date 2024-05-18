@@ -6,9 +6,9 @@ import { APIadmin } from "@/lib/api/admin";
 
 export default function useGetPlaceList (placeId: number | null) {
   const response = useQuery(
-    [APIadmin.place, placeId],
+    [APIadmin.placeDetail, placeId],
     () => getAPI(
-      APIadmin.place, { placeId }
+      APIadmin.placeDetail, { placeId }
     ), {
       enabled: !!(placeId)
     })

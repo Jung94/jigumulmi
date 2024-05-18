@@ -17,7 +17,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   const { data: placeDetail } = useGetPlaceDetail(
     params.placeId ? Number(params.placeId) : null
   )
-  console.log(placeDetail, placeDetail?.data)
+  console.log(placeDetail?.data)
 
   return (
     <Layout row>
