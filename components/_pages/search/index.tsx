@@ -158,6 +158,7 @@ export default function Search() {
   useEffect(()=>{
     const placeList = places?.data
     if (!placeList?.length) return
+    console.log(placeList)
 
     setBakeryList(convertPlaceList(placeList))
   }, [places])

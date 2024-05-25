@@ -16,10 +16,12 @@ export type Place = {
 
 export type OverallReview = { totalCount: number, averageRating: number, statistics: {1: number, 2: number, 3: number, 4: number, 5: number} }
 
+export type SubwayStation = { id: number, stationName: string, lineNumber: string }
+
 export type PlaceSummary = {
   id: number
   name: string
-  subwayStation: { id: number, stationName: string, lineNumber: string }
+  subwayStationList: SubwayStation[]
   position: { latitude: number, longitude: number }
   images: string[]
 }

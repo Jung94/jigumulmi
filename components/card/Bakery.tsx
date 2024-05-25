@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import styles from './Bakery.module.scss'
-import type { PlaceSummary } from '@/types/place'
+import type { PlaceSummary, SubwayStation } from '@/types/place'
 
 type Props = {
   place: PlaceSummary
@@ -34,10 +34,16 @@ const BakeryCard = ({ place, onClick }: Props) => {
           </div> */}
         </div>
         <div className={styles.bottom}>
-          <div className={`${styles.subway_line} ${styles[`line_${place.subwayStation.lineNumber}`]}`}>
-            {changeLineName(place.subwayStation.lineNumber)}
-          </div>
-          <div className={styles.subway_station}>{place.subwayStation.stationName}</div>
+          {place.subwayStationList.map((station: SubwayStation) => {
+            return (
+              <div key={station.id} className={styles.subway_station_wrapper}>
+                <div className={`${styles.subway_line} ${styles[`line_${station.lineNumber}`]}`}>
+                  {changeLineName(station.lineNumber)}
+                </div>
+                <div className={styles.subway_station}>{station.stationName}</div>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

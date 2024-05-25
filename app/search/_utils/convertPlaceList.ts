@@ -6,7 +6,7 @@ export const convertPlaceList = (placeList: any[]) => {
     return {
       id: place.id,
       name: place.name,
-      subwayStation: {id: place.subwayStation.id, stationName: place.subwayStation.stationName, lineNumber: place.subwayStation.lineNumber},
+      subwayStationList: place.subwayStationList ?? [],
       position: {latitude: place.position.latitude, longitude: place.position.longitude},
       images: [place.mainImageUrl],
       // category: place.category,
