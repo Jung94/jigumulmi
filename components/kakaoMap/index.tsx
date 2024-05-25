@@ -108,6 +108,50 @@ const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCo
       markers.push(marker)
     })
 
+    return () => {
+      bakeries.forEach((e: any, index: number) => {
+        const { markerImage, markerImageActive } = getMarkerImages()
+        
+        const marker = new kakao.maps.Marker({
+          map: map, // 마커를 표시할 지도
+          position: e.latlng, // 마커를 표시할 위치
+          title: e.id, // 마커의 타이틀
+          image: e.id === placeCode ? markerImageActive : markerImage,
+          zIndex: e.id === placeCode ? 1 : 0
+        })
+  
+        if (e.id === placeCode) selectedMarker = marker;
+  
+        // 마커에 클릭 이벤트 등록
+        window.kakao.maps.event.removeListener(marker, 'click', () => {
+          // https://apis.map.kakao.com/web/sample/multipleMarkerEvent2/
+          if (!selectedMarker || selectedMarker !== marker) {
+  
+            // 클릭된 마커 객체가 null이 아니면
+            // 클릭된 마커의 이미지를 기본 이미지로 변경하고
+            if (!!selectedMarker) {
+              selectedMarker.setImage(markerImage);
+              selectedMarker.setZIndex(0);
+            }
+  
+            // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+            marker.setImage(markerImageActive);
+            marker.setZIndex(1);
+          }
+  
+          // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+          selectedMarker = marker;
+  
+          dispatch(update_marker({
+            placeId: e.id,
+            position: {x: e.latlng.La, y:e.latlng.Ma}
+          }))
+        })
+  
+        markers.push(marker)
+      })
+    }
+
   }, [bakeries, map])
 
   useEffect(()=>{
