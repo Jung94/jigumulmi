@@ -9,7 +9,7 @@ export default function useGetPlaceSubway (stationName: string) {
       APIsearch.getSubwayStations,
       { stationName: stationName }
     ), {
-      // enabled: !!stationName
+      enabled: !!stationName
     })
   return response
 }

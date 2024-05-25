@@ -8,5 +8,5 @@ export const APIadmin = {
    * @description 장소 상세 조회
    * @method get
    */
-  placeDetail: `/admin/place/detail`,
+  getPlaceDetail: (placeId: number) => `/admin/place/detail/${placeId}`,
 }

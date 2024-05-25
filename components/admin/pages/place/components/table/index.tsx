@@ -29,8 +29,14 @@ export const Body = ({
           <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
           <Td align='left'>{el.name}</Td>
           <Td>{el.category}</Td>
-          <Td>{el.subwayStation.stationName} / {el.subwayStation.lineNumber}</Td>
-          <Td>{el.isApproved}</Td>
+          <Td>
+            {el.subwayStationList.map((v: any) => <span key={v.id}>{v.stationName}</span>)}
+          </Td>
+          <Td>
+            {el.isApproved 
+              ? <div style={{width: '0.75rem', height: '0.75rem', borderRadius: '0.75rem', backgroundColor: '#0D9276'}}></div> 
+              : <div style={{width: '0.75rem', height: '0.75rem', borderRadius: '0.75rem', backgroundColor: '#EF4040'}}></div>}
+          </Td>
         </Tr>
       )}
     </>
@@ -44,7 +50,7 @@ const TableSection = ({
   totalPage, 
   handlePage,
 }: TableProps) => {
-  const cols = ["35%", "15%", "35%", "15%"] // total: 100%
+  const cols = ["30%", "15%", "35%", "20%"] // total: 100%
   const columns = ["이름", "카테고리", "지하철", "승인 여부"]
   const rowsPerPage = 15 // 한 페이지 내 row 개수
 

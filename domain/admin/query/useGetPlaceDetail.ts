@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getAPI } from "@/lib/api";
 import { APIadmin } from "@/lib/api/admin";
 
-// export type PlaceDetailQueryParams = { placeId: number }
+export const placeDetailQueryKey = (placeId: number | null) => 
+  APIadmin.getPlaceDetail(placeId ?? 0)
 
 export default function useGetPlaceList (placeId: number | null) {
   const response = useQuery(
-    [APIadmin.placeDetail, placeId],
+    [placeDetailQueryKey(placeId), placeId],
     () => getAPI(
-      APIadmin.placeDetail, { placeId }
+      placeDetailQueryKey(placeId), { placeId }
     ), {
       enabled: !!(placeId)
     })

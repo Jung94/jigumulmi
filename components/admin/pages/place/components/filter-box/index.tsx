@@ -25,7 +25,7 @@ const FilterBox = ({
 
   return (
     <div className={styles.container} style={{alignItems: 'flex-end'}}>
-      <Button type='normal' onClick={handleClick} style={{height: '2.5rem', fontSize: '13px'}}>생성하기</Button>
+      <Button type='normal' onClick={handleClick} style={{height: '2.5rem', fontSize: '13px'}}>등록하기</Button>
       {/* <SelectBox.HiddenOption
         name="sort" 
         label='정렬'

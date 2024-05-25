@@ -14,6 +14,7 @@ type Props = {
   hasSearch?: boolean
   defaultName?: string
   styleShowBox?: any
+  styleLabel?: any
   style?: any
   onClick: (v: any)=>void
 }
@@ -28,6 +29,7 @@ const HiddenOption = ({
   hasSearch=false,
   defaultName='',
   styleShowBox,
+  styleLabel,
   style,
   onClick
 }: Props) => {
@@ -73,7 +75,7 @@ const HiddenOption = ({
       style={style}
       onMouseLeave={()=>setActiveOptionBox(false)}
     >
-      <div className={styles.label}>{label}</div>
+      <div className={styles.label} style={styleLabel}>{label}</div>
       <div 
         style={styleShowBox}
         className={`${styles.show_box} ${multi && styles.multi}`} 
