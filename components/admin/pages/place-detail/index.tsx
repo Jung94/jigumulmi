@@ -74,8 +74,9 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
       putPlace.mutate(body, { 
         onSuccess(data, variables, context) {
           if (data.status === 204) {
-            // queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId))])
-            queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId)), "places"])
+            queryClient.refetchQueries({queryKey: ["places"]})
+            queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId))])
+            // queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId)), "places"])
             alert('수정이 완료되었습니다')
             // router.push('/admin/place?sort=1&page=1')
           }
@@ -85,7 +86,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
       postPlace.mutate(body, { 
         onSuccess(data, variables, context) {
           if (data.status === 204) {
-            queryClient.invalidateQueries([APIadmin.place, "places"])
+            queryClient.refetchQueries({queryKey: ["places"]})
             alert('등록이 완료되었습니다')
             router.push('/admin/place?sort=1&page=1')
           }
