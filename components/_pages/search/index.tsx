@@ -47,7 +47,7 @@ export default function Search() {
   const selectedPlace = searchParams?.get("place") // string | null
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   const marker = useAppSelector(((state) => state.search.marker))
-  const kakaoMap = useAppSelector(((state) => state.search.kakaoMap))
+  const kakaoMapFunc = useAppSelector(((state) => state.search.kakaoMap))
   const kakaoKeywordSearch = useAppSelector(((state) => state.search.kakaoKeywordSearch))
 
   const [ bakeryList, setBakeryList ] = useState<PlaceSummary[]>(cache.getQueryData(["places"]) ?? [])
@@ -97,7 +97,7 @@ export default function Search() {
     
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-    kakaoMap.panTo(moveLatLon);
+    kakaoMapFunc.panTo(moveLatLon);
   }
 
   const getLocationOfKeyword = (value: string) => {
@@ -135,10 +135,10 @@ export default function Search() {
   }, [selectedPlace, windowSize.width])
 
   useEffect(()=>{
-    if (!window.kakao || !kakaoMap || !stationName) return 
+    if (!window.kakao || !kakaoMapFunc || !stationName) return 
     
     getLocationOfKeyword(stationName)
-  }, [stationName, window.kakao, kakaoMap])
+  }, [stationName, window.kakao, kakaoMapFunc])
 
   useEffect(()=>{
     if (!stationId) return

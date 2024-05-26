@@ -63,7 +63,7 @@ const Sidebar = () => {
 
   return (
     <div className={styles.sidebar}>
-      <Link href="/admin/place-list" className={styles.logo}>Jigumulmi</Link>
+      <Link href="/admin/place?page=1" className={styles.logo}>Jigumulmi</Link>
       {adminMenus.map((el: any) => 
         <Button 
           key={el.value} 

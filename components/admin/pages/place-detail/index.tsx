@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { APIadmin } from "@/lib/api/admin";
 import { placeDetailQueryKey } from '@/domain/admin/query/useGetPlaceDetail';
@@ -40,8 +40,6 @@ const defaultData = {
 
 export default function PlaceDetailPage({ params }: { params: Params }) {
   const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
   const queryClient = useQueryClient()
 
   const [ data, setData ] = useState<PlaceDetail>(defaultData)
@@ -76,7 +74,8 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
       putPlace.mutate(body, { 
         onSuccess(data, variables, context) {
           if (data.status === 204) {
-            queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId))])
+            // queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId))])
+            queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId)), "places"])
             alert('수정이 완료되었습니다')
             // router.push('/admin/place?sort=1&page=1')
           }
@@ -86,7 +85,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
       postPlace.mutate(body, { 
         onSuccess(data, variables, context) {
           if (data.status === 204) {
-            queryClient.invalidateQueries([APIadmin.place])
+            queryClient.invalidateQueries([APIadmin.place, "places"])
             alert('등록이 완료되었습니다')
             router.push('/admin/place?sort=1&page=1')
           }
