@@ -316,7 +316,7 @@ export default function FormSection ({
 
         <SelectBox.HiddenOption
           name="sort" 
-          label='정렬'
+          label='승인 여부'
           options={[{name: '승인', value: 1}, {name: '미승인', value: 2}]}
           selected={data.isApproved ? 1 : 2}
           onClick={(v)=>handleIsApproved(v)}
