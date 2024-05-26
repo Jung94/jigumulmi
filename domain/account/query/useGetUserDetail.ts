@@ -11,7 +11,7 @@ export default function useGetUserDetail () {
   const response = useQuery(
     [APIaccount.getUserDetail],
     () => getAPI(APIaccount.getUserDetail))
-  console.log('useGetUserDetail', response)
+  // console.log('useGetUserDetail', response)
   return response
 }
 

@@ -38,9 +38,9 @@ Axios.interceptors.response.use(
   },
   async (error) => {
     const res = error.response
-    console.log(res)
+    // console.log(res)
     if (res.status === 403) {
-      console.log('403')
+      // console.log('403')
       // await postAPI({apiURL: '/member/logout', body: {}})
       // alert('로그인이 필요합니다.')
     }

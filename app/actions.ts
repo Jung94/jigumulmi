@@ -2,7 +2,6 @@
 
 import { getAPI } from "@/lib/api"
 import { APIsearch } from '@/lib/api/search'
-import { APIaccount } from '@/lib/api/account'
 import { convertPlaceList } from '@/app/search/_utils/convertPlaceList'
 
 export async function getPlaceList() {
