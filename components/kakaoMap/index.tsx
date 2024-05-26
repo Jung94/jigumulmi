@@ -37,7 +37,7 @@ const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCo
           return {id: place.id, name: place.name, latlng: new kakao.maps.LatLng(place.position.latitude, place.position.longitude)}
         })
         setBakeries(positions)
-        console.log(placeList)
+        console.log('placeList:', placeList)
 
         const places = new window.kakao.maps.services.Places()
         dispatch(set_kakao_places_func(places))
@@ -66,7 +66,7 @@ const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCo
 
   useEffect(()=>{
     if (bakeries.length === 0 || !map) return
-    console.log(bakeries)
+    console.log('bakeries:', bakeries)
 
     bakeries.forEach((e: any, index: number) => {
       const { markerImage, markerImageActive } = getMarkerImages()
