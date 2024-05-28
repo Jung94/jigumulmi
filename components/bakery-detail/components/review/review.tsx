@@ -2,7 +2,8 @@
 
 import styles from './review.module.scss';
 import Button from '@/components/button';
-import NoComment from './no-review';
+import NoLogin from './no-login';
+import NoReview from './no-review';
 import RatingSection from './rating';
 import ReviewListSection from './review-list';
 import { useModal } from '@/lib/hooks';
@@ -10,10 +11,13 @@ import RequestLoginContent from '@/components/modal/request-login/Content';
 import RegistrationReviewContent from '@/components/modal/registration-review/Content';
 import { checkIsLogin } from '@/domain/account/query/useGetUserDetail';
 import { useGetReview } from '@/domain/review/query';
+import { useGetUserDetail } from '@/domain/account/query'
 import type { OverallReview } from '@/types/place';
 
 export default function Review({ placeId, data }: { placeId: number, data: OverallReview }) {
-  const { data: review } = useGetReview(placeId);
+  const { data: userDetail } = useGetUserDetail()
+  console.log(userDetail, userDetail?.data)
+  const { data: review } = useGetReview(placeId)
   console.log(review, data)
 
   const RequestLoginModal = useModal(
@@ -58,7 +62,10 @@ export default function Review({ placeId, data }: { placeId: number, data: Overa
             <ReviewListSection reviewList={review.data} />
           }
         </>)
-        : <NoComment />
+        : (userDetail?.status === 200
+          ? <NoReview />
+          : <NoLogin />
+        )
       }
 
       {RequestLoginModal.Dialog}
