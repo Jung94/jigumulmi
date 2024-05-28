@@ -44,11 +44,10 @@ export default function Rating ({ data }: { data: OverallReview }) {
     const onesPlace = Math.floor(averageRating)
     const rest = Math.floor((averageRating - onesPlace) * 100)
 
-    if (onesPlace > index) return 100
-    if (onesPlace < index) return 0
-    if (onesPlace === index) {
-      if (rest === 0) return 100
-        else return rest
+    if (onesPlace >= index) return 100
+    if (onesPlace < index) {
+      if (onesPlace === index - 1) return rest
+      return 0
     }
     return 0
   }
