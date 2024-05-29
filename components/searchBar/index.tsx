@@ -190,7 +190,7 @@ const SearchBar = ({type}: SearchBarProps) => {
       window.removeEventListener('mousedown', handleClick);
       window.removeEventListener('touchstart', handleClick);
     }
-  }, [inputRef, autoRef, kakaoMap])
+  }, [inputRef, autoRef])
 
 
   return (
