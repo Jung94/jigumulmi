@@ -130,8 +130,6 @@ const SearchBar = ({type}: SearchBarProps) => {
       if (nowIndex === -1) {  // 검색창에 있을 때
         if (windowSize.width <= 1100) inputRef.current?.blur()  // 모바일 - 키보드 이동(return) 클릭시 키보드 닫힘(input focus를 삭제)
       } else selectAutoSearchResult()  // 자동 검색 박스 안에 있을 때
-
-      setAutoCompleteList([])
     }
 
     if (autoCompleteList.length > 0) {
@@ -173,19 +171,26 @@ const SearchBar = ({type}: SearchBarProps) => {
   }, [value])
 
   useEffect(()=>{
-    const handleClick = (e: MouseEvent) => {
+    const handleClick = (e: MouseEvent | TouchEvent) => {
       if (inputRef.current) {
         if (inputRef.current.contains(e.target as Node)) {
           setShownOptionList(true)
         } else if (autoRef.current && !autoRef.current.contains(e.target as Node)) {
+          console.log('out---')
           setShownOptionList(false)
           inputRef.current.blur()
         }
       }
     };
+
     window.addEventListener('mousedown', handleClick);
-    return () => window.removeEventListener('mousedown', handleClick);
-  }, [inputRef, autoRef])
+    window.addEventListener('touchstart', handleClick);
+
+    return () => {
+      window.removeEventListener('mousedown', handleClick);
+      window.removeEventListener('touchstart', handleClick);
+    }
+  }, [inputRef, autoRef, kakaoMap])
 
 
   return (
