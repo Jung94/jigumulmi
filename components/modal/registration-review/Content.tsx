@@ -49,15 +49,6 @@ const RegistrationReviewContent = ({
 
   const handleRating = (order: number) => setRating(order);
 
-  const getStarLabel = (rating: number) => {
-    if (rating === 0) return '';
-    if (rating === 1 || rating === 2) return '아쉬워요';
-    if (rating === 3) return '그저그래요';
-    if (rating === 4) return '괜찮아요';
-    if (rating === 5) return '최고예요';
-    return '';
-  }
-
   const handleReview = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value }: { value: string } = e.target as HTMLTextAreaElement;
     setReview(value);
@@ -184,7 +175,6 @@ const RegistrationReviewContent = ({
               : (
                 <>
                   <span>{rating}점</span>
-                  ({getStarLabel(rating)})
                 </>
               )
             }
