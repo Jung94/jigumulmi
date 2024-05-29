@@ -60,6 +60,7 @@ const SearchBar = ({type}: SearchBarProps) => {
   const windowSize = useWindowSize()
   const searchParams = useSearchParams()
   const stationName = searchParams?.get("stationName") // string | null
+  const selectedPlace = searchParams?.get("place") // string | null
 
   const inputRef = useRef<HTMLInputElement>(null)
   const autoRef = useRef<any>(null)
@@ -171,6 +172,11 @@ const SearchBar = ({type}: SearchBarProps) => {
   }, [value])
 
   useEffect(()=>{
+    setShownOptionList(false)
+    inputRef.current?.blur()
+  }, [inputRef, selectedPlace])
+
+  useEffect(()=>{
     const handleClick = (e: MouseEvent | TouchEvent) => {
       if (inputRef.current) {
         if (inputRef.current.contains(e.target as Node)) {
@@ -184,11 +190,9 @@ const SearchBar = ({type}: SearchBarProps) => {
     };
 
     window.addEventListener('mousedown', handleClick);
-    window.addEventListener('touchstart', handleClick);
 
     return () => {
       window.removeEventListener('mousedown', handleClick);
-      window.removeEventListener('touchstart', handleClick);
     }
   }, [inputRef, autoRef])
 
