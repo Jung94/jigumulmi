@@ -33,6 +33,7 @@ const PlaceListBottomSheet = ({
         35,
         360
       ]}
+      expandOnContentDrag={true}
     >
       <div 
         className={`${styles.inner}`}

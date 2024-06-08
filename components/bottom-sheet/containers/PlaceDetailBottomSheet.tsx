@@ -35,6 +35,7 @@ const PlaceDetailBottomSheet = ({
         150,
         maxHeight - 52,
       ]}
+      expandOnContentDrag={true}
     >
       <div 
         className={`
