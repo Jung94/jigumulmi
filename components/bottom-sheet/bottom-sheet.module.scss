@@ -4,18 +4,6 @@
 .empty_space {
   height: 7px;
 }
-.inner {
-  border: 1px solid red;
-  width: 100%;
-  height: 100%;
-  background-color: map.get($--greys, "100");
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none; /* 인터넷 익스플로러 */
-  scrollbar-width: none; /* 파이어폭스 */
-}
 
 .floating-button {
   position: absolute;

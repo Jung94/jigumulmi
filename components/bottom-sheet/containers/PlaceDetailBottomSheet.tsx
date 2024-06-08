@@ -37,14 +37,7 @@ const PlaceDetailBottomSheet = ({
       ]}
       expandOnContentDrag={true}
     >
-      {/* <div 
-        className={`
-          ${styles.inner}
-          ${styles["status-full"]}
-        `}
-      > */}
-        {children}
-      {/* </div> */}
+      {children}
     </BottomSheet>
   )
 }

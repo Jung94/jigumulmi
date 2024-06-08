@@ -4,7 +4,6 @@
 .bakery_cards_wrapper {
   width: 100%;
   height: calc($--wrapper-height - $--header-height);
-  // background-color: map.get($--greys, "100");
   overflow-x: auto;
 
   ::-webkit-scrollbar {

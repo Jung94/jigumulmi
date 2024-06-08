@@ -37,9 +37,7 @@ const PlaceListBottomSheet = ({
       ]}
       expandOnContentDrag={true}
     >
-      {/* <div className={`${styles.inner}`}> */}
-        {children}
-      {/* </div> */}
+      {children}
     </BottomSheet>
   )
 }
