@@ -23,7 +23,8 @@ const PlaceListBottomSheet = ({
       open
       skipInitialTransition
       ref={sheetRef}
-      blocking = {false}
+      blocking={false}
+      scrollLocking={false}
       header={
         <div className={styles.empty_space}>
           <FloatingButton onClick={handleClickFloatBtn} />
