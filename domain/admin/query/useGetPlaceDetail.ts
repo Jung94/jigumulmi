@@ -9,7 +9,7 @@ export default function useGetPlaceList (placeId: number | null) {
   const response = useQuery(
     [placeDetailQueryKey(placeId), placeId],
     () => getAPI(
-      placeDetailQueryKey(placeId), { placeId }
+      placeDetailQueryKey(placeId)
     ), {
       enabled: !!(placeId)
     })

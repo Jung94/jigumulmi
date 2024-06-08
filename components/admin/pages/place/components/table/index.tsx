@@ -30,7 +30,7 @@ export const Body = ({
           <Td align='left'>{el.name}</Td>
           <Td>{el.category}</Td>
           <Td>
-            {el.subwayStationList.map((v: any) => <span key={v.id}>{v.stationName}</span>)}
+            {el.subwayStation.stationName}
           </Td>
           <Td>
             {el.isApproved 

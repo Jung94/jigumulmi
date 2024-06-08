@@ -66,6 +66,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
     delete body.subwayStationList
     delete body.createdAt
     delete body.modifiedAt
+    delete body.id
     
     // 수정
     if (params.placeId) {
