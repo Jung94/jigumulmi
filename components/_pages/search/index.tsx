@@ -100,7 +100,7 @@ export default function Search() {
         location = stations[0]
 
         if (!location) return  // ex. 강릉역 검색 시
-        const locationY = 1100 < windowSize.width ? location.y : String(parseFloat(location.y) - 0.005)
+        const locationY = 1100 < windowSize.width ? location.y : String(parseFloat(location.y) - 0.007)
 
         kakaoMapFunc.relayout()
         kakaoMapFunc.setLevel(5)

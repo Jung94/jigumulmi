@@ -126,7 +126,7 @@ const KakaoMap = ({ placeList }: { placeList: PlaceSummary[] }) => {
       })
       marker.setMap(kakaoMapFunc)
 
-      if (e.id === Number(placeId)) { // 맨 처음 로드 시
+      if (e.id === Number(placeId)) { // 맨 처음 로드 시 - 상세페이지 있을 때
         selectedMarker = marker;
         
         const panTo = (x: number, y: number) => {
