@@ -100,7 +100,7 @@ export default function Search() {
         location = stations[0]
 
         if (!location) return  // ex. 강릉역 검색 시
-        const locationY = 1100 < windowSize.width ? location.y : String(parseFloat(location.y) - 0.003)
+        const locationY = 1100 < windowSize.width ? location.y : String(parseFloat(location.y) - 0.005)
 
         kakaoMapFunc.relayout()
         kakaoMapFunc.setLevel(5)
@@ -143,7 +143,7 @@ export default function Search() {
       if (!!kakaoMapFunc && !!detail) {
         kakaoMapFunc.relayout()
         kakaoMapFunc.setLevel(5)
-        if (!!marker) panTo(marker.position.y - 0.006, marker.position.x)
+        if (!!marker) panTo(marker.position.y - 0.003, marker.position.x)
       }
 
       !!placeId && dispatch(update_is_shown_detail(true))
