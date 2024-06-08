@@ -128,7 +128,7 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
                 }
                 {status === 'success' &&
                   <div className={`${styles.wrapper_status}`}>
-                    <Check color='#E8674D' />
+                    <Check color='#0060AE' />
                   </div>
                 }
                 {status === 'error' &&
