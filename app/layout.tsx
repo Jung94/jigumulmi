@@ -1,4 +1,5 @@
 import './globals.scss'
+import Script from "next/script"
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/lib/utils/Provider'
@@ -21,6 +22,34 @@ export default async function RootLayout({children}: {children: React.ReactNode}
 
   return (
     <html lang="en">
+      <head>
+        <Script 
+          id="clarity-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "ml4k9s5lc3");
+            `
+          }}
+        />
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-0Q5RSTCK8N" />
+        <Script 
+          id="gtm-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-0Q5RSTCK8N');
+            `
+          }}
+        />
+      </head>
       <body className={inter.className}>
         <Providers>
           <Hydrate state={dehydratedState}>
