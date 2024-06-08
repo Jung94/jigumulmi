@@ -139,7 +139,7 @@ const KakaoMap = ({ placeList }: { placeList: PlaceSummary[] }) => {
         kakaoMapFunc.setLevel(5)
 
         if (1100 < windowSize.width) panTo(e.latlng.Ma, e.latlng.La)
-          else panTo(e.latlng.Ma - 0.006, e.latlng.La)
+          else panTo(e.latlng.Ma - 0.003, e.latlng.La)
       }
 
       window.kakao.maps.event.addListener(marker, 'click', () => handleClickMarker(marker, e))
