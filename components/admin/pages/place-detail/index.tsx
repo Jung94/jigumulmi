@@ -64,6 +64,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
       subwayStationIdList: !!data.subwayStationList.length ? data.subwayStationList.map(v => v.id) : null,
     }
     delete body.subwayStationList
+    delete body.subwayStation
     delete body.createdAt
     delete body.modifiedAt
     delete body.id
