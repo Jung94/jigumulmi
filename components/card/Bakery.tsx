@@ -36,7 +36,7 @@ const BakeryCard = ({ place, onClick }: Props) => {
           <div className={styles.subway_station_wrapper}>
             {place.subwayStation.subwayStationLineList.map((line: {id: number, lineNumber: string}) => {
               return (
-                <div key={line.id} className={`${styles.subway_line} ${styles[`line_${line.lineNumber}`]}`}>
+                <div key={line.id} id={`subway-station-line-${line.lineNumber}`} className={styles.subway_line}>
                   {changeLineName(line.lineNumber)}
                 </div>
               )

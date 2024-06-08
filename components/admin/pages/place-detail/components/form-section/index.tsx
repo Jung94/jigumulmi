@@ -48,6 +48,7 @@ export default function FormSection ({
   const [ menuName, setMenuName ] = useState<string>('')
   
   const { data: subwayStationList } = useGetPlaceSubway(stationName)
+  // console.log(subwayStationList?.data)
 
   const handleChange = (propName: string, value: string) => setData(prev => {return {...prev, [propName]: value}})
   const handlePosition = (propName: Position, value: string) => {
@@ -113,7 +114,6 @@ export default function FormSection ({
               : -1
             )
           : -1
-        console.log(newId)
         return {...prev, menuList: [...prev.menuList, {id: newId, name: menuName}]}
       })
       setMenuName('')

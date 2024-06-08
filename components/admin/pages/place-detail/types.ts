@@ -15,7 +15,12 @@ export type Position =
   'latitude' 
   | 'longitude'
 
-export type SubwayStation = { id: number, stationName: string, lineNumber: string }
+export type SubwayStation = {
+  id: number, 
+  isMain: boolean | null, 
+  stationName: string, 
+  subwayStationLineList: { id: number, lineNumber: string }[] | null
+}
 
 export type Menu = { id: number, name: string }
 

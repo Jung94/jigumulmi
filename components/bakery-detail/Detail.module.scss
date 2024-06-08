@@ -146,6 +146,33 @@
       align-items: flex-start;
     }
 
+    .subway {
+      &-wrapper {
+        margin-top: 3px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      &-line {
+        padding: 1px 6px 0;
+        min-width: 18px;
+        height: 18px;
+        color: white;
+        font-size: 11px;
+        border-radius: 2px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      &-name {
+        font-size: 13px;
+      }
+    }
+
     .opening_hours {
       width: 100%;
       display: flex;

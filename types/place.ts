@@ -5,7 +5,7 @@ export type Place = {
   address: string
   contact: string
   menuList: {id: number, name: string}[]
-  subwayStation: { id: number, stationName: string, lineNumber: string }
+  subwayStation: SubwayStation
   position: { latitude: number, longitude: number }
   openingHour: { openingHourMon: string, openingHourTue: string, openingHourWed: string, openingHourThu: string, openingHourFri: string, openingHourSat: string, openingHourSun: string }
   additionalInfo: string

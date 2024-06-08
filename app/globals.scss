@@ -1,3 +1,6 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
 * { 
   margin: 0;
   padding: 0;
@@ -47,11 +50,24 @@ input[type="number"]::-webkit-inner-spin-button {
   background-color: #eee;
 } // 세로 스크롤 막대와 가로 스크롤 막대가 모두 만나는 스크롤 막대의 오른쪽 아래 모서리 부분
 
-[data-rsbs-header] {
-  // background-color: #f2f4f6;
-}
-
-// [data-rsbs-overlay], [data-rsbs-backdrop] {
-//   border: 1px solid red;
-//   z-index: 1500;
-// }
+#subway-station-line-01호선 { background-color: map.get($--subway-line-bg, "1호선"); }
+#subway-station-line-02호선 { background-color: map.get($--subway-line-bg, "2호선"); }
+#subway-station-line-03호선 { background-color: map.get($--subway-line-bg, "3호선"); }
+#subway-station-line-04호선 { background-color: map.get($--subway-line-bg, "4호선"); }
+#subway-station-line-05호선 { background-color: map.get($--subway-line-bg, "5호선"); }
+#subway-station-line-06호선 { background-color: map.get($--subway-line-bg, "6호선"); }
+#subway-station-line-07호선 { background-color: map.get($--subway-line-bg, "7호선"); }
+#subway-station-line-08호선 { background-color: map.get($--subway-line-bg, "8호선"); }
+#subway-station-line-09호선 { background-color: map.get($--subway-line-bg, "9호선"); }
+#subway-station-line-경의선 { background-color: map.get($--subway-line-bg, "경의중앙선"); }
+#subway-station-line-경의중앙선 { background-color: map.get($--subway-line-bg, "경의중앙선"); }
+#subway-station-line-신분당선 { background-color: map.get($--subway-line-bg, "신분당선"); }
+#subway-station-line-수인분당선 { background-color: map.get($--subway-line-bg, "수인분당선"); }
+#subway-station-line-공항철도 { background-color: map.get($--subway-line-bg, "공항철도"); }
+#subway-station-line-인천1호선 { background-color: map.get($--subway-line-bg, "인천1호선"); }
+#subway-station-line-인천2호선 { background-color: map.get($--subway-line-bg, "인천2호선"); }
+#subway-station-line-의정부경전철 { background-color: map.get($--subway-line-bg, "의정부경전철"); }
+#subway-station-line-우이신설선 { background-color: map.get($--subway-line-bg, "우이신설선"); }
+#subway-station-line-김포골드라인 { background-color: map.get($--subway-line-bg, "김포골드라인"); }
+#subway-station-line-용인에버라인 { background-color: map.get($--subway-line-bg, "용인에버라인"); }
+#subway-station-line-신림선 { background-color: map.get($--subway-line-bg, "신림선"); }

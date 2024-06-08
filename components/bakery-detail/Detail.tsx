@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import type { Place } from '@/types/place'
 
 const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boolean }) => {
-
+  console.log(place)
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   const getOpeningHour = (v: string) => {
     if (v === 'openingHourMon') return '월'
@@ -18,6 +18,14 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
     if (v === 'openingHourFri') return '금'
     if (v === 'openingHourSat') return '토'
     if (v === 'openingHourSun') return '일'
+  }
+
+  const changeLineName = (subwayLineName: string) => {
+    const nameList = subwayLineName.split('')
+
+    if (nameList[0] === '0') subwayLineName = nameList.splice(1).join('')
+    if (subwayLineName.includes('호선')) return subwayLineName.replace('호선', '')
+    if (subwayLineName.includes('선')) return subwayLineName.replace('선', '')
   }
 
   return place && isShownDetail && (
@@ -48,6 +56,16 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
                 </div>
                 <div className={styles.right}>
                   <div className={styles.address}>{place.address}</div>
+                  <div className={styles["subway-wrapper"]}>
+                    {place.subwayStation.subwayStationLineList.map((line: {id: number, lineNumber: string}) => {
+                      return (
+                        <div key={line.id} id={`subway-station-line-${line.lineNumber}`} className={styles["subway-line"]}>
+                          {changeLineName(line.lineNumber)}
+                        </div>
+                      )
+                    })}
+                    <div className={styles["subway-name"]}>{place.subwayStation.stationName}</div>
+                  </div>
                 </div>
               </div>
             </div>
