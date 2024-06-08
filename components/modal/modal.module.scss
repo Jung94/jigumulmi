@@ -47,11 +47,6 @@
     background-color: rgba(0, 0, 0, 0.2);
   }
 
-  // &:not([open]) {
-  //   pointer-events: none;
-  //   opacity: 0;
-  // }
-
   @include scale-in;
   position: fixed;
   // top: 15%;
@@ -59,7 +54,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   transform-origin: left;
-  border: 1px solid map.get($--greys, "900");
+  border: 1px solid map.get($--greys, "800");
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 0 0 1px rgba(0,0,0,.08),0px 1px 1px rgba(0,0,0,.02),0px 8px 16px -4px rgba(0,0,0,.04),0px 24px 32px -8px rgba(0,0,0,.06);

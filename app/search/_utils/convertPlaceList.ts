@@ -1,12 +1,10 @@
-import type { Bakery } from '@/types/bakery'
-
 export const convertPlaceList = (placeList: any[]) => {
   if (typeof placeList !== "object") return []
   return placeList.map(place => {
     return {
       id: place.id,
       name: place.name,
-      subwayStationList: place.subwayStationList ?? [],
+      subwayStation: place.subwayStation ?? [],
       position: {latitude: place.position.latitude, longitude: place.position.longitude},
       images: [place.mainImageUrl],
       // category: place.category,

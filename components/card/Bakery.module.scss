@@ -3,8 +3,10 @@
 
 @media (min-width: 1101px) {
   .bakery_card {
-    background-color: map.get($--colors, "off-white");
-    border: 1.5px solid #222;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+    background-color: white;
+    background-color: map.get($--greys, "100");
+    border: 1px solid map.get($--greys, "300");
     border-radius: 6px;
     max-height: 9rem;
     display: flex;
@@ -12,13 +14,11 @@
     transition: all 0.12s;
   
     &:hover {
-      opacity: 0.95;
-  
-      .card_image { opacity: 0.9; }
+      background-color: map.get($--greys, "200");
     }
   
     .card_image {
-      border-right: 1.5px solid #222;
+      border-right: 1px solid map.get($--greys, "300");
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;
       overflow: hidden;
@@ -50,25 +50,22 @@
       cursor: pointer;
   
       .top {
-        // border: 1px solid red;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
   
         .left {
-          // border: 1px solid red;
           width: 100%;
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
+          gap: 2px;
           
           .card_title {
-            // border: 1px solid blue;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
           }
           .card_desc {
-            // border: 1px solid blue;
             font-size: 0.75rem;
             font-weight: 400;
           }
@@ -97,7 +94,6 @@
         }
       }
       .bottom {
-        // border: 1px solid blue;
         display: flex;
         justify-content: flex-start;
         align-items: center;
@@ -135,8 +131,9 @@
     width: 15rem;
     overflow: hidden;
     border-radius: 10px;
-    border: 1.5px solid #222;
-    background-color: map.get($--colors, "off-white");
+    border: 1.5px solid #333;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+    background-color: map.get($--greys, "50");
     display: flex;
     flex-direction: column;
     transition: all 0.12s;

@@ -4,15 +4,19 @@ import { useState } from 'react';
 import styles from './registration-bakery.module.scss';
 import Button from '@/components/button';
 import { useModal } from '@/lib/hooks';
+import SearchSubwayBar from '@/components/searchSubwayBar';
 import SuccessContent from '@/components/modal/success/Content';
+import { usePostPlace } from '@/domain/place/query';
 
 const RegistrationBakeryContent = ({
   onClose
 }: {
   onClose: ()=>void
 }) => {
+  const registerPlace = usePostPlace();
+
   const [ name, setName ] = useState('');
-  const [ subway, setSubway ] = useState('');
+  const [ subway, setSubway ] = useState<{id: number | null, name: string}>({id: null, name: ''});
   const [ menus, setMenus ] = useState<string[]>(['']);
   const [ desc, setDesc ] = useState('');
 
@@ -21,9 +25,12 @@ const RegistrationBakeryContent = ({
     setName(value)
   }
 
-  const handleSubway = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value }: { value: string } = e.target as HTMLInputElement;
-    setSubway(value)
+  const handleSubway = (id: number) => {
+    setSubway(prev => { return {...prev, id}})
+  }
+
+  const handleSubwayStationName = (name: string) => {
+    setSubway({id: null, name})
   }
 
   const handleMenus = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -62,12 +69,13 @@ const RegistrationBakeryContent = ({
       </div>}
       onClose={handleCloseSuccessModal} 
     />,
-    {style: {top: '45%'}}
+    {disabledBackdropClosing: true, style: {top: '45%'}}
   )
   function handleOpenSuccessModal() { SuccessModal.open() }
   function handleCloseSuccessModal() {
     setName("")
-    setSubway("")
+    setSubway({id: null, name: ''})
+    setMenus([""])
     setDesc("")
     SuccessModal.close()
     onClose()
@@ -75,25 +83,29 @@ const RegistrationBakeryContent = ({
 
   const updateBakery = async () => {
     handleOpenSuccessModal()
-    // setLoading(true)
+    setLoading(true)
 
-    // const data = {
-    //   name: name,
-    //   station_name_1: subway,
-    //   // user_feedback: desc || null,
-    //   // is_mobile: isMobile() ? checkOS() : null,
-    // }
-
-    // try {
-    //   const { error } = await supabase.from('registered_bakeries').insert(data)
-    //   if (error) throw error
-    //   console.log('success!')
-    // } catch (error) {
-    //   console.log('failed!')
-    // } finally {
-    //   setLoading(false)
-    //   handleOpenSuccessModal()
-    // }
+    registerPlace.mutate(
+      {
+        name: name,
+        subwayStationId: subway.id!,
+        menuList: menus,
+        registrantComment: desc
+      },
+      {
+        onSuccess: async (data) => {
+          console.log(data)
+          if (data.status === 201) {
+            handleOpenSuccessModal()
+          } 
+          setLoading(false)
+        },
+        onError(error, variables, context) {
+          setLoading(false)
+          alert('등록에 실패하였습니다. 관리자에게 문의하여 주시기 바랍니다.')
+        },
+      }
+    )
   }
 
   return (
@@ -117,7 +129,7 @@ const RegistrationBakeryContent = ({
             <span className={styles.mark__must_do}>*&nbsp;</span>
             가까운 지하철역
           </label>
-          <input type='text' id='subway' name='subway' value={subway} onChange={handleSubway} />
+          <SearchSubwayBar value={subway.name} handleValue={handleSubwayStationName} handleSelect={handleSubway} />
         </div>
         <div className={styles.input_wrapper}>
           <label htmlFor='menu'>메뉴</label>
@@ -143,9 +155,16 @@ const RegistrationBakeryContent = ({
           <textarea id='desc' name='desc' value={desc} onChange={handleDesc} />
         </div>
         <div className={styles.input_wrapper}>
-          <Button loading={loading} type='submit' variant='contained' color='primary' disabled={!name || !subway} formAction={updateBakery}>등록하기</Button>
-          {(!name || !subway) &&
+          <Button loading={loading} type='submit' variant='contained' color='primary' disabled={!name || !(!!subway.id)} formAction={updateBakery}>등록하기</Button>
+          {/* {(!name || !subway) &&
             <div className={styles.noti}>*&nbsp;표시의 항목을 모두 입력해 주시면 등록하기 버튼이 활성화 됩니다.</div>
+          } */}
+          {!name
+            ? <div className={styles.noti}>베이커리명을 입력해주세요.</div>
+            : (!(!!subway.id)
+              ? <div className={styles.noti}>가까운 지하철역을 등록해주세요.</div>
+              : ''
+            )
           }
         </div>
       </form>

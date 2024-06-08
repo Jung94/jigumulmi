@@ -4,7 +4,7 @@ import type { PlaceSummary } from '@/types/place';
 
 type Props = {
   placeList: PlaceSummary[]
-  handleClickPlaceCard: (placeId: number)=>void
+  handleClickPlaceCard: (place: PlaceSummary)=>void
 };
 
 const SearchContent = ({
@@ -23,8 +23,8 @@ const SearchContent = ({
         )
         : (
           <div className={styles.empty_msg}>
-            <div>등록된 베이커리가 없어요.. </div>
-            <div>직접 베이커리를 등록해 주세요!</div>
+            <div>등록된 장소가 없습니다. </div>
+            <div>새로운 장소를 등록해 주세요.</div>
           </div>
         )
       }

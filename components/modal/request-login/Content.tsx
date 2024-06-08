@@ -30,7 +30,7 @@ const RequestLoginContent = ({
       </div>
       <div className={styles.desc}>
         <div className={styles.text}>3초 만에 간편 소셜 로그인 후</div>
-        <div className={styles.text}>채식에 관심있는 많은 분들과 의견을 나눠보세요.</div>
+        <div className={styles.text}>환경에 관심 있는 많은 분들과 의견을 나눠보세요.</div>
       </div>
       <Button loading={loading} type='button' variant='contained' color='primary' onClick={handleMoveToLoginPage}>3초 만에 로그인하기</Button>
     </div>

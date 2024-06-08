@@ -116,7 +116,6 @@ const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
 const ReviewCard = ({ review }: { review: Review }) => {
   const queryClient = useQueryClient();
   const [ shownReReview, setShownReReview ] = useState<boolean>(false);
-  const [ isModifying, setIsModifying ] = useState<boolean>(false);
 
   const RegistrationReviewModal = useModal(
     <RegistrationReviewContent
@@ -156,7 +155,6 @@ const ReviewCard = ({ review }: { review: Review }) => {
     shown: shownReReview, 
     replyCount: review.replyCount 
   });
-  console.log(reviewReplyList)
 
   return (
     <div className={styles.review_card}>
@@ -169,9 +167,14 @@ const ReviewCard = ({ review }: { review: Review }) => {
       </div>
       {!review.deletedAt &&
         <div className={styles.review_card_rating}>
-          <div>
-            <span>평점:&nbsp;</span>
-            <span className={styles.review_card_rating_number}>{review.rating}점</span>
+          <div className={styles.review_card_rating_star}>
+            <div className={styles.review_card_rating_star_icon}>
+              <svg width="16px" height="16px" strokeWidth="1.5" viewBox="0 0 24 24" fill='#0060AE' xmlns="http://www.w3.org/2000/svg" color="#000000">
+                <path d="M8.58737 8.23597L11.1849 3.00376C11.5183 2.33208 12.4817 2.33208 12.8151 3.00376L15.4126 8.23597L21.2215 9.08017C21.9668 9.18848 22.2638 10.0994 21.7243 10.6219L17.5217 14.6918L18.5135 20.4414C18.6409 21.1798 17.8614 21.7428 17.1945 21.3941L12 18.678L6.80547 21.3941C6.1386 21.7428 5.35909 21.1798 5.48645 20.4414L6.47825 14.6918L2.27575 10.6219C1.73617 10.0994 2.03322 9.18848 2.77852 9.08017L8.58737 8.23597Z" stroke="#000000" strokeWidth="0" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            
+            <span className={styles.review_card_rating_star_number}>{review.rating}</span>
           </div>
           {review.isEditable &&
             <div className={styles.review_card_rating_buttons}>
@@ -179,21 +182,18 @@ const ReviewCard = ({ review }: { review: Review }) => {
               <button className={styles.review_card_rating_buttons_deletion} onClick={handleOpenDeletionReviewModal}>삭제</button>
             </div>
           }
-          {review.isEditable && isModifying &&
-            <div className={`${styles.review_card_rating_buttons} ${styles.review_card_rating_buttons_self}`}>
-              <button className={styles.review_card_rating_buttons_cancel} onClick={()=>setIsModifying(false)}>취소</button>
-              <button className={styles.review_card_rating_buttons_save}>저장</button>
-            </div>
-          }
         </div>
       }
       
       {review.deletedAt
         ? <div className={styles.review_card_deleted}>삭제된 리뷰입니다.</div>
-        : (isModifying
-          ? <textarea>{review.content}</textarea>
-          : <div className={styles.review_card_content}>{review.content}</div>
+        : (!!review.content &&
+          <div className={styles.review_card_content}>{review.content}</div>
         )
+        // (isModifying
+        //   ? <textarea>{review.content}</textarea>
+        //   : <div className={styles.review_card_content}>{review.content}</div>
+        // )
       }
       
       <div className={styles.review_card_footer}>
@@ -287,8 +287,10 @@ const ReviewReplyForm = ({ reviewId=0, reviewReplyId=0, method, content='', muta
             await queryClient.refetchQueries([APIreview.reply])
             setReply('')
             setStatus('success')
+            return
           } else if (data.status === 403) {
             handleOpenRequestLoginModal()
+            return
           }
           setStatus('error')
         },

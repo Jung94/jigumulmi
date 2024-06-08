@@ -14,14 +14,16 @@ export type Place = {
   overallReview: OverallReview
 }
 
+export type PlaceForMarker = { id: number, name: string, latlng: any }
+
 export type OverallReview = { totalCount: number, averageRating: number, statistics: {1: number, 2: number, 3: number, 4: number, 5: number} }
 
-export type SubwayStation = { id: number, stationName: string, lineNumber: string }
+export type SubwayStation = { id: number, isMain: boolean, stationName: string, subwayStationLineList: {id: number, lineNumber: string}[] }
 
 export type PlaceSummary = {
   id: number
   name: string
-  subwayStationList: SubwayStation[]
+  subwayStation: SubwayStation
   position: { latitude: number, longitude: number }
   images: string[]
 }

@@ -48,9 +48,29 @@
       background-color: map.get($--colors, "brick-red");
 
       &:disabled {
-        color: #a6a6a6;
-        border: 1px solid #e0e0e0;
-        background-color: #e0e0e0;
+        // color: #a6a6a6;
+        // border: 1px solid #e0e0e0;
+        // background-color: #e0e0e0;
+        color: map.get($--greys, "400");
+        border: 1px solid map.get($--greys, "200");
+        background-color: map.get($--greys, "200");
+      }
+    }
+
+    &.contained-sub {
+      color: map.get($--colors, "brick-red");
+      border: 1px solid map.get($--greys, "200");
+      background-color: map.get($--greys, "200");
+
+      &:hover {
+        border: 1px solid map.get($--greys, "300");
+        background-color: map.get($--greys, "300");
+      }
+
+      &:disabled {
+        color: map.get($--greys, "400");
+        border: 1px solid map.get($--greys, "200");
+        background-color: map.get($--greys, "200");
       }
     }
 
@@ -60,9 +80,28 @@
       background-color: transparent;
 
       &:disabled {
-        color: #bdbdbd;
-        border: 1px solid #e0e0e0;
+        // color: #bdbdbd;
+        // border: 1px solid #e0e0e0;
+        color: map.get($--greys, "400");
+        border: 1px solid map.get($--greys, "100");
       }
+    }
+  }
+
+  &_error {
+    &.contained {
+      // color: map.get($--colors, "red-800");
+      // border: 1px solid map.get($--colors, "red-800");
+      // background-color: white;
+      color: white;
+      border: 1px solid map.get($--colors, "red-800");
+      background-color: map.get($--colors, "red-800");
+      
+      // &:hover {
+      //   color: white;
+      //   border: 1px solid map.get($--colors, "red-800");
+      //   background-color: map.get($--colors, "red-800");
+      // }
     }
   }
 }

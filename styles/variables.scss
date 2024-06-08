@@ -1,6 +1,6 @@
 $--padding--mobile: 14px;
 
-$--header-height-pc: 5rem;
+$--header-height-pc: 4.5rem;
 $--header-height-mobile: 3.25rem;
 $--navbar-height: 4.25rem;
 
@@ -13,16 +13,11 @@ $--search-height: 45px;
 $--colors: (
   // "primary": #f63156,
   "off-white": #F5ECE9,
-  // "off-white": #FFFEFA,
-  "brick-red": #E8674D,
+  // "brick-red": #E8674D,
+  "brick-red": #0060AE,
   "park-green": #62B273,
-  // "park-green": #FFF6D2,
-  // "crystal-blue": #132FBA,
-  // "crystal-blue": #FFF6D2,
   "crystal-blue": #CEEADD,
-  // "desert-gold": #799CF0,
   "desert-gold": #E8A13A,
-  // "blush": #FFFEFA
   "blush": #EED6C5,
   "gray-100": hsl(0,0%,95%),
   "gray-200": hsl(0,0%,92%),
@@ -78,6 +73,7 @@ $--colors: (
 $--greys: (
   "50": #f9fafb,
   "100": #f2f4f6,
+  // "150": #ebedee,
   "200": #e5e8eb,
   "300": #d1d6db,
   "400": #b0b8c1,

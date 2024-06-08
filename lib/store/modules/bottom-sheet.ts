@@ -5,7 +5,7 @@ interface SearchState {
 }
 
 const initialState: SearchState = {
-  isShown: null,
+  isShown: true,
 }
 
 const bottomSheetSlice = createSlice({

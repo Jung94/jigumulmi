@@ -2,7 +2,9 @@
 @import "styles/variables.scss";
 
 .container {
-  background-color: map.get($--colors, "off-white");
+  // background-color: map.get($--colors, "off-white");
+  // background-color: map.get($--greys, "50");
+  // background-color: #fcfcfc;
 
   display: grid;
   overflow: hidden;
@@ -12,22 +14,42 @@
     grid-template-columns: 1fr 380px;
 
     .map {
-      border-right: 2px solid #666;
+      padding: 1rem;
+      // padding-right: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .bakeries_wrap {
       display: flex;
       justify-content: flex-end;
-      background-color: map.get($--colors, "blush");
+      background-color: white;
+      // background-color: map.get($--greys, "50");
+      // background-color: map.get($--colors, "blush");
       overflow-y: hidden;
 
       .cards {
         width: 380px;
-        padding: 0.75rem;
+        padding: 1rem;
+        border-left: 1px solid map.get($--greys, "300");
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
         overflow-y: auto;
+        
+        &_empty {
+          padding: 1rem;
+          color: map.get($--greys, "800");
+          border-radius: 5px;
+          border: 1px solid map.get($--greys, "300");
+          background-color: map.get($--greys, "100");
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 5px;
+        }
       }
     
       .floating_button {
@@ -43,8 +65,9 @@
         width: 3rem;
         height: 3rem;
         border-radius: 20rem;
-        border: 1.5px solid #222;
-        background-color: map.get($--colors, "desert-gold");
+        border: 1.5px solid map.get($--greys, "900");
+        background-color: map.get($--colors, "brick-red");
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
       }
     }
   }

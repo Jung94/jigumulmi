@@ -29,21 +29,16 @@
 }
 
 .wrapper {
-  @media (min-width: 1101px) {
-    position: relative;
-    width: 380px;
-    border-right: 1px solid #555;
-    animation: fade-in 0.5s ease-out 0.1s 1 alternate both;
-  }
+  padding: 1rem;
+  padding-left: 0;
+  position: relative;
+  width: 380px;
+  animation: fade-in 0.5s ease-out 0.1s 1 alternate both;
   
   @media (max-width: 1100px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1100;
-    animation: fade-in 0.15s ease-out 0.05s 1 alternate both;
+    padding: 0;
+    width: 100%;
+    height: 100%;
   }
   
   .loading {
@@ -65,32 +60,19 @@
   }
 
   opacity: 0;
-  background-color: map.get($--colors, "off-white");
+  // background-color: map.get($--colors, "off-white");
   
   .content {
+    border-radius: 10px;
+    border: 1px solid map.get($--greys, "200");
+    background-color: map.get($--greys, "50");
     padding-bottom: 0.5rem;
     height: 100%;
     overflow-y: auto;
-  }
 
-  .header {
-    @media (min-width: 1101px) {
-      display: none;
-    }
     @media (max-width: 1100px) {
-      padding: 0 calc($--padding--mobile - 4px);
-      height: $--header-height-mobile;
-      border-bottom: 1px solid #222;
-      background-color: map.get($--colors, "off-white");
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-
-      .icon_close {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+      border-radius: 0;
+      border: none;
     }
   }
 
@@ -105,7 +87,6 @@
     }
     @media (max-width: 1100px) {
       max-width: 100%;
-      border-bottom: 1px solid #222;
     }
   }
   .card_detail_content {
@@ -120,7 +101,7 @@
       justify-content: center;
       align-items: center;
       gap: 2px;
-      background-color: map.get($--colors, "off-white");
+      // background-color: map.get($--colors, "off-white");
 
       .title {
         color: #222;

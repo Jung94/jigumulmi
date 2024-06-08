@@ -19,7 +19,7 @@ interface BottomSheetMetrics {
 const useBottomSheet = () => {
   const dispatch = useAppDispatch();
   const wrapperHeight = 360;
-  const headerHeight = 45;
+  const headerHeight = 40;
   const searchHeight = 45;
   const MIN_Y = innerHeight - wrapperHeight; // 바텀시트가 최대로 높이 올라갔을 때의 y 값
   // const MAX_Y = window.innerHeight - 130; // 바텀시트가 최소로 내려갔을 때의 y 값
@@ -27,8 +27,7 @@ const useBottomSheet = () => {
 
   const sheetRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  // const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown));
-  const { isShown } = useAppSelector(((state) => state.bottomSheet));
+  const isShownBottomSheet = useAppSelector(((state) => state.bottomSheet.isShown));
   
   const metrics = useRef<BottomSheetMetrics>({
     touchStart: {
@@ -109,7 +108,7 @@ const useBottomSheet = () => {
         if (status === "open" && touchStart.touchY > currentTouch.clientY) return;
           
         // sheet 위치 갱신. 
-        sheetRef.current?.style.setProperty('transform', `translateY(${nextSheetY - MAX_Y}px)`);
+        sheetRef.current.style.setProperty('transform', `translateY(${nextSheetY - MAX_Y}px)`);
       } else {
         
         // 컨텐츠를 스크롤하는 동안에는 body가 스크롤되는 것을 막습니다
@@ -125,14 +124,14 @@ const useBottomSheet = () => {
       if (canUserMoveBottomSheet()) {
         if (touchMove.movingDirection === 'down') {
           dispatch(update_is_shown(false));
-          sheetRef.current?.style.setProperty('transform', `translateY(-${headerHeight}px)`);
+          sheetRef.current.style.setProperty('transform', 'translateY(0)');
           metrics.current = { ...metrics.current, status: "close" };
         }
     
         if (touchMove.movingDirection === 'up') {
           dispatch(update_is_shown(true));
-          // sheetRef.current?.style.setProperty('transform', `translateY(-${wrapperHeight - headerHeight}px)`);
-          sheetRef.current?.style.setProperty('transform', `translateY(-${wrapperHeight}px)`);
+          // sheetRef.current.style.setProperty('transform', `translateY(-${wrapperHeight - headerHeight}px)`);
+          sheetRef.current.style.setProperty('transform', `translateY(-${wrapperHeight}px)`);
           metrics.current = { ...metrics.current, status: "open" }
         }
       }
@@ -175,17 +174,16 @@ const useBottomSheet = () => {
     contentRef.current.addEventListener('touchstart', handleTouchStart);
     
     return () => {
-      contentRef.current?.removeEventListener('touchstart', handleTouchStart);
+      if (!contentRef.current) return;
+
+      contentRef.current.removeEventListener('touchstart', handleTouchStart);
     }
   }, []);
 
   useEffect(()=>{
-    if (isShown) {
-      sheetRef.current?.style.setProperty('transform', `translateY(-${wrapperHeight}px)`);
-    } else {
-      sheetRef.current?.style.setProperty('transform', 'translateY(0)');
-    }
-  }, [isShown])
+    if (isShownBottomSheet) sheetRef.current?.style.setProperty('transform', `translateY(-${wrapperHeight}px)`);
+      else sheetRef.current?.style.setProperty('transform', 'translateY(0)');
+  }, [isShownBottomSheet])
   
   return { sheetRef, contentRef };
 };

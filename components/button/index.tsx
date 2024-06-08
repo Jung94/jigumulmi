@@ -9,7 +9,7 @@ type Props = {
   type?: 'button' | 'submit'
   size?: 'small' | 'medium' | 'large'
   color?: 'primary' | 'success' | 'error'
-  variant?: 'text' | 'contained' | 'outlined'
+  variant?: 'text' | 'contained' | 'contained-sub' | 'outlined'
   disabled?: boolean
   loading?: boolean
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>void

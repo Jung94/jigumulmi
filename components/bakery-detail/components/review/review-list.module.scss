@@ -10,7 +10,7 @@
 .review_card {
   padding: 1rem;
   border-radius: 10px;
-  background-color: map.get($--colors, gray-300);
+  background-color: map.get($--greys, "200");
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -36,24 +36,37 @@
       }
     }
     &_created_at {
-      color: map.get($--colors, gray-700);
+      color: map.get($--greys, "500");
       font-size: 12px;
     }
   }
 
   &_rating {
-    color: map.get($--colors, gray-700);
+    color: map.get($--greys, "500");
     font-size: 12px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
 
-    &_number {
-      color: map.get($--colors, gray-1000);
+    &_star {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+
+      &_icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      &_number {
+        color: map.get($--greys, "900");
+      }
     }
+    
     &_buttons {
-      color: map.get($--colors, gray-1000);
+      color: map.get($--greys, "900");
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -63,8 +76,8 @@
         padding: 2px 5px;
         font-size: 11px;
         border-radius: 3px;
-        border: 1px solid map.get($--colors, gray-500);
-        background-color: map.get($--colors, gray-500);
+        border: 1px solid map.get($--greys, "300");
+        background-color: map.get($--greys, "300");
         display: inline-flex;
         justify-content: center;
         align-items: center;
@@ -73,8 +86,8 @@
         padding: 2px 5px;
         font-size: 11px;
         border-radius: 3px;
-        border: 1px solid map.get($--colors, gray-500);
-        background-color: map.get($--colors, gray-500);
+        border: 1px solid map.get($--greys, "300");
+        background-color: map.get($--greys, "300");
         display: inline-flex;
         justify-content: center;
         align-items: center;
@@ -133,7 +146,7 @@
     align-items: flex-end;
 
     button {
-      color: map.get($--colors, gray-1000);
+      color: map.get($--greys, "900");
       font-size: 13px;
       display: flex;
       align-items: center;
@@ -155,7 +168,7 @@
       gap: 2px;
 
       span {
-        color: map.get($--colors, gray-900);
+        color: map.get($--greys, "800");
         font-size: 12px;
         line-height: 15px;
         vertical-align: middle;
@@ -207,7 +220,7 @@
         padding: 3px 5px;
         font-size: 11px;
         border-radius: 3px;
-        background-color: map.get($--colors, gray-500);
+        background-color: map.get($--greys, "300");
         display: flex;
         justify-content: center;
         align-items: center;
@@ -216,24 +229,24 @@
         padding: 3px 5px;
         font-size: 11px;
         border-radius: 3px;
-        background-color: map.get($--colors, gray-500);
+        background-color: map.get($--greys, "300");
         display: flex;
         justify-content: center;
         align-items: center;
       }
     }
     &_created_at {
-      color: map.get($--colors, gray-700);
+      color: map.get($--greys, "500");
       font-size: 11px;
     }
   }
 
   &_rating {
-    color: map.get($--colors, gray-700);
+    color: map.get($--greys, "800");
     font-size: 12px;
 
     &_number {
-      color: map.get($--colors, gray-1000);
+      color: map.get($--greys, "900");
     }
   }
 
@@ -250,7 +263,7 @@
     align-items: flex-end;
 
     button {
-      color: map.get($--colors, gray-1000);
+      color: map.get($--greys, "800");
       font-size: 12px;
       display: flex;
       align-items: center;
@@ -303,7 +316,7 @@
     min-height: 1.7rem;
     height: 1.7rem;
     border-radius: 5px;
-    background-color: map.get($--colors, "blush");
+    background-color: map.get($--greys, "300");
 
     &:disabled {
       background-color: transparent;
@@ -315,6 +328,7 @@
     width: 2.5rem;
     height: 1.7rem;
     color: map.get($--colors, "brick-red");
+    color: white;
     font-size: 12px;
     border-radius: 3px;
     border: 1px solid map.get($--colors, "brick-red");
@@ -325,13 +339,13 @@
   }
   
   button {
+    color: white;
+    background-color: map.get($--colors, "brick-red");
     &:hover {
-      color: white;
-      background-color: map.get($--colors, "brick-red");
     }
     &:disabled {
-      border: 1px solid map.get($--colors, "gray-400");
-      background-color: map.get($--colors, "gray-400");
+      border: 1px solid map.get($--greys, "300");
+      background-color: map.get($--greys, "300");
       cursor: default;
     }
   }

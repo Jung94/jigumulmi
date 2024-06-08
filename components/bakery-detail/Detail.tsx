@@ -5,11 +5,10 @@ import styles from './Detail.module.scss'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
 import Review from '@/components/bakery-detail/components/review/review'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
-import { update_is_shown_detail } from '@/lib/store/modules/search'
 import type { Place } from '@/types/place'
 
-const PlaceDetail = ({ place, loading, handleResetDetail }: { place?: Place | null, loading?: boolean, handleResetDetail?: ()=>void }) => {
-  const dispatch = useAppDispatch()
+const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boolean }) => {
+
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   const getOpeningHour = (v: string) => {
     if (v === 'openingHourMon') return '월'
@@ -21,11 +20,6 @@ const PlaceDetail = ({ place, loading, handleResetDetail }: { place?: Place | nu
     if (v === 'openingHourSun') return '일'
   }
 
-  const closeDetailOnMobile = () => {
-    handleResetDetail && handleResetDetail()
-    dispatch(update_is_shown_detail(false))
-  }
-
   return place && isShownDetail && (
     <div className={styles.wrapper}>
       <div className={`${styles.loading} ${loading ? styles.show_loading : styles.hide_loading}`}>
@@ -35,13 +29,6 @@ const PlaceDetail = ({ place, loading, handleResetDetail }: { place?: Place | nu
       </div>
       {place && 
         <div className={styles.content}>
-          <div className={styles.header}>
-            <div className={styles.icon_close} onClick={closeDetailOnMobile}>
-              <svg width="28px" height="28px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
-                <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-              </svg>
-            </div>
-          </div>
           <div className={styles.card_detail_carousel}>
             <Image fill src={place.mainImageUrl} alt={place.name} style={{objectFit: 'cover'}} />
           </div>

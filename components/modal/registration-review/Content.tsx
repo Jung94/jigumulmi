@@ -17,7 +17,7 @@ import { APIreview } from "@/lib/api/review";
 const Star = ({ active, onClick }: { active: boolean, onClick: ()=>void }) => {
   return (
     <button type='button' className={styles["star-button"]} onClick={onClick}>
-      <svg width="40px" height="40px" strokeWidth="1.5" viewBox="0 0 24 24" fill={active ? '#E8674D' : 'hsl(0,0%,85%)'} xmlns="http://www.w3.org/2000/svg" color="#000000">
+      <svg width="40px" height="40px" strokeWidth="1.5" viewBox="0 0 24 24" fill={active ? '#0060AE' : 'hsl(0,0%,85%)'} xmlns="http://www.w3.org/2000/svg" color="#000000">
         <path d="M8.58737 8.23597L11.1849 3.00376C11.5183 2.33208 12.4817 2.33208 12.8151 3.00376L15.4126 8.23597L21.2215 9.08017C21.9668 9.18848 22.2638 10.0994 21.7243 10.6219L17.5217 14.6918L18.5135 20.4414C18.6409 21.1798 17.8614 21.7428 17.1945 21.3941L12 18.678L6.80547 21.3941C6.1386 21.7428 5.35909 21.1798 5.48645 20.4414L6.47825 14.6918L2.27575 10.6219C1.73617 10.0994 2.03322 9.18848 2.77852 9.08017L8.58737 8.23597Z" stroke="#000000" strokeWidth="0" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </button>
@@ -107,6 +107,8 @@ const RegistrationReviewContent = ({
 
           if (data.status === 201) {
             handleOpenSuccessModal()
+          } else if (data.status === 400) {
+            alert('리뷰는 장소별 한 번만 작성 가능합니다.')
           }
         },
         onError(error, variables, context) {
@@ -195,24 +197,3 @@ const RegistrationReviewContent = ({
 }
 
 export default RegistrationReviewContent
-
-{/* <label htmlFor='rating_5'>
-      <input type='radio' id='rating_5' name='rating' value={5} checked={rating === 5} onChange={handleRating} />
-      <span>5점</span>
-    </label>
-    <label htmlFor='rating_4'>
-      <input type='radio' id='rating_4' name='rating' value={4} checked={rating === 4} onChange={handleRating} />
-      <span>4점</span>
-    </label>
-    <label htmlFor='rating_3'>
-      <input type='radio' id='rating_3' name='rating' value={3} checked={rating === 3} onChange={handleRating} />
-      <span>3점</span>
-    </label>
-    <label htmlFor='rating_2'>
-      <input type='radio' id='rating_2' name='rating' value={2} checked={rating === 2} onChange={handleRating} />
-      <span>2점</span>
-    </label>
-    <label htmlFor='rating_1'>
-      <input type='radio' id='rating_1' name='rating' value={1} checked={rating === 1} onChange={handleRating} />
-      <span>1점</span>
-    </label> */}

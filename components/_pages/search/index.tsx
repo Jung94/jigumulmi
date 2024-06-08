@@ -6,13 +6,14 @@ import { useWindowSize } from '@/lib/hooks'
 import styles from './search.module.scss'
 import BakeryCard from '@/components/card/Bakery'
 import BakeryDetail from '@/components/bakery-detail/Detail'
-import BottomSheet from '@/components/bottom-sheet'
+import PlaceListBottomSheet from '@/components/bottom-sheet/containers/PlaceListBottomSheet'
+import PlaceDetailBottomSheet from '@/components/bottom-sheet/containers/PlaceDetailBottomSheet'
+// import BottomSheet from '@/components/bottom-sheet'
 import { SearchContent } from '@/components/bottom-sheet/contents'
 
 import KakaoMap from '@/components/kakaoMap'
-import { useQueryClient } from '@tanstack/react-query'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
-import { update_is_shown } from '@/lib/store/modules/bottom-sheet'
+import { update_is_shown as update_is_shown_bottom_sheet } from '@/lib/store/modules/bottom-sheet'
 import { update_is_shown_detail, update_marker } from '@/lib/store/modules/search'
 
 import { useModal } from '@/lib/hooks'
@@ -38,50 +39,40 @@ type KakaoSearchResult = {
 
 export default function Search() {
   const router = useRouter()
-  const cache = useQueryClient()
   const dispatch = useAppDispatch()
   const windowSize = useWindowSize()
   const searchParams = useSearchParams()
   const stationId = searchParams?.get("stationId") // string | null
   const stationName = searchParams?.get("stationName") // string | null
-  const selectedPlace = searchParams?.get("place") // string | null
+  const placeId = searchParams?.get("place") // string | null
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   const marker = useAppSelector(((state) => state.search.marker))
   const kakaoMapFunc = useAppSelector(((state) => state.search.kakaoMap))
   const kakaoKeywordSearch = useAppSelector(((state) => state.search.kakaoKeywordSearch))
 
-  const [ bakeryList, setBakeryList ] = useState<PlaceSummary[]>(cache.getQueryData(["places"]) ?? [])
-  const [ allThePlaces ] = useState<PlaceSummary[]>(cache.getQueryData(["places"]) ?? [])
-  const { data: places } = useGetPlaceList({ 
-    subwayStationId: stationId != null ? Number(stationId) : undefined,
-    placeId: marker?.placeId ?? (selectedPlace ? Number(selectedPlace) : undefined)
-  })
+  const [ placeList, setPlaceList ] = useState<PlaceSummary[]>([])
+  const { data: places } = useGetPlaceList(stationId === null ? null : Number(stationId)) // null: all
+  // console.log(places?.data)
 
   const [ detail, setDetail ] = useState(null)
   const handleResetDetail = () => setDetail(null)
-  const { data: placeDetail, isFetching } = useGetPlaceDetail(selectedPlace ? Number(selectedPlace) : 0)
+  const { data: placeDetail, isFetching } = useGetPlaceDetail(placeId ? Number(placeId) : 0)
 
   // set URL query parameter - search_query
-  const setUrlSearchQuery = (type: 'card' | 'marker', placeId: number) => {  
+  const setUrlSearchQuery = (placeId: number) => {  
     if (!searchParams) return
 
     const params = new URLSearchParams(searchParams)
     
-    if (type === 'marker') {
-      params.delete('stationId')
-    } else if (type === 'card') {
-      if (!params.has('stationId')) {
-        params.set('stationId', "")
-      }
-    }
-  
     params.set('place', String(placeId))
     router.push(`search?${params.toString()}`)
   }
 
   // 검색 결과 리스트에서 카드 클릭
-  const handleClickPlaceCard = (bakeryId: number) => {
-    setUrlSearchQuery('card', bakeryId)
+  const handleClickPlaceCard = (place: PlaceSummary) => {
+    setUrlSearchQuery(place.id)
+    const latlng = new window.kakao.maps.LatLng(place.position.latitude, place.position.longitude)
+    dispatch(update_marker({ placeId: place.id, position: {x: latlng.La, y: latlng.Ma} }))
     dispatch(update_is_shown_detail(true))
   }
 
@@ -92,12 +83,9 @@ export default function Search() {
   function handleCloseRegistrationBakeryModal() { RegistrationBakeryModal.close() }
 
   function panTo(x: number, y: number) {
-    // 이동할 위도 경도 위치를 생성합니다 
-    var moveLatLon = new window.kakao.maps.LatLng(x, y)
+    const moveLatLon = new window.kakao.maps.LatLng(x, y) // 이동할 위도 경도 위치 생성
     
-    // 지도 중심을 부드럽게 이동시킵니다
-    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-    kakaoMapFunc.panTo(moveLatLon);
+    kakaoMapFunc.panTo(moveLatLon); // 지도 중심을 부드럽게 이동시킵니다. (만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동)
   }
 
   const getLocationOfKeyword = (value: string) => {
@@ -112,65 +100,80 @@ export default function Search() {
         location = stations[0]
 
         if (!location) return  // ex. 강릉역 검색 시
-        const locationY = 1100 < windowSize.width ? location.y : String(parseFloat(location.y) - 0.025)
+        const locationY = 1100 < windowSize.width ? location.y : String(parseFloat(location.y) - 0.006)
 
+        kakaoMapFunc.relayout()
+        kakaoMapFunc.setLevel(5)
         panTo(Number(locationY), Number(location.x))
-        dispatch(update_is_shown(true))
+        dispatch(update_is_shown_bottom_sheet(true))
       }
     }
     kakaoKeywordSearch && kakaoKeywordSearch(value, getLocation)
   }
 
-    // 쿼리 스트림 place 변경 시 동작
+  // useEffect(()=>{
+  //   if (!placeId && !stationId && !stationName && !detail && !!kakaoMapFunc) {
+  //     kakaoMapFunc.relayout()
+  //     kakaoMapFunc.setLevel(8)
+  //     panTo(37.523844561019224, 126.98021150388406)
+  //   }
+  // }, [placeId, stationId, stationName, detail, kakaoMapFunc])  
+
+    // 쿼리 스트림 place(=placeId) 변경 시 동작
   useEffect(()=>{
-    if (!selectedPlace) {
+    if (!placeId) {
       setDetail(null)
       dispatch(update_is_shown_detail(false))
       return
     }
 
-    dispatch(update_is_shown(true)) // bottom-sheet
+    dispatch(update_is_shown_bottom_sheet(true)) // bottom-sheet
     
-    if (1100 < windowSize.width) dispatch(update_is_shown_detail(true))
-  }, [selectedPlace, windowSize.width])
+    if (1100 < windowSize.width) {
+      // detail과 isShownDetail 값이 모두 존재할 때 상세페이지가 등장합니다. 
+      // 등장 후에 relayout 메서드를 호출해야 새롭게 변경된 지도 영역에 맞춰 다시 지도를 그릴 수 있습니다.
+      if (!!kakaoMapFunc && !!detail && isShownDetail) { 
+        kakaoMapFunc.relayout()
+        kakaoMapFunc.setLevel(5)
+        if (!!marker) panTo(marker.position.y, marker.position.x)
+      }
+      
+      !!placeId && dispatch(update_is_shown_detail(true))
+    } else if (1100 >= windowSize.width) {
+      if (!!kakaoMapFunc && !!detail) {
+        kakaoMapFunc.relayout()
+        kakaoMapFunc.setLevel(5)
+        if (!!marker) panTo(marker.position.y - 0.006, marker.position.x)
+      }
 
-  useEffect(()=>{
+      !!placeId && dispatch(update_is_shown_detail(true))
+    }
+  }, [placeId, windowSize.width, detail, isShownDetail, kakaoMapFunc])
+
+  useEffect(()=>{ // 지하철역 검색 시
     if (!window.kakao || !kakaoMapFunc || !stationName) return 
     
-    getLocationOfKeyword(stationName)
+    !placeId && getLocationOfKeyword(stationName)
   }, [stationName, window.kakao, kakaoMapFunc])
 
-  useEffect(()=>{
-    if (!stationId) return
-
-    if (marker) {
-      dispatch(update_marker(null))
-    }
+  useEffect(()=>{ // 지하철역 검색 시
+    if (!!stationId && !!marker) dispatch(update_marker(null))
   }, [stationId])
 
-  // 지도 마커 클릭했을 때 동작
-  useEffect(()=>{
-    if (!marker) return
-
-    setUrlSearchQuery('marker', marker.placeId)
+  useEffect(()=>{ // 지도 마커 클릭 or 검색 결과 리스트에서 카드 클릭
+    if (!!marker) setUrlSearchQuery(marker.placeId)
   }, [marker])
 
   useEffect(()=>{
-    const placeList = places?.data
-    if (!placeList?.length) return
-    console.log(placeList)
-
-    setBakeryList(convertPlaceList(placeList))
+    if (!places?.data) return
+    if (places.data.length === 0) setPlaceList([])
+      else setPlaceList(convertPlaceList(places.data))
   }, [places])
 
-  useEffect(()=>{
-    if (!placeDetail?.data?.id) return
+  useEffect(()=>{ // 상세 페이지 데이터 업데이트 시
+    if (!!placeDetail?.data?.id) setDetail(placeDetail.data)
 
-    setDetail(placeDetail.data)
-
-    return () => {
-      handleResetDetail()
-    }
+    return () => handleResetDetail()
   }, [placeDetail])
 
   useEffect(()=>{
@@ -178,49 +181,60 @@ export default function Search() {
       if (windowSize.width <= 1100) dispatch(update_is_shown_detail(false))
     }
     window.addEventListener('popstate', handleShownDetailOnMobile)
-    // setTimeout(()=>{
-    //   window.addEventListener('popstate', handleShownDetailOnMobile)
-    // }, 2000)
 
     return () => window.removeEventListener('popstate', handleShownDetailOnMobile)
   }, [])
+  
 
-  return allThePlaces && (
+  return places?.data && (
     <>
       <div className={`${styles.container} ${isShownDetail && detail && styles.hasDetail}`}>
         <div className={styles.map}>
-          <KakaoMap placeList={allThePlaces} placeCode={selectedPlace ? Number(selectedPlace) : null} />
+          <KakaoMap placeList={placeList} />
         </div>
+        
         {/* PC ver */}
         {1100 < windowSize.width &&
           <div className={styles.bakeries_wrap}>
             <BakeryDetail place={detail} loading={isFetching} />
             <div className={styles.cards}>
-              {bakeryList.map((place: PlaceSummary) => (
+              {placeList.map((place: PlaceSummary) => (
                 <BakeryCard key={place.id} place={place} onClick={handleClickPlaceCard} />
               ))}
+              {placeList.length === 0 &&
+                <div className={styles.cards_empty}>
+                  <div>등록된 장소가 없습니다. </div>
+                  <div>새로운 장소를 등록해 주세요.</div>
+                </div>
+              }
             </div>
             
             <button 
               className={`${styles.floating_button} ${styles.registration_bakery}`}
               onClick={handleOpenRegistrationBakeryModal}
             >
-              <svg width="30px" height="30px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M6 12h6m6 0h-6m0 0V6m0 6v6" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+              <svg width="30px" height="30px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                <path d="M6 12h6m6 0h-6m0 0V6m0 6v6" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+              </svg>
             </button>
           </div>
         }
-
       </div>
 
       {/* Mobile ver */}
       {windowSize.width <= 1100 &&
-        <>
-          {!isFetching && <BakeryDetail place={detail} handleResetDetail={handleResetDetail} />}
-          
-          <BottomSheet handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
-            <SearchContent placeList={bakeryList} handleClickPlaceCard={handleClickPlaceCard} />
-          </BottomSheet>
-        </>
+        (detail
+          ? (
+            <PlaceDetailBottomSheet handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
+              <BakeryDetail place={detail} />
+            </PlaceDetailBottomSheet>
+          )
+          : (
+            <PlaceListBottomSheet handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
+              <SearchContent placeList={placeList} handleClickPlaceCard={handleClickPlaceCard} />
+            </PlaceListBottomSheet>
+          )
+        )
       }
       {RegistrationBakeryModal.Dialog}
     </>

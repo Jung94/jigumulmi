@@ -3,7 +3,7 @@
 
 .bakery_cards_wrapper {
   height: calc($--wrapper-height - $--header-height);
-  background-color: map.get($--colors, "blush");
+  background-color: map.get($--greys, "100");
   overflow-x: auto;
 
   .bakery_cards {
@@ -21,7 +21,7 @@
     padding-bottom: 50px;
     width: 100%;
     height: 100%;
-    color: map.get($--colors, "brick-red");
+    color: map.get($--greys, "800");
     font-size: 15px;
     display: flex;
     flex-direction: column;

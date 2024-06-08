@@ -3,8 +3,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './searchBar.module.scss'
 import { useWindowSize } from '@/lib/hooks'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { STATIONS } from '@/lib/json/subwayStation.json'
 import { useGetPlaceSubway } from '@/domain/search/query'
 
 declare global {
@@ -13,62 +11,20 @@ declare global {
   }
 }
 
-type SearchBarProps = {
-  type: 'bakery' | 'station'
-}
-
-const searchTypes = [
-  {
-    id: 'search', 
-    name: 'search', 
-    placeholder: '지하철역',
-    json: STATIONS,
-    icon: <svg width="21px" height="21px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M9.609 7h4.782A2.609 2.609 0 0117 9.609a.391.391 0 01-.391.391H7.39A.391.391 0 017 9.609 2.609 2.609 0 019.609 7z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 3h6a6 6 0 016 6v4a6 6 0 01-6 6H9a6 6 0 01-6-6V9a6 6 0 016-6zM16 15.01l.01-.011M8 15.01l.01-.011" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M10.5 19l-2 2.5M13.5 19l2 2.5M16.5 19l2 2.5M7.5 19l-2 2.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round"></path></svg>
-  },
-  {
-    id: 'station', 
-    name: 'station', 
-    placeholder: '지하철역',
-    json: STATIONS,
-    icon: <svg width="23px" height="23px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M17 17L21 21" stroke="#333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z" stroke="#333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
-    // icon: <svg width="21px" height="21px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M9.609 7h4.782A2.609 2.609 0 0117 9.609a.391.391 0 01-.391.391H7.39A.391.391 0 017 9.609 2.609 2.609 0 019.609 7z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M9 3h6a6 6 0 016 6v4a6 6 0 01-6 6H9a6 6 0 01-6-6V9a6 6 0 016-6zM16 15.01l.01-.011M8 15.01l.01-.011" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M10.5 19l-2 2.5M13.5 19l2 2.5M16.5 19l2 2.5M7.5 19l-2 2.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round"></path></svg>
-  },
-  {
-    id: 'bakery', 
-    name: 'bakery', 
-    placeholder: '베이커리',
-    json: STATIONS,   
-    icon: <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11.4706 1C10.4118 2.78571 11.4706 4.07143 11.4706 4.07143C11.4706 4.07143 12.6618 5.5 11.4706 7" stroke="black" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M8.47059 2C7.41176 3.4881 8.47059 4.55952 8.47059 4.55952C8.47059 4.55952 9.66176 5.75 8.47059 7" stroke="black" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M19 14.8382C17.9258 8.38725 1.40314 8.38725 1.00912 14.8382C0.816526 17.9913 3.67205 17.9913 9.85266 17.9913H9.87857C16.0771 17.9913 19 18.3258 19 14.8382Z" stroke="black" strokeWidth="1.5"/>
-            <rect x="0.236814" y="0.440392" width="0.7" height="3.63991" rx="0.35" transform="matrix(0.954661 0.297696 -0.278049 0.960567 6.56318 10.0824)" fill="black" stroke="black" strokeWidth="0.7"/>
-            <rect x="0.236814" y="0.440392" width="0.7" height="3.67027" rx="0.35" transform="matrix(0.954661 0.297696 -0.278049 0.960567 10.1471 10.0524)" fill="black" stroke="black" strokeWidth="0.7"/>
-            <rect x="0.236814" y="0.440392" width="0.7" height="3.83877" rx="0.35" transform="matrix(0.954661 0.297696 -0.278049 0.960567 13.6949 9.94687)" fill="black" stroke="black" strokeWidth="0.7"/>
-          </svg>
-  },
-]
-
-const getSearchType = (type: 'bakery' | 'station') => {
-  return searchTypes.find((e: any) => e.name === type)
-}
-
 type AutoCompletedSubway = { id: number, lineNumber: string, stationName: string }
 
-const SearchBar = ({type}: SearchBarProps) => {
-  const router = useRouter()
+const SearchSubwayBar = ({
+  value, handleValue, handleSelect
+}: { 
+  value: string
+  handleValue: (v: string)=>void
+  handleSelect: (id: number)=>void }
+) => {
   const windowSize = useWindowSize()
-  const searchParams = useSearchParams()
-  const stationName = searchParams?.get("stationName") // string | null
-  const selectedPlace = searchParams?.get("place") // string | null
-
   const inputRef = useRef<HTMLInputElement>(null)
   const autoRef = useRef<any>(null)
   const [nowIndex, setNowIndex] = useState<number>(-1)
-  const [searchType] = useState<any>(() => getSearchType(type))
-  const [value, setValue] = useState<string>(stationName ?? '')
   const { data: autoCompletedSubwayList } = useGetPlaceSubway(value)
-  // stationId == null와 stationId == undefined와 stationId === null || stationId === undefined와 같음 - https://helloworldjavascript.net/pages/160-null-undefined.html
 
   const [shownOptionList, setShownOptionList] = useState<boolean>(false)
   const [autoCompleteList, setAutoCompleteList] = useState<AutoCompletedSubway[]>([])
@@ -76,22 +32,12 @@ const SearchBar = ({type}: SearchBarProps) => {
   // 지하철역 검색 키워드 자동완성
   useEffect(()=>{
     if (!autoCompletedSubwayList || autoCompletedSubwayList.status !== 200) return
-    console.log(autoCompletedSubwayList.data)
     
     setAutoCompleteList(autoCompletedSubwayList.data)
   }, [autoCompletedSubwayList])
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-  }
-
-  // update query parameter
-  const updateQueryStation = (stationId: number, stationName: string) => {
-    const params = new URLSearchParams()
-  
-    params.set('stationId', String(stationId))
-    params.set('stationName', stationName)
-    router.push(`search?${params.toString()}`)
+    handleValue(e.target.value)
   }
   
   // implement when the auto-search keyword is selected
@@ -99,26 +45,18 @@ const SearchBar = ({type}: SearchBarProps) => {
     // 클릭 이벤트가 우선. 만약 방향키로 활성화된 옵션과 실제 클릭한 옵션이 다르다면 어떻게 될까? 무조건 클릭이 우선이 된다.
     if (stationId) { // 자동 검색 리스트 중 한 개 클릭한 경우
       const { id, stationName } = autoCompleteList.find(v => v.id === stationId)!
-      setValue(stationName)
-      updateQueryStation(id, stationName)
+      handleValue(stationName)
+      handleSelect(id)
     } else {
       const { id, stationName } = autoCompleteList[nowIndex]
-      setValue(stationName)
-      updateQueryStation(id, stationName)
+      handleValue(stationName)
+      handleSelect(id)
     }
     
     setNowIndex(-1)
     setShownOptionList(false)
+    setAutoCompleteList([])
     inputRef.current?.blur()
-
-    // PC - auto-search가 클릭(엔터)되어도 한 번 더 검색하기 때문에 focus가 되어야 합니다.
-    // Mobile - auto-search가 클릭(엔터)되면 곧바로 검색되는 것이 자연스럽기 때문에 blur 되어야 합니다.
-    if (1100 < windowSize.width) {
-      // inputRef.current?.focus()
-
-    } else {
-      // inputRef.current?.blur()
-    }
   }
 
   const handleKeyArrow = (e: React.KeyboardEvent) => {
@@ -160,7 +98,7 @@ const SearchBar = ({type}: SearchBarProps) => {
   }
 
   const eraseAllText = () => {
-    setValue('')  // erase input value
+    handleValue('')  // erase input value
     setAutoCompleteList([])  // empty auto searched list
     inputRef.current?.focus()
   }
@@ -172,7 +110,7 @@ const SearchBar = ({type}: SearchBarProps) => {
   useEffect(()=>{
     setShownOptionList(false)
     inputRef.current?.blur()
-  }, [inputRef, selectedPlace])
+  }, [inputRef])
 
   useEffect(()=>{
     const handleClick = (e: MouseEvent | TouchEvent) => {
@@ -197,7 +135,7 @@ const SearchBar = ({type}: SearchBarProps) => {
 
   return (
     <div className={styles.container} >
-      <input ref={inputRef} type='text' placeholder={searchType.placeholder} value={value} onChange={handleChangeInput} onKeyDown={handleKeyArrow} />
+      <input ref={inputRef} type='text' value={value} onChange={handleChangeInput} onKeyDown={handleKeyArrow} />
       {!!value &&
         <div className={styles.erase_all_text} onClick={eraseAllText}>
           <svg width="19px" height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000" strokeWidth="1.5">
@@ -232,4 +170,4 @@ const SearchBar = ({type}: SearchBarProps) => {
   )
 }
 
-export default React.memo(SearchBar)
+export default React.memo(SearchSubwayBar)

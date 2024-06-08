@@ -21,7 +21,7 @@ import { usePostLogout, usePutNickname, useGetUserDetail } from '@/domain/accoun
 const UserButton = ({ onOpen }: { onOpen: ()=>void }) => {
   return (
     <button className={styles.button_user_space} onClick={onOpen}>
-      <User />
+      <User size='23px' />
     </button>
   )
 }
@@ -158,6 +158,7 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
 }
 
 const Header = () => {
+  const router = useRouter()
   const windowSize = useWindowSize()
   const { data: userDetail } = useGetUserDetail()
   const nickname: string | undefined = userDetail?.data?.nickname
@@ -166,15 +167,19 @@ const Header = () => {
   const openUserModal = () => setShownUserModal(true)
   const closeUserModal = () => setShownUserModal(false)
 
+  const handleClickLogo = () => {
+    router.push('/search')
+  }
+
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
         <button className={styles.links}>
           {1100 < windowSize.width &&
-            <Image src={Logo} width={100} height={25} alt='logo' style={{marginTop: '4px'}} ></Image>
+            <Image src={Logo} width={100} height={25} alt='logo' style={{marginTop: '4px'}} onClick={handleClickLogo}></Image>
           }
           {windowSize.width <= 1100 &&
-            <Image src={Logo} width={85} height={22} alt='logo' style={{marginTop: '8px'}} ></Image>
+            <Image src={Logo} width={85} height={22} alt='logo' style={{marginTop: '8px'}} onClick={()=>router.push('/search')}></Image>
           }
         </button>
 

@@ -30,7 +30,7 @@
 .container {
   padding: 0 10px 3rem;
   height: 100vh;
-  background-color: map.get($--colors, "off-white");
+  background-color: map.get($--greys, "100");
 
   display: flex;
   flex-direction: column;

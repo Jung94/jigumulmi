@@ -4,11 +4,10 @@ import type { PlaceSummary, SubwayStation } from '@/types/place'
 
 type Props = {
   place: PlaceSummary
-  onClick: (placeId: number)=>void
+  onClick: (place: PlaceSummary)=>void
 }
 
 const BakeryCard = ({ place, onClick }: Props) => {
-  // console.log(place)
   
   const changeLineName = (subwayLineName: string) => {
     const nameList = subwayLineName.split('')
@@ -19,7 +18,7 @@ const BakeryCard = ({ place, onClick }: Props) => {
   }
 
   return place && (
-    <div className={styles.bakery_card} onClick={()=>onClick(place.id)}>
+    <div className={styles.bakery_card} onClick={()=>onClick(place)}>
       <div className={styles.card_image}>
         <Image className={styles.image} fill src={place.images[0]} alt={place.name} />
       </div>
@@ -34,16 +33,16 @@ const BakeryCard = ({ place, onClick }: Props) => {
           </div> */}
         </div>
         <div className={styles.bottom}>
-          {place.subwayStationList.map((station: SubwayStation) => {
-            return (
-              <div key={station.id} className={styles.subway_station_wrapper}>
-                <div className={`${styles.subway_line} ${styles[`line_${station.lineNumber}`]}`}>
-                  {changeLineName(station.lineNumber)}
+          <div className={styles.subway_station_wrapper}>
+            {place.subwayStation.subwayStationLineList.map((line: {id: number, lineNumber: string}) => {
+              return (
+                <div key={line.id} className={`${styles.subway_line} ${styles[`line_${line.lineNumber}`]}`}>
+                  {changeLineName(line.lineNumber)}
                 </div>
-                <div className={styles.subway_station}>{station.stationName}</div>
-              </div>
-            )
-          })}
+              )
+            })}
+            <div className={styles.subway_station}>{place.subwayStation.stationName}</div>
+          </div>
         </div>
       </div>
     </div>

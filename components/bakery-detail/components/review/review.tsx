@@ -15,10 +15,9 @@ import { useGetUserDetail } from '@/domain/account/query'
 import type { OverallReview } from '@/types/place';
 
 export default function Review({ placeId, data }: { placeId: number, data: OverallReview }) {
+  // console.log('review:', review, data)
   const { data: userDetail } = useGetUserDetail()
-  console.log(userDetail, userDetail?.data)
   const { data: review } = useGetReview(placeId)
-  console.log(review, data)
 
   const RequestLoginModal = useModal(
     <RequestLoginContent
@@ -50,12 +49,12 @@ export default function Review({ placeId, data }: { placeId: number, data: Overa
       <div className={styles.header_wrapper}>
         <div className={styles.title}>리뷰 <span>{!data.totalCount ? '' : data.totalCount}</span></div>
         <Button
-          variant='outlined'
+          variant='contained-sub'
           style={{padding: '0px', width: '4.2rem', height: '1.65rem', fontSize: '12px', fontWeight: '400'}}
           onClick={handleOpenModal}
         >리뷰 작성</Button>
       </div>
-      {review.data.length > 0
+      {data.totalCount !== 0
         ? (<>
           <RatingSection data={data}/>
           {review.data &&

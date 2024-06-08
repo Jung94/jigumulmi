@@ -1,19 +1,43 @@
 "use client"
 
-import React, { useState, useEffect, useRef, useCallback } from 'react'
 import styles from './kakaoMap.module.scss'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useWindowSize } from '@/lib/hooks'
 import { set_kakao_map_func, set_kakao_places_func, update_marker } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
-import type { PlaceSummary } from '@/types/place'
+import type { PlaceSummary, PlaceForMarker } from '@/types/place'
 
 let selectedMarker: any = null;
 let markers: any[] = [];
 
-const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCode: number | null }) => {
+const KakaoMap = ({ placeList }: { placeList: PlaceSummary[] }) => {
   const dispatch = useAppDispatch()
+  const windowSize = useWindowSize()
+  const searchParams = useSearchParams()
+  const stationId = searchParams?.get("stationId") // string | null
+  const placeId = searchParams?.get("place") // string | null
+
   const mapRef = useRef<HTMLDivElement>(null)
-  const [map, setMap] = useState<any>(null)
-  const [bakeries, setBakeries] = useState<{id: number, name: string, latlng: any}[]>([])
+  const kakaoMapFunc = useAppSelector(((state) => state.search.kakaoMap))
+  const [ positionList, setPositionList ] = useState<PlaceForMarker[]>([])
+
+  const createPositionList = (placeList: PlaceSummary[]) => {
+    const positions = placeList.map((place: PlaceSummary) => {
+      return {id: place.id, name: place.name, latlng: new kakao.maps.LatLng(place.position.latitude, place.position.longitude)}
+    })
+    
+    setPositionList(positions)
+  }
+
+  useEffect(()=>{
+    // if (!kakaoMapFunc || !stationId) return
+    if (!kakaoMapFunc) return
+    
+    if (!!stationId) kakaoMapFunc.setLevel(5)
+      else kakaoMapFunc.setLevel(8)
+    createPositionList(placeList)
+  }, [kakaoMapFunc, placeList])
 
   useEffect(()=>{
     const kakaoMapScript = document.createElement('script')
@@ -26,22 +50,14 @@ const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCo
         const mapContainer = document.getElementById('kakao_map')
         const mapOption = {
           center: new window.kakao.maps.LatLng(37.523844561019224, 126.98021150388406),
-          level: 7,
+          level: stationId ? 5 : 8,
         }
 
         const map = new window.kakao.maps.Map(mapContainer, mapOption)
-        setMap(map)
-        dispatch(set_kakao_map_func(map))
-
-        const positions = placeList.map((place: PlaceSummary) => {
-          return {id: place.id, name: place.name, latlng: new kakao.maps.LatLng(place.position.latitude, place.position.longitude)}
-        })
-        setBakeries(positions)
-        console.log('placeList:', placeList)
-
         const places = new window.kakao.maps.services.Places()
+
+        dispatch(set_kakao_map_func(map))
         dispatch(set_kakao_places_func(places))
-        
       })
     }
 
@@ -52,116 +68,102 @@ const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCo
     }
   }, [])
 
-
   const getMarkerImages = useCallback(() => {
-    const normalImage = 'https://ifh.cc/g/9gS2ma.png' // inactive marker - desert-gold bgColor
-    const activeImage = 'https://ifh.cc/g/PV5ZBA.png' // active marker
+    // const normalImage = 'https://ifh.cc/g/aklZk9.png' // inactive marker - desert-gold bgColor
+    // const activeImage = 'https://ifh.cc/g/PV5ZBA.png' // active marker
+    const normalImage = 'https://ifh.cc/g/HY2Vt7.png' // inactive marker
+    const activeImage = 'https://ifh.cc/g/yvm1Oo.png' // active marker
+    
     const imageSize = new kakao.maps.Size(24, 32)
-    const imageSizeActive = new kakao.maps.Size(32, 42)
+    const imageSizeActive = new kakao.maps.Size(35, 46.5)
+    // const imageSizeActive = new kakao.maps.Size(45, 60)
     const markerImage = new kakao.maps.MarkerImage(normalImage, imageSize)
     const markerImageActive = new kakao.maps.MarkerImage(activeImage, imageSizeActive)
 
     return { markerImage, markerImageActive }
   }, [])
 
-  useEffect(()=>{
-    if (bakeries.length === 0 || !map) return
-    console.log('bakeries:', bakeries)
+  const handleClickMarker = (marker: any, e?: PlaceForMarker) => {
+    const { markerImage, markerImageActive } = getMarkerImages()
 
-    bakeries.forEach((e: any, index: number) => {
+    // https://apis.map.kakao.com/web/sample/multipleMarkerEvent2/
+    if (!selectedMarker || selectedMarker !== marker) {
+
+      // 클릭된 마커 객체가 null이 아니면
+      // 클릭된 마커의 이미지를 기본 이미지로 변경하고
+      if (!!selectedMarker) {
+        selectedMarker.setImage(markerImage);
+        selectedMarker.setZIndex(0);
+      }
+
+      // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+      marker.setImage(markerImageActive);
+      marker.setZIndex(1);
+    }
+
+    // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+    // selectedMarker = marker;
+
+    if (!e) return
+    dispatch(update_marker({
+      placeId: e.id,
+      position: {x: e.latlng.La, y: e.latlng.Ma}
+    }))
+  }
+
+  useEffect(()=>{
+    if (positionList.length === 0 || !kakaoMapFunc) return
+
+    positionList.forEach((e: PlaceForMarker, index: number) => {
       const { markerImage, markerImageActive } = getMarkerImages()
       
       const marker = new kakao.maps.Marker({
-        map: map, // 마커를 표시할 지도
+        map: kakaoMapFunc, // 마커를 표시할 지도
         position: e.latlng, // 마커를 표시할 위치
         title: e.id, // 마커의 타이틀
-        image: e.id === placeCode ? markerImageActive : markerImage,
-        zIndex: e.id === placeCode ? 1 : 0
+        image: e.id === Number(placeId) ? markerImageActive : markerImage,
+        zIndex: e.id === Number(placeId) ? 1 : 0
       })
+      marker.setMap(kakaoMapFunc)
 
-      if (e.id === placeCode) selectedMarker = marker;
-
-      // 마커에 클릭 이벤트 등록
-      window.kakao.maps.event.addListener(marker, 'click', () => {
-        // https://apis.map.kakao.com/web/sample/multipleMarkerEvent2/
-        if (!selectedMarker || selectedMarker !== marker) {
-
-          // 클릭된 마커 객체가 null이 아니면
-          // 클릭된 마커의 이미지를 기본 이미지로 변경하고
-          if (!!selectedMarker) {
-            selectedMarker.setImage(markerImage);
-            selectedMarker.setZIndex(0);
-          }
-
-          // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
-          marker.setImage(markerImageActive);
-          marker.setZIndex(1);
+      if (e.id === Number(placeId)) { // 맨 처음 로드 시
+        selectedMarker = marker;
+        
+        const panTo = (x: number, y: number) => {
+          const moveLatLon = new window.kakao.maps.LatLng(x, y) // 이동할 위도 경도 위치 생성
+          
+          kakaoMapFunc.panTo(moveLatLon); // 지도 중심을 부드럽게 이동시킵니다. (만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동)
         }
 
-        // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
-        selectedMarker = marker;
+        kakaoMapFunc.relayout()
+        kakaoMapFunc.setLevel(5)
 
-        dispatch(update_marker({
-          placeId: e.id,
-          position: {x: e.latlng.La, y:e.latlng.Ma}
-        }))
-      })
+        if (1100 < windowSize.width) panTo(e.latlng.Ma, e.latlng.La)
+          else panTo(e.latlng.Ma - 0.006, e.latlng.La)
+      }
 
+      window.kakao.maps.event.addListener(marker, 'click', () => handleClickMarker(marker, e))
       markers.push(marker)
     })
 
-    // return () => {
-    //   bakeries.forEach((e: any, index: number) => {
-    //     const { markerImage, markerImageActive } = getMarkerImages()
-        
-    //     const marker = new kakao.maps.Marker({
-    //       map: map, // 마커를 표시할 지도
-    //       position: e.latlng, // 마커를 표시할 위치
-    //       title: e.id, // 마커의 타이틀
-    //       image: e.id === placeCode ? markerImageActive : markerImage,
-    //       zIndex: e.id === placeCode ? 1 : 0
-    //     })
-  
-    //     if (e.id === placeCode) selectedMarker = marker;
-  
-    //     // 마커에 클릭 이벤트 등록
-    //     window.kakao.maps.event.removeListener(marker, 'click', () => {
-    //       // https://apis.map.kakao.com/web/sample/multipleMarkerEvent2/
-    //       if (!selectedMarker || selectedMarker !== marker) {
-  
-    //         // 클릭된 마커 객체가 null이 아니면
-    //         // 클릭된 마커의 이미지를 기본 이미지로 변경하고
-    //         if (!!selectedMarker) {
-    //           selectedMarker.setImage(markerImage);
-    //           selectedMarker.setZIndex(0);
-    //         }
-  
-    //         // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
-    //         marker.setImage(markerImageActive);
-    //         marker.setZIndex(1);
-    //       }
-  
-    //       // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
-    //       selectedMarker = marker;
-  
-    //       dispatch(update_marker({
-    //         placeId: e.id,
-    //         position: {x: e.latlng.La, y:e.latlng.Ma}
-    //       }))
-    //     })
-  
-    //     markers.push(marker)
-    //   })
-    // }
+    return () => {
+      markers.forEach(marker => {
+        marker.setMap(null)
+        window.kakao.maps.event.removeListener(marker, 'click', () => handleClickMarker(marker))
+      })
+      markers = []
+    }
 
-  }, [bakeries, map])
+  }, [positionList, kakaoMapFunc])
 
   useEffect(()=>{
-    if (bakeries.length === 0 || !map) return
+    if (positionList.length === 0 || !kakaoMapFunc) return
     const { markerImage, markerImageActive } = getMarkerImages()
 
-    if (placeCode) {
-      const marker = markers.find(e => e.Gb === String(placeCode))
+    if (placeId) {
+      const marker = markers.find(e => e.Gb === String(placeId))
+
+      if (!marker) return
 
       if (!!selectedMarker) {
         selectedMarker.setImage(markerImage);
@@ -171,18 +173,18 @@ const KakaoMap = ({ placeList, placeCode }: { placeList: PlaceSummary[], placeCo
       marker.setZIndex(1);
       selectedMarker = marker;
     }
-    if (!placeCode && !!selectedMarker) {
+
+    if (!placeId && !!selectedMarker) { // placeId가 사라졌을 때 (ex. 지하철역 재검색)
       selectedMarker.setImage(markerImage);
       selectedMarker.setZIndex(0);
       selectedMarker = null;
     }
-  }, [placeCode])
+  }, [placeId])
 
   // 모바일 환경에서 bottom sheet 열기/닫기 이벤트에 따라 지도의 중심 이동
   // useEffect(()=>{
   //   if (isShownBottomSheet) {
   //     // const mapHeight = mapRef.current?.offsetHeight
-  //     // console.log(String(parseFloat(location.x) - 0.025), mapHeight / 5)
   //     dispatch(update_location({x: String(parseFloat(location.x) - 0.025), y: location.y}))
   //   } else if (isShownBottomSheet === false) {
   //     dispatch(update_location({x: String(parseFloat(location.x) + 0.025), y: location.y}))
