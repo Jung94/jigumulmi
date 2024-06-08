@@ -20,7 +20,6 @@ const PlaceDetailBottomSheet = ({
   return (
     <BottomSheet 
       id="bottom-sheet"
-      className={styles.wrapper} 
       open
       skipInitialTransition
       ref={sheetRef}
