@@ -23,7 +23,8 @@ const PlaceDetailBottomSheet = ({
       open
       skipInitialTransition
       ref={sheetRef}
-      blocking = {false}
+      blocking={false}
+      scrollLocking={false}
       header={
         <div className={styles.empty_space}>
           <FloatingButton onClick={handleClickFloatBtn} />
@@ -36,14 +37,14 @@ const PlaceDetailBottomSheet = ({
       ]}
       expandOnContentDrag={true}
     >
-      <div 
+      {/* <div 
         className={`
           ${styles.inner}
           ${styles["status-full"]}
         `}
-      >
+      > */}
         {children}
-      </div>
+      {/* </div> */}
     </BottomSheet>
   )
 }

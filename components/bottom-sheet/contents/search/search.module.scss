@@ -4,8 +4,14 @@
 .bakery_cards_wrapper {
   width: 100%;
   height: calc($--wrapper-height - $--header-height);
-  background-color: map.get($--greys, "100");
+  // background-color: map.get($--greys, "100");
   overflow-x: auto;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
 
   .bakery_cards {
     padding: $--padding--mobile;
