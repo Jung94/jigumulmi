@@ -28,10 +28,10 @@ const PlaceListBottomSheet = ({
       header={
         <div className={styles.empty_space} />
       }
-      defaultSnap={({ maxHeight }) => 360}
+      defaultSnap={({ maxHeight }) => 380}
       snapPoints={({ minHeight, maxHeight }) => [
         35,
-        360
+        380
       ]}
       expandOnContentDrag={true}
     >
