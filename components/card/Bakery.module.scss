@@ -101,9 +101,10 @@
 
         .subway_station_wrapper {
           display: flex;
+          flex-wrap: wrap;
           justify-content: flex-start;
           align-items: center;
-          gap: 0.3rem;
+          gap: 0.2rem;
         }
   
         .subway_line {
