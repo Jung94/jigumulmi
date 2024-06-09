@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import styles from './Bakery.module.scss'
-import type { PlaceSummary, SubwayStation } from '@/types/place'
+import type { PlaceSummary } from '@/types/place'
 
 type Props = {
   place: PlaceSummary
@@ -8,13 +8,13 @@ type Props = {
 }
 
 const BakeryCard = ({ place, onClick }: Props) => {
-  
   const changeLineName = (subwayLineName: string) => {
     const nameList = subwayLineName.split('')
-
+    
     if (nameList[0] === '0') subwayLineName = nameList.splice(1).join('')
     if (subwayLineName.includes('호선')) return subwayLineName.replace('호선', '')
     if (subwayLineName.includes('선')) return subwayLineName.replace('선', '')
+    return subwayLineName
   }
 
   return place && (
