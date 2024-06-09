@@ -4,10 +4,11 @@ import Image from 'next/image'
 import styles from './Detail.module.scss'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
 import Review from '@/components/bakery-detail/components/review/review'
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
+import { useAppSelector } from '@/lib/store/hooks'
 import type { Place } from '@/types/place'
 
 const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boolean }) => {
+  console.log(place)
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   const getOpeningHour = (v: string) => {
     if (v === 'openingHourMon') return '월'

@@ -15,9 +15,9 @@ import { useGetUserDetail } from '@/domain/account/query'
 import type { OverallReview } from '@/types/place';
 
 export default function Review({ placeId, data }: { placeId: number, data: OverallReview }) {
-  // console.log('review:', review, data)
   const { data: userDetail } = useGetUserDetail()
   const { data: review } = useGetReview(placeId)
+  // console.log('review:', review?.data, data)
 
   const RequestLoginModal = useModal(
     <RequestLoginContent
