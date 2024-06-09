@@ -8,7 +8,7 @@ import { useAppSelector } from '@/lib/store/hooks'
 import type { Place } from '@/types/place'
 
 const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boolean }) => {
-  console.log(place)
+  // console.log(place)
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   const getOpeningHour = (v: string) => {
     if (v === 'openingHourMon') return '월'
