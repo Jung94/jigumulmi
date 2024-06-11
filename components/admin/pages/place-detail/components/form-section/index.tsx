@@ -326,7 +326,7 @@ export default function FormSection ({
 
         <div className={styles['form-section-textarea']}>
           <div className={styles['form-section-textarea-label']}>하고 싶은 말</div>
-          <textarea readOnly id='registrantComment' name='registrantComment' value={data.registrantComment} />
+          <textarea readOnly id='registrantComment' name='registrantComment' value={data.registrantComment ?? ''} />
         </div>
       </div>
     </div>

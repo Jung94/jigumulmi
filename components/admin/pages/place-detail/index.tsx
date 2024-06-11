@@ -105,7 +105,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   return (
     <Layout row>
       <MainLayout>
-        <HeaderSection title={`${params.placeId ? '장소 수정' : '장소 등록'}`}>
+        <HeaderSection title={`${params.placeId ? `장소 수정${data ? ` (ID: ${data.id})` : ''}` : '장소 등록'}`}>
           <Button onClick={save}>저장하기</Button>
         </HeaderSection>
         <FormSection data={data} setData={setData} />

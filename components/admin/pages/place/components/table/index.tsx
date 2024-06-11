@@ -28,6 +28,7 @@ export const Body = ({
         <Tr key={el.id} onClick={()=>handleClick(el.id)}>
           <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
           <Td align='left'>{el.name}</Td>
+          <Td>{el.id}</Td>
           <Td>{el.category}</Td>
           <Td>
             {el.subwayStation.stationName}
@@ -50,8 +51,8 @@ const TableSection = ({
   totalPage, 
   handlePage,
 }: TableProps) => {
-  const cols = ["30%", "15%", "35%", "20%"] // total: 100%
-  const columns = ["이름", "카테고리", "지하철", "승인 여부"]
+  const cols = ["25%", "10%", "15%", "30%", "20%"] // total: 100%
+  const columns = ["이름", "ID", "카테고리", "지하철", "승인 여부"]
   const rowsPerPage = 15 // 한 페이지 내 row 개수
 
   const col = Col(cols)
