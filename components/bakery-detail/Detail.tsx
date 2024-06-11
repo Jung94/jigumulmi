@@ -99,28 +99,33 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
               </div>
             </div>
 
-            <div className={styles.divider}></div>
+            {place.menuList.length > 0 && (
+              <>
+                <div className={styles.divider}></div>
 
-            <div className={styles.section}>
-              <div className={styles.title}>메뉴</div>
-              <div className={styles.main_menus}>
-                {place.menuList.map((menu: {id: number, name: string}) => {
-                  return (
-                    <div key={menu.id} className={styles.menu}>
-                      <div className={styles.checkbox}>
-                        <svg width="11px" height="11px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
-                          <path d="M5 13l4 4L19 7" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                        </svg>
-                      </div>
-                      <div className={styles.menu_nm}>{menu.name}</div>
-                    </div>
-                  )
-                })}
-              </div>
-              <div className={styles.additional_info}>
-                {place.additionalInfo}
-              </div>
-            </div>
+                <div className={styles.section}>
+                  <div className={styles.title}>메뉴</div>
+                  <div className={styles.main_menus}>
+                    {place.menuList.map((menu: {id: number, name: string}) => {
+                      return (
+                        <div key={menu.id} className={styles.menu}>
+                          <div className={styles.checkbox}>
+                            <svg width="11px" height="11px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                              <path d="M5 13l4 4L19 7" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                            </svg>
+                          </div>
+                          <div className={styles.menu_nm}>{menu.name}</div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div className={styles.additional_info}>
+                    {place.additionalInfo}
+                  </div>
+                </div>
+              </>
+            )}
+            
 
             <div className={styles.divider}></div>
 
