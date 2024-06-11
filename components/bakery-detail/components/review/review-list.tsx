@@ -2,6 +2,7 @@
 
 import styles from './review-list.module.scss';
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import User from '@/public/icons/User';
 import Check from '@/public/icons/Check';
 import XMark from '@/public/icons/XMark';
@@ -19,6 +20,7 @@ import {
   useDeleteReview,
   useDeleteReviewReply
 } from '@/domain/review/query';
+import { placeDetailQueryKey } from '@/domain/search/query/useGetPlaceDetail';
 import { APIreview } from "@/lib/api/review";
 
 type ReviewReply = {
@@ -119,6 +121,8 @@ const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
 };
 
 const ReviewCard = ({ review }: { review: Review }) => {
+  const searchParams = useSearchParams();
+  const placeId = searchParams?.get("place"); // string | null
   const queryClient = useQueryClient();
   const [ shownReReview, setShownReReview ] = useState<boolean>(false);
 
@@ -137,6 +141,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
 
   const successDeletionReview = async () => {
     await queryClient.refetchQueries([APIreview.review])
+    await queryClient.refetchQueries([placeDetailQueryKey(Number(placeId))])
     handleCloseDeletionReviewModal()
   };
 
