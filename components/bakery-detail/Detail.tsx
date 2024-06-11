@@ -26,6 +26,7 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
     if (nameList[0] === '0') subwayLineName = nameList.splice(1).join('')
     if (subwayLineName.includes('호선')) return subwayLineName.replace('호선', '')
     if (subwayLineName.includes('선')) return subwayLineName.replace('선', '')
+    return subwayLineName
   }
 
   return place && isShownDetail && (
