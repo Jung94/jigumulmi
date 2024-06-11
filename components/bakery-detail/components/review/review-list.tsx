@@ -168,12 +168,14 @@ const ReviewCard = ({ review }: { review: Review }) => {
           <div className={styles.review_card_header_left_profile_image}></div>
           <div className={styles.review_card_header_left_user_nickname}>{review.member.nickname}</div>
         </div>
-        <div className={styles.review_card_header_created_at}>
-          {review.isEdited &&
-            <span style={{ marginRight: '3px', fontSize: '11px' }}>(수정됨)</span>
-          }
-          {review.reviewedAt}
-        </div>
+        {!review.deletedAt &&
+          <div className={styles.review_card_header_created_at}>
+            {review.isEdited &&
+              <span style={{ marginRight: '3px', fontSize: '11px' }}>(수정됨)</span>
+            }
+            {review.reviewedAt}
+          </div>
+        }
       </div>
       {!review.deletedAt &&
         <div className={styles.review_card_rating}>
