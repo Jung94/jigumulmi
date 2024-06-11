@@ -124,6 +124,10 @@ export default function Search() {
     if (!placeId) {
       setDetail(null)
       dispatch(update_is_shown_detail(false))
+
+      if (!!stationId && !!stationName) { // 역 검색 후 상세페이지 있는 상태에서 동일 역 재검색 시 리렌더링
+        getLocationOfKeyword(stationName)
+      }
       return
     }
 
@@ -203,7 +207,7 @@ export default function Search() {
               ))}
               {placeList.length === 0 &&
                 <div className={styles.cards_empty}>
-                  <div>등록된 장소가 없습니다. </div>
+                  <div>등록된 장소가 없습니다.</div>
                   <div>새로운 장소를 등록해 주세요.</div>
                 </div>
               }
