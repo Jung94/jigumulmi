@@ -150,21 +150,21 @@ export default function FormSection ({
         <Input 
           type='text' 
           name='카테고리' 
-          value={data.category} 
+          value={data.category ?? ''} 
           onChange={(v)=>handleChange('category', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='주소' 
-          value={data.address} 
+          value={data.address ?? ''} 
           onChange={(v)=>handleChange('address', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='연락처' 
-          value={data.contact} 
+          value={data.contact ?? ''} 
           onChange={(v)=>handleChange('contact', v)} 
           style={{fontSize: '0.875rem'}} 
         />
@@ -174,28 +174,28 @@ export default function FormSection ({
         <Input 
           type='text' 
           name='위도' 
-          value={data.position.latitude} 
+          value={data.position.latitude ?? ''} 
           onChange={(v)=>handlePosition('latitude', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='경도' 
-          value={data.position.longitude} 
+          value={data.position.longitude ?? ''} 
           onChange={(v)=>handlePosition('longitude', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='대표 이미지' 
-          value={data.mainImageUrl} 
+          value={data.mainImageUrl ?? ''} 
           onChange={(v)=>handleChange('mainImageUrl', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='추가 정보' 
-          value={data.additionalInfo} 
+          value={data.additionalInfo ?? ''} 
           onChange={(v)=>handleChange('additionalInfo', v)} 
           style={{fontSize: '0.875rem'}} 
         />
@@ -205,49 +205,49 @@ export default function FormSection ({
         <Input 
           type='text' 
           name='일' 
-          value={data.openingHour.openingHourSun} 
+          value={data.openingHour.openingHourSun ?? ''} 
           onChange={(v)=>handleOpeningHour('openingHourSun', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='월' 
-          value={data.openingHour.openingHourMon} 
+          value={data.openingHour.openingHourMon ?? ''} 
           onChange={(v)=>handleOpeningHour('openingHourMon', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='화' 
-          value={data.openingHour.openingHourTue} 
+          value={data.openingHour.openingHourTue ?? ''} 
           onChange={(v)=>handleOpeningHour('openingHourTue', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='수' 
-          value={data.openingHour.openingHourWed} 
+          value={data.openingHour.openingHourWed ?? ''} 
           onChange={(v)=>handleOpeningHour('openingHourWed', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='목' 
-          value={data.openingHour.openingHourThu} 
+          value={data.openingHour.openingHourThu ?? ''} 
           onChange={(v)=>handleOpeningHour('openingHourThu', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='금' 
-          value={data.openingHour.openingHourFri} 
+          value={data.openingHour.openingHourFri ?? ''} 
           onChange={(v)=>handleOpeningHour('openingHourFri', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Input 
           type='text' 
           name='토' 
-          value={data.openingHour.openingHourSat} 
+          value={data.openingHour.openingHourSat ?? ''} 
           onChange={(v)=>handleOpeningHour('openingHourSat', v)} 
           style={{fontSize: '0.875rem'}} 
         />
@@ -320,9 +320,14 @@ export default function FormSection ({
           options={[{name: '승인', value: 1}, {name: '미승인', value: 2}]}
           selected={data.isApproved ? 1 : 2}
           onClick={(v)=>handleIsApproved(v)}
-          style={{width: '8rem'}}
-          styleLabel={{fontSize: '0.85rem'}} 
+          style={{minWidth: '8rem', maxWidth: '8rem'}}
+          styleLabel={{fontSize: '0.8rem'}} 
         ></SelectBox.HiddenOption>
+
+        <div className={styles['form-section-textarea']}>
+          <div className={styles['form-section-textarea-label']}>하고 싶은 말</div>
+          <textarea readOnly id='registrantComment' name='registrantComment' value={data.registrantComment} />
+        </div>
       </div>
     </div>
   )
