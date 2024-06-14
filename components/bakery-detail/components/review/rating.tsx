@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import styles from './rating.module.scss';
 import type { OverallReview } from '@/types/place';
 
@@ -28,7 +29,7 @@ const RatioItem = ({
 const RatingStar = ({ order, rating }: { order: number, rating: number }) => {
   return (
     <span className={styles["rating-star"]}>
-      <svg width="27px" height="27px" strokeWidth="1.5" viewBox="0 0 24 24" fill="hsl(0,0%,85%)" xmlns="http://www.w3.org/2000/svg" color="#000000">
+      <svg width="27px" height="27px" strokeWidth="1.5" viewBox="0 0 24 24" fill="#d1d6db" xmlns="http://www.w3.org/2000/svg" color="#000000">
         <clipPath id={`star-clip-${order}`}>
           <rect width={24 * rating / 100} height={27} />
         </clipPath>
@@ -52,18 +53,38 @@ export default function Rating ({ data }: { data: OverallReview }) {
     return 0
   }
 
-  const statistics = Object.entries(data.statistics)
-  const maxAndCount = statistics.reduce((acc, cur, idx) => {
-    if (acc[0] < cur[1]) {
-      return [cur[1], 1]
-    } else if (acc[0] === cur[1]) {
-      return [acc[0], acc[1] + 1]
-    } else {
-      return [acc[0], acc[1]]
-    }
-  }, [0, 0]); // [가장 큰 수, 개수]
+  // const statistics = Object.entries(data.statistics)
+  // const maxAndCount = statistics.reduce((acc, cur, idx) => {
+  //   if (acc[0] < cur[1]) {
+  //     return [cur[1], 1]
+  //   } else if (acc[0] === cur[1]) {
+  //     return [acc[0], acc[1] + 1]
+  //   } else {
+  //     return [acc[0], acc[1]]
+  //   }
+  // }, [0, 0]); // [가장 큰 수, 개수]
+  
+  const [ statistics, setStatistics ] = useState<any>(null)
+  const [ maxAndCount, setMaxAndCount ] = useState<any>(null)
 
-  return (
+  useEffect(()=>{
+    setStatistics(Object.entries(data.statistics))
+  }, [data])
+
+  useEffect(()=>{
+    if (!statistics) return
+    setMaxAndCount(statistics.reduce((acc, cur, idx) => {
+      if (acc[0] < cur[1]) {
+        return [cur[1], 1]
+      } else if (acc[0] === cur[1]) {
+        return [acc[0], acc[1] + 1]
+      } else {
+        return [acc[0], acc[1]]
+      }
+    }, [0, 0]))
+  }, [statistics])
+
+  return maxAndCount && (
     <div className={styles.wrapper}>
       <div className={styles.section}>
         <div className={styles.title}>사용자 총 평점</div>
