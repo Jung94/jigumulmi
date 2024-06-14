@@ -1,14 +1,19 @@
 import './globals.scss'
 import Script from "next/script"
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import localFont from 'next/font/local'
+// import { Inter } from 'next/font/google'
 import Providers from '@/lib/utils/Provider'
-import Header from '@/components/header'
 import getQueryClient from '@/lib/utils/getQueryClient'
 import { Hydrate, dehydrate } from '@tanstack/react-query'
 import { getPlaceList } from '@/app/actions'
 
-const inter = Inter({ subsets: ['latin'] })
+// const inter = Inter({ subsets: ['latin'] })
+const pretendard = localFont({
+  src: './fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '45 920',
+})
 
 export const metadata: Metadata = {
   title: 'Jigumulmi',
@@ -50,10 +55,9 @@ export default async function RootLayout({children}: {children: React.ReactNode}
           }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={pretendard.className}>
         <Providers>
           <Hydrate state={dehydratedState}>
-            {/* <Header /> */}
             {children}
           </Hydrate>
         </Providers>
