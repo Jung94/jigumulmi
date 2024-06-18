@@ -11,13 +11,14 @@ import RequestLoginContent from '@/components/modal/request-login/Content';
 import RegistrationReviewContent from '@/components/modal/registration-review/Content';
 import { checkIsLogin } from '@/domain/account/query/useGetUserDetail';
 import { useGetReview } from '@/domain/review/query';
-import { useGetUserDetail } from '@/domain/account/query'
+import { useGetUserDetail } from '@/domain/account/query';
 import type { OverallReview } from '@/types/place';
 
 export default function Review({ placeId, data }: { placeId: number, data: OverallReview }) {
   const { data: userDetail } = useGetUserDetail()
   const { data: review } = useGetReview(placeId)
-  console.log('review:', review?.data, data)
+  // console.log('review:', review?.data, data)
+  // console.log('userDetail:', !!(userDetail?.status === 200), userDetail?.status)
 
   const RequestLoginModal = useModal(
     <RequestLoginContent

@@ -20,6 +20,7 @@ import {
   useDeleteReview,
   useDeleteReviewReply
 } from '@/domain/review/query';
+import { useGetUserDetail } from '@/domain/account/query'
 import { placeDetailQueryKey } from '@/domain/search/query/useGetPlaceDetail';
 import { APIreview } from "@/lib/api/review";
 
@@ -268,6 +269,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
 };
 
 const ReviewReplyForm = ({ reviewId=0, reviewReplyId=0, method, content='', mutateFunc, handleModify }: { reviewId?: number, reviewReplyId?: number, method: 'post' | 'put', content?: string, mutateFunc?:()=>void, handleModify?:()=>void }) => {
+  const { data: userDetail } = useGetUserDetail()
   const queryClient = useQueryClient();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ reply, setReply ] = useState(content);
@@ -343,6 +345,11 @@ const ReviewReplyForm = ({ reviewId=0, reviewReplyId=0, method, content='', muta
   }
 
   const handleClick = () => {
+    if (userDetail?.status !== 200) {
+      handleOpenRequestLoginModal()
+      return
+    }
+
     setStatus('loading')
     
     if (method === 'post') mutatePostReviewReply()
