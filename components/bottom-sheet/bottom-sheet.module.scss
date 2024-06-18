@@ -19,7 +19,7 @@
 
     &-left {
       // border: 1px solid red;
-      padding: 0 0 8px 12px;
+      padding: 4px 0 16px 16px;
       width: 100%;
 
       // &-title {
@@ -42,7 +42,7 @@
       // }
 
       &-title {
-        margin-bottom: 3px;
+        margin-bottom: 2px;
         color: map.get($--colors, 'brick-red');
         font-size: 19px;
         font-weight: 600;
@@ -65,7 +65,7 @@
         }
 
         &-content {
-          padding: 3px 4px;
+          padding: 2px 4px;
           color: map.get($--colors, 'brick-red');
           font-weight: 400;
           border-radius: 3px;
@@ -78,7 +78,7 @@
         align-items: center;
 
         &-star-rating {
-          margin-bottom: 8px;
+          margin-bottom: 7px;
           display: flex;
           justify-content: flex-start;
           align-items: center;
@@ -105,7 +105,7 @@
     }
     &-right {
       // border: 1px solid green;
-      padding: 0 12px 15px;
+      padding: 0 16px 16px 8px;
       width: 15rem;
 
       &-image-wrapper {

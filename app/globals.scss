@@ -1,6 +1,13 @@
 @use "sass:map";
 @import "styles/variables.scss";
 
+:root {
+  --rsbs-handle-bg: #d1d6db;
+  [data-rsbs-header] {
+    border-bottom: none;
+  }
+}
+
 * { 
   margin: 0;
   padding: 0;
