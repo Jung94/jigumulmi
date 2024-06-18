@@ -48,13 +48,12 @@
         font-weight: 600;
       }
       &-category {
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         color: map.get($--greys, '500');
         font-size: 15px;
         font-weight: 300;
       }
       &-today-time {
-        // margin-bottom: 3px;
         width: 100%;
         color: map.get($--greys, '800');
         font-size: 15px;
@@ -78,7 +77,7 @@
         align-items: center;
 
         &-star-rating {
-          margin-bottom: 7px;
+          margin-bottom: 6px;
           display: flex;
           justify-content: flex-start;
           align-items: center;
@@ -105,7 +104,7 @@
     }
     &-right {
       // border: 1px solid green;
-      padding: 0 16px 16px 8px;
+      padding: 0 16px 12px 8px;
       width: 15rem;
 
       &-image-wrapper {
