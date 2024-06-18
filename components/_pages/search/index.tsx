@@ -229,7 +229,7 @@ export default function Search() {
       {windowSize.width <= 1100 &&
         (detail
           ? (
-            <PlaceDetailBottomSheet handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
+            <PlaceDetailBottomSheet place={detail} handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
               <BakeryDetail place={detail} />
             </PlaceDetailBottomSheet>
           )
