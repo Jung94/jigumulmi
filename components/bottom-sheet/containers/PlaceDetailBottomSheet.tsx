@@ -1,21 +1,40 @@
 "use client"
 
-import { ReactNode, memo, useRef } from 'react'
+import Image from 'next/image'
+import { ReactNode, memo, useRef, useState } from 'react'
 import styles from '../bottom-sheet.module.scss'
 import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import FloatingButton from '../FloatingButton'
+import type { Place } from '@/types/place'
 
 type Props = {
   children: ReactNode
+  place: Place
   handleClickFloatBtn: ()=>void
 }
 
 const PlaceDetailBottomSheet = ({
   children,
+  place,
   handleClickFloatBtn
 }: Props) => {
+  const getOpeningHour = (v: string) => {
+    if (v === 'openingHourMon') return '월'
+    if (v === 'openingHourTue') return '화'
+    if (v === 'openingHourWed') return '수'
+    if (v === 'openingHourThu') return '목'
+    if (v === 'openingHourFri') return '금'
+    if (v === 'openingHourSat') return '토'
+    if (v === 'openingHourSun') return '일'
+  }
+
+  const week = ['일', '월', '화', '수', '목', '금', '토']
+  const dayOfWeek = week[new Date().getDay()]
+  const todayTime = Object.entries(place.openingHour).find(h => getOpeningHour(h[0]) === dayOfWeek)?.[1]
+  
   const sheetRef = useRef<BottomSheetRef>(null)
+  const [ isOpen, setIsOpen ] = useState(false)
 
   return (
     <BottomSheet 
@@ -25,6 +44,7 @@ const PlaceDetailBottomSheet = ({
       ref={sheetRef}
       blocking={false}
       scrollLocking={false}
+      expandOnContentDrag={true}
       header={
         <div className={styles.empty_space}>
           <FloatingButton onClick={handleClickFloatBtn} />
@@ -35,8 +55,50 @@ const PlaceDetailBottomSheet = ({
         150,
         maxHeight - 52,
       ]}
-      expandOnContentDrag={true}
+      onSpringStart={(event) => {
+        requestAnimationFrame(() => {
+          if (event.type === 'SNAP' && sheetRef.current && sheetRef.current.height > 150) {
+            setIsOpen(true)
+          } else {
+            setIsOpen(false)
+          }
+        })
+      }}
     >
+      <div className={`${styles['detail-summary']} ${isOpen && styles['detail-summary-disabled']}`}>
+        <div className={styles['detail-summary-content']}>
+          <div className={styles['detail-summary-content-left']}>
+            {/* <div className={styles['detail-summary-content-left-title']}>
+              <span className={styles['detail-summary-content-left-title-name']}>{place.name}</span>
+              <span className={styles['detail-summary-content-left-title-category']}>{place.category}</span>
+            </div> */}
+
+            <div className={styles['detail-summary-content-left-title']}>{place.name}</div>
+            <div className={styles['detail-summary-content-left-category']}>{place.category}</div>
+            
+            <div className={styles['detail-summary-content-left-review-star-rating']}>
+              <div className={styles['detail-summary-content-left-review-star-rating-icon']}>
+                <svg width="16px" height="16px" strokeWidth="1.5" viewBox="0 0 24 24" fill='#0060AE' xmlns="http://www.w3.org/2000/svg" color="#000000">
+                  <path d="M8.58737 8.23597L11.1849 3.00376C11.5183 2.33208 12.4817 2.33208 12.8151 3.00376L15.4126 8.23597L21.2215 9.08017C21.9668 9.18848 22.2638 10.0994 21.7243 10.6219L17.5217 14.6918L18.5135 20.4414C18.6409 21.1798 17.8614 21.7428 17.1945 21.3941L12 18.678L6.80547 21.3941C6.1386 21.7428 5.35909 21.1798 5.48645 20.4414L6.47825 14.6918L2.27575 10.6219C1.73617 10.0994 2.03322 9.18848 2.77852 9.08017L8.58737 8.23597Z" stroke="#000000" strokeWidth="0" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className={styles['detail-summary-content-left-review-star-rating-number']}>{place.overallReview.averageRating}</div>
+              <div className={styles['detail-summary-content-left-review-count']}>
+                리뷰 {place.overallReview.totalCount}
+              </div>
+            </div>
+            <div className={styles['detail-summary-content-left-today-time']}>
+              <span className={styles['detail-summary-content-left-today-time-label']}>영업 시간</span>&nbsp;
+              <span className={styles['detail-summary-content-left-today-time-content']}>{todayTime}</span>
+            </div>
+          </div>
+          <div className={styles['detail-summary-content-right']}>
+            <div className={styles['detail-summary-content-right-image-wrapper']}>
+              <Image fill src={place.mainImageUrl} alt={place.name} style={{objectFit: 'cover', borderRadius: '5px'}} />
+            </div>
+          </div>
+        </div>
+      </div>
       {children}
     </BottomSheet>
   )
