@@ -109,7 +109,7 @@
         font-weight: 700;
       }
       .category {
-        color: #8f8f8f;
+        color: map.get($--greys, '500');
         font-size: 13px;
       }
     }
@@ -181,6 +181,7 @@
       align-items: flex-start;
 
       .time_wrap {
+        padding: 3px 0;
         display: flex;
         flex-direction: column;
         gap: 2px;
@@ -197,6 +198,13 @@
           flex-direction: column;
           align-items: center;
         }
+      }
+      .today_active {
+        padding: 3px 4px;
+        color: map.get($--colors, 'brick-red');
+        font-weight: 600;
+        border-radius: 3px;
+        background-color: map.get($--colors, 'blue-300');
       }
     }
   }

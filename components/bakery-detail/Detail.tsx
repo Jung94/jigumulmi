@@ -28,6 +28,8 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
     if (subwayLineName.includes('선')) return subwayLineName.replace('선', '')
     return subwayLineName
   }
+  const week = ['일', '월', '화', '수', '목', '금', '토']
+  const dayOfWeek = week[new Date().getDay()]
 
   return place && isShownDetail && (
     <div className={styles.wrapper}>
@@ -83,7 +85,7 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
                 <div className={styles.right}>
                   <div className={styles.opening_hours}>
                     {Object.entries(place.openingHour).map((h: string[], idx: number) =>
-                      <div key={String(idx)} className={styles.time_wrap}>
+                      <div key={String(idx)} className={`${styles.time_wrap} ${getOpeningHour(h[0]) === dayOfWeek && styles.today_active}`}>
                         <div className={styles.day}>
                           {getOpeningHour(h[0])}
                         </div>
