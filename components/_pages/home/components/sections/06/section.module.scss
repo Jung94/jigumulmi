@@ -1,0 +1,79 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.section {
+  background: #404040;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &-inner {
+    padding: 0 32px;
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+
+    @media (max-width: 500px) {
+      padding: 0 24px;
+    }
+
+    &-title {
+
+      &-sub {
+        padding: 3rem 0 0;
+        margin: 0 auto;
+        max-width: 30rem;
+        color: #fafafa;
+        font-size: 22px;
+        font-weight: 400;
+        text-align: center;
+        line-height: 1.5;
+        word-break: keep-all;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        @media (max-width: 649px) {
+          padding: 2rem 0 0;
+          font-size: 19px;
+          text-align: left;
+          line-height: 1.2;
+        }
+        @media (max-width: 500px) {
+          justify-content: flex-start;
+        }
+      }
+    }
+    &-image {
+      border: 1px solid green;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    &-button {
+      &-wrapper {
+        padding: 2.25rem 0 3rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        @media (max-width: 500px) {
+          justify-content: flex-start;
+        }
+      }
+      
+      padding: 1.25rem 2.25rem;
+      color: #232323;
+      font-size: 20px;
+      border-radius: 20rem;
+      background-color: #E1EDFC;
+      transition: all 0.12s;
+
+      &:hover {
+        background-color: #d3e3f7;
+      }
+    }
+  }
+}
