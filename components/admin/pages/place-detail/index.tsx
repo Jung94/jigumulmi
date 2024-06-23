@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { APIadmin } from "@/lib/api/admin";
 import { placeDetailQueryKey } from '@/domain/admin/query/useGetPlaceDetail';
 import Layout from '@/components/admin/layout/main';
 import MainLayout from '@/components/admin/layout/section/main';
@@ -13,6 +12,7 @@ import { useGetPlaceDetail, usePostPlace, usePutPlace } from '@/domain/admin/que
 import type { Params, PlaceDetail } from './types';
 
 const defaultData = {
+  id: null, // --
   name: '', // --
   mainImageUrl: '', // --
   position: { latitude: '', longitude: '' }, // --
@@ -21,6 +21,7 @@ const defaultData = {
   address: '', // --
   contact: '', // --
   menuList: [], // --
+  imageList: [], // --
   openingHour: { // --
     openingHourSun: '',
     openingHourMon: '',
@@ -35,7 +36,8 @@ const defaultData = {
   createdAt: '',
   modifiedAt: '',
   registrantComment: '',
-  isApproved: false // --
+  isApproved: false, 
+  googlePlaceId: '', 
 }
 
 export default function PlaceDetailPage({ params }: { params: Params }) {
@@ -68,6 +70,8 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
     delete body.createdAt
     delete body.modifiedAt
     delete body.id
+
+    delete body.imageList
     
     // 수정
     if (params.placeId) {
@@ -99,7 +103,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
 
   useEffect(()=>{
     if (!placeDetail?.data) return
-    setData(placeDetail?.data)
+    setData({...placeDetail?.data, googlePlaceId: '', imageList: [placeDetail?.data.mainImageUrl]})
   }, [placeDetail?.data])
 
   return (

@@ -25,6 +25,7 @@ export type SubwayStation = {
 export type Menu = { id: number, name: string }
 
 export type PlaceDetail = {
+  id: number | null,
   name: string,
   mainImageUrl: string,
   position: Record<Position, string>,
@@ -33,11 +34,13 @@ export type PlaceDetail = {
   address: string,
   contact: string,
   menuList: Menu[],
+  imageList: string[],
   openingHour: Record<OpeningHourDay, string>,
   additionalInfo: string,
   overallReview: any,
   createdAt: string,
   modifiedAt: string,
   registrantComment: string,
-  isApproved: boolean
+  isApproved: boolean,
+  googlePlaceId?: string, 
 }

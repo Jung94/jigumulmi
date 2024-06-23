@@ -5,7 +5,7 @@ const Home = () => {
     <>
       <Section01 />
       <Section02 />
-      <Section03 />
+      {/* <Section03 /> */}
       <Section04 />
       <Section05 />
       <Section06 />

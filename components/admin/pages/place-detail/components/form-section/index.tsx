@@ -1,14 +1,19 @@
 "use client"
 
+import Image from 'next/image'
 import styles from './form-section.module.scss'
 import { SetStateAction, useState } from 'react'
 import { Input } from '@/components/admin/form'
+import { Button } from '@/components/admin/button'
 import { SelectBox } from '@/components/admin/form'
+import { useQueryClient } from '@tanstack/react-query';
+import { placeDetailQueryKey } from '@/domain/admin/query/useGetPlaceDetail';
 import { useGetPlaceSubway } from '@/domain/search/query'
+import { usePatchPlace } from '@/domain/admin/query';
 import XMarkIcon from '@/public/icons/XMark'
 import { DndContext, closestCorners, useSensor, useSensors, MouseSensor, KeyboardSensor } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
-import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable'
+import { SortableContext, horizontalListSortingStrategy, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable'
 import type { PlaceDetail, Position, SubwayStation, OpeningHourDay, Menu } from '../../types'
 
 const DndItem = ({ id, name, isMain, handleDelete}: { id: number, name: string, isMain?: boolean, handleDelete: (id: number)=>void}) => {
@@ -36,6 +41,33 @@ const DndItem = ({ id, name, isMain, handleDelete}: { id: number, name: string, 
   )
 }
 
+const DndImageItem = ({ id, url, isMain, handleDelete}: { id: string, url: string, isMain?: boolean, handleDelete: (id: string)=>void}) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id })
+  const style = { transition, transform: CSS.Transform.toString(transform)}
+
+  return (
+    <div 
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      className={styles['form-section-multi-select-box-preview']}
+    >
+      <div className={styles['form-section-multi-select-box-preview-image-wrapper']}>
+        <div className={styles['form-section-multi-select-box-preview-image']}>
+          <Image fill src={url} alt={url} style={{objectFit: 'cover', borderRadius: '5px'}} />
+        </div>
+        {isMain && 
+          <span className={styles['form-section-multi-select-box-preview-main']}>main</span>
+        }
+      </div>
+      <button className={styles['form-section-multi-select-box-preview-x-mark']} onClick={()=>handleDelete(id)}>
+        <XMarkIcon size='16px' />
+      </button>
+    </div>
+  )
+}
+
 export default function FormSection ({ 
   data, 
   setData 
@@ -43,12 +75,14 @@ export default function FormSection ({
   data: PlaceDetail, 
   setData: React.Dispatch<SetStateAction<PlaceDetail>> 
 }) {
+  const queryClient = useQueryClient()
   
   const [ stationName, setStationName ] = useState<string>('')
   const [ menuName, setMenuName ] = useState<string>('')
+  const [ imageUrl, setImageUrl ] = useState<string>('')
   
   const { data: subwayStationList } = useGetPlaceSubway(stationName)
-  // console.log(subwayStationList?.data)
+  console.log(data)
 
   const handleChange = (propName: string, value: string) => setData(prev => {return {...prev, [propName]: value}})
   const handlePosition = (propName: Position, value: string) => {
@@ -120,8 +154,49 @@ export default function FormSection ({
     }
   }
 
+  const getImageItemPos = (id: any, items: any[]) => items.findIndex(item => item === id)
+  const handleDragEndForImage = (activeId: number, overId: number) => {
+    setData(prev => {
+      const items = prev.imageList!
+      const originalPos = getImageItemPos(activeId, items)
+      const newPos = getImageItemPos(overId, items)
+      const newList = arrayMove(items, originalPos, newPos)
+      
+      return {...prev, imageList: newList}
+    })
+  }
+  const handleDeleteSelectedImage = (url: string) => {
+    setData(prev => {return {...prev, imageList: prev.imageList!.filter(v => v !== url)}})
+  }
+  const handleKeydownForImage = (e: React.KeyboardEvent) => {
+    const { key, nativeEvent } = e
+    if (nativeEvent.isComposing || !imageUrl) return 
+
+    if (key === 'Enter') {
+      // setData(prev => {
+      //   const newId = !!prev.imageList.length 
+      //     ? (Math.min(...prev.imageList.map(v => v)) < 0
+      //         ? Math.min(...prev.imageList.map(menu => menu.id)) - 1
+      //         : -1
+      //       )
+      //     : -1
+      //   return {...prev, imageList: [...prev.imageList, {id: newId, name: imageUrl}]}
+      // })
+      setData(prev => {
+        if (prev.imageList.some(url => url === imageUrl)) {
+          alert('이미 등록된 이미지입니다.')
+          return prev
+        } else {
+          return {...prev, imageList: [...prev.imageList, imageUrl]}
+        }
+      })
+      setImageUrl('')
+    }
+  }
+
   const handleDragEnd = (event: any, callback: (activeId: number, overId: number)=>void) => {
     const { active, over } = event
+    console.log(active, over)
 
     if (active.id === over.id) return
     callback(active.id, over.id)
@@ -135,6 +210,20 @@ export default function FormSection ({
 
   const handleIsApproved = (e: any) => {
     setData(prev => {return {...prev, isApproved: e.target.value === '1' ? true : false}})
+  }
+
+
+  const patchPlace = usePatchPlace()
+  const handleGetData = (e: any) => {
+    patchPlace.mutate({ placeId: data.id!, googlePlaceId: data.googlePlaceId! }, { 
+      onSuccess(data, variables, context) {
+        console.log(data)
+        if (data.status === 204) {
+          queryClient.refetchQueries({queryKey: [placeDetailQueryKey(Number(data.id))]})
+          // queryClient.refetchQueries([placeDetailQueryKey(Number(data.id))])
+        }
+      }
+    })
   }
 
   return (
@@ -185,13 +274,13 @@ export default function FormSection ({
           onChange={(v)=>handlePosition('longitude', v)} 
           style={{fontSize: '0.875rem'}} 
         />
-        <Input 
+        {/* <Input 
           type='text' 
           name='대표 이미지' 
           value={data.mainImageUrl ?? ''} 
           onChange={(v)=>handleChange('mainImageUrl', v)} 
           style={{fontSize: '0.875rem'}} 
-        />
+        /> */}
         <Input 
           type='text' 
           name='추가 정보' 
@@ -296,7 +385,7 @@ export default function FormSection ({
             type='text' 
             name='메뉴' 
             value={menuName} 
-            placeholder='메뉴명 입력 > Enter'
+            placeholder='메뉴명 입력'
             onChange={(v)=>setMenuName(v)} 
             onKeyDown={handleKeydownForMenu}
             style={{fontSize: '0.875rem', width: '14rem'}} 
@@ -328,6 +417,42 @@ export default function FormSection ({
           <div className={styles['form-section-textarea-label']}>하고 싶은 말</div>
           <textarea readOnly id='registrantComment' name='registrantComment' value={data.registrantComment ?? ''} />
         </div>
+      </div>
+
+      <div className={styles['form-section-inputs-wrapper']}>
+        <div className={styles['form-section-multi-select-box-wrapper']}>
+          <Input 
+            type='text' 
+            name='이미지' 
+            value={imageUrl} 
+            placeholder='이미지 URL'
+            onChange={(v)=>setImageUrl(v)} 
+            onKeyDown={handleKeydownForImage}
+            style={{fontSize: '0.875rem'}} 
+          />
+          <DndContext sensors={sensors} onDragEnd={e => handleDragEnd(e, handleDragEndForImage)} collisionDetection={closestCorners}>
+            {!!data.imageList.length &&
+              <div className={styles['form-section-multi-select-box-dnd-context-preview']}>
+                <SortableContext items={data.imageList} strategy={horizontalListSortingStrategy}>
+                  {data.imageList.map((url: string, index: number) => 
+                    <DndImageItem key={url} id={url} url={url} isMain={index === 0} handleDelete={handleDeleteSelectedImage} />
+                  )}
+                </SortableContext>
+              </div>
+            }
+          </DndContext>
+        </div>
+      </div>
+
+      <div className={styles['form-section-inputs-wrapper']}>
+        <Input 
+          type='text' 
+          name='구글 장소 ID' 
+          value={data.googlePlaceId} 
+          onChange={(v)=>handleChange('googlePlaceId', v)} 
+          style={{fontSize: '0.875rem'}} 
+        />
+        <Button type={data.googlePlaceId ? 'normal' : 'disabled'} onClick={handleGetData} style={{ alignSelf: 'flex-end', height: '40px' }}>데이터 불러오기</Button>
       </div>
     </div>
   )

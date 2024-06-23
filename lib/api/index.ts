@@ -25,10 +25,21 @@ export const postAPI = async ({ apiURL, body, config }: { apiURL: string, body?:
     return error.response
   }
 }
+
 export const putAPI = async (data: any) => {
   console.log("\x1B[1m[putAPI] ", data)
   try {
     const response = await Axios.put(data.apiURL, data.body)
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+export const patchAPI = async (data: any) => {
+  console.log("\x1B[1m[patchAPI] ", data)
+  try {
+    const response = await Axios.patch(data.apiURL, data.body)
     return response
   } catch (error: any) {
     return error.response

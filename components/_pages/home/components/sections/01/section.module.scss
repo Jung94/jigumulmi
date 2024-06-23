@@ -21,6 +21,58 @@
       padding: 0 24px;
     }
 
+    &-line {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100vw - 8px);
+      height: 8px;
+      background-color: map.get($--colors, 'brick-red');
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      @media (max-width: 800px) {
+        top: 60%;
+      }
+
+      &-inner {
+        position: relative;
+        width: 100%;
+        height: 2px;
+
+        &-circle {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 3.5rem;
+          height: 3.5rem;
+          font-size: 15px;
+          font-weight: 500;
+          border-radius: 20rem;
+          border: 7px solid map.get($--colors, 'brick-red');
+          background-color: white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          &-01 {
+            left: 8%;
+          }
+          &-02 {
+            left: 24%;
+          }
+          &-03 {
+            left: 40%;
+          }
+          &-04 {
+            right: 5%;
+          }
+        }
+      }
+    }
+
     &-title {
       padding: 8rem 0 0;
       max-width: 25rem;
