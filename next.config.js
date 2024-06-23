@@ -18,15 +18,15 @@ const nextConfig = {
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/search',
-        permanent: false,
-      },
-    ]
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/search',
+  //       permanent: false,
+  //     },
+  //   ]
+  // },
 }
 
 module.exports = nextConfig
