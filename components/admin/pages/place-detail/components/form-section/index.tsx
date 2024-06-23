@@ -82,7 +82,7 @@ export default function FormSection ({
   const [ imageUrl, setImageUrl ] = useState<string>('')
   
   const { data: subwayStationList } = useGetPlaceSubway(stationName)
-  console.log(data)
+  // console.log(data)
 
   const handleChange = (propName: string, value: string) => setData(prev => {return {...prev, [propName]: value}})
   const handlePosition = (propName: Position, value: string) => {
@@ -215,14 +215,18 @@ export default function FormSection ({
 
   const patchPlace = usePatchPlace()
   const handleGetData = (e: any) => {
-    patchPlace.mutate({ placeId: data.id!, googlePlaceId: data.googlePlaceId! }, { 
+    const placeId = data.id!
+    patchPlace.mutate({ placeId, googlePlaceId: data.googlePlaceId! }, { 
       onSuccess(data, variables, context) {
-        console.log(data)
+        // console.log(data)
         if (data.status === 204) {
-          queryClient.refetchQueries({queryKey: [placeDetailQueryKey(Number(data.id))]})
-          // queryClient.refetchQueries([placeDetailQueryKey(Number(data.id))])
-        }
-      }
+          alert('데이터 불러오기에 성공하였습니다.')
+          queryClient.refetchQueries({queryKey: [placeDetailQueryKey(placeId)]})
+        } else if (data.status === 500) alert('서버에 문제가 있습니다. 학준님께 문의해 주세요^^;;')
+      },
+      onError(error, variables, context) {
+          console.log(error)
+      },
     })
   }
 
