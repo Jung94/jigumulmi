@@ -1,8 +1,13 @@
+"use client"
+
 import styles from './section.module.scss'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Section01Image from '@/public/images/home/section01.png'
 
 const Section01 = () => {
+  const router = useRouter()
+
   return (
     <div className={styles['section']}>
       <div className={styles['section-inner']}>
@@ -12,7 +17,7 @@ const Section01 = () => {
         <div className={styles['section-inner-image']}>
           <Image className={styles.symbol} src={Section01Image} width={343} height={550} alt='section-01'></Image>
         </div>
-        <button className={styles['section-inner-button']}>지도 바로보기</button>
+        <button className={styles['section-inner-button']} onClick={()=>router.push('/search')}>지도 바로보기</button>
       </div>
     </div>
   )
