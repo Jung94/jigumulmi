@@ -5,7 +5,7 @@ import Image from 'next/image'
 import styles from './header.module.scss'
 import { useQueryClient } from '@tanstack/react-query'
 import { useWindowSize } from '@/lib/hooks'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useModal } from '@/lib/hooks'
 import { APIaccount } from "@/lib/api/account"
 import SearchBar from '@/components/searchBar'
@@ -159,6 +159,7 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
 
 const Header = () => {
   const router = useRouter()
+  const pathname = usePathname()
   const windowSize = useWindowSize()
   const { data: userDetail } = useGetUserDetail()
   const nickname: string | undefined = userDetail?.data?.nickname
@@ -184,7 +185,9 @@ const Header = () => {
         </button>
 
         <div className={styles.buttons}>
-          <SearchBar type='station' />
+          {pathname === '/search' &&
+            <SearchBar type='station' />
+          }
           <UserButton onOpen={openUserModal} />
           {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
         </div>
