@@ -18,6 +18,15 @@ const nextConfig = {
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
+  async redirects() {
+    return [
+      {
+        source: '/admin',
+        destination: '/admin/place',
+        permanent: false,
+      },
+    ]
+  },
   // async redirects() {
   //   return [
   //     {
