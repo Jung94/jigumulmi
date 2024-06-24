@@ -169,7 +169,7 @@ const Header = () => {
   const closeUserModal = () => setShownUserModal(false)
 
   const handleClickLogo = () => {
-    router.push('/search')
+    router.push('/')
   }
 
   return (
@@ -180,7 +180,7 @@ const Header = () => {
             <Image src={Logo} width={100} height={25} alt='logo' style={{marginTop: '4px'}} onClick={handleClickLogo}></Image>
           }
           {windowSize.width <= 1100 &&
-            <Image src={Logo} width={85} height={22} alt='logo' style={{marginTop: '8px'}} onClick={()=>router.push('/search')}></Image>
+            <Image src={Logo} width={85} height={22} alt='logo' style={{marginTop: '8px'}} onClick={handleClickLogo}></Image>
           }
         </button>
 
