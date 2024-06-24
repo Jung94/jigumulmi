@@ -1,25 +1,19 @@
 import styles from './search.module.scss';
 import Button from '@/components/button';
 import BakeryCard from '@/components/card/Bakery';
-import { useModal } from '@/lib/hooks'
-import RegistrationBakeryContent from '@/components/modal/registration-bakery/Content'
 import type { PlaceSummary } from '@/types/place';
-
 
 type Props = {
   placeList: PlaceSummary[]
   handleClickPlaceCard: (place: PlaceSummary)=>void
+  handleOpenRegistrationBakeryModal: ()=>void
 };
 
 const SearchContent = ({
   placeList,
-  handleClickPlaceCard
+  handleClickPlaceCard,
+  handleOpenRegistrationBakeryModal
 }: Props) => {
-  const RegistrationBakeryModal = useModal(
-    <RegistrationBakeryContent onClose={handleCloseRegistrationBakeryModal} /> 
-  )
-  function handleOpenRegistrationBakeryModal() { RegistrationBakeryModal.open() }
-  function handleCloseRegistrationBakeryModal() { RegistrationBakeryModal.close() }
 
   return (
     <div className={styles.bakery_cards_wrapper}>
@@ -39,7 +33,6 @@ const SearchContent = ({
           </div>
         )
       }
-      {RegistrationBakeryModal.Dialog}
     </div>
   );
 };
