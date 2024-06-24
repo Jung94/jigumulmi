@@ -76,7 +76,7 @@ const SearchBar = ({type}: SearchBarProps) => {
   // 지하철역 검색 키워드 자동완성
   useEffect(()=>{
     if (!autoCompletedSubwayList || autoCompletedSubwayList.status !== 200) return
-    console.log(autoCompletedSubwayList.data)
+    // console.log(autoCompletedSubwayList.data)
     
     setAutoCompleteList(autoCompletedSubwayList.data)
   }, [autoCompletedSubwayList])
@@ -110,15 +110,6 @@ const SearchBar = ({type}: SearchBarProps) => {
     setNowIndex(-1)
     setShownOptionList(false)
     inputRef.current?.blur()
-
-    // PC - auto-search가 클릭(엔터)되어도 한 번 더 검색하기 때문에 focus가 되어야 합니다.
-    // Mobile - auto-search가 클릭(엔터)되면 곧바로 검색되는 것이 자연스럽기 때문에 blur 되어야 합니다.
-    if (1100 < windowSize.width) {
-      // inputRef.current?.focus()
-
-    } else {
-      // inputRef.current?.blur()
-    }
   }
 
   const handleKeyArrow = (e: React.KeyboardEvent) => {
@@ -162,6 +153,7 @@ const SearchBar = ({type}: SearchBarProps) => {
   const eraseAllText = () => {
     setValue('')  // erase input value
     setAutoCompleteList([])  // empty auto searched list
+    setShownOptionList(true)
     inputRef.current?.focus()
   }
   
@@ -178,6 +170,7 @@ const SearchBar = ({type}: SearchBarProps) => {
     const handleClick = (e: MouseEvent | TouchEvent) => {
       if (inputRef.current) {
         if (inputRef.current.contains(e.target as Node)) {
+          console.log('in---')
           setShownOptionList(true)
         } else if (autoRef.current && !autoRef.current.contains(e.target as Node)) {
           console.log('out---')
