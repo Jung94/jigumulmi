@@ -237,7 +237,7 @@ export default function Search() {
           )
           : (
             <PlaceListBottomSheet handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
-              <SearchContent placeList={placeList} handleClickPlaceCard={handleClickPlaceCard} />
+              <SearchContent placeList={placeList} handleClickPlaceCard={handleClickPlaceCard} handleOpenRegistrationBakeryModal={handleOpenRegistrationBakeryModal} />
             </PlaceListBottomSheet>
           )
         )
