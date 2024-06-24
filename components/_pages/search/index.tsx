@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useWindowSize } from '@/lib/hooks'
 import styles from './search.module.scss'
+import Button from '@/components/button'
 import BakeryCard from '@/components/card/Bakery'
 import BakeryDetail from '@/components/bakery-detail/Detail'
 import PlaceListBottomSheet from '@/components/bottom-sheet/containers/PlaceListBottomSheet'
@@ -209,6 +210,7 @@ export default function Search() {
                 <div className={styles.cards_empty}>
                   <div>등록된 장소가 없습니다.</div>
                   <div>새로운 장소를 등록해 주세요.</div>
+                  <Button type='button' variant='contained' color='primary' onClick={handleOpenRegistrationBakeryModal} style={{ marginTop: '0.5rem', width: '13rem', height: '2.5rem' }}>장소 등록하기</Button>
                 </div>
               }
             </div>
