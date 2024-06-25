@@ -13,7 +13,7 @@ const Section04 = () => {
           채식하면서도 맛있게 먹고 싶으니까, 솔직한 방문 후기를 공유하는 커뮤니티
         </div>
         <div className={styles['section-inner-image']}>
-          <Image className={styles['section-inner-image-content']} src={Section04Image} width={337} height={285} sizes="340px" layout='fixed' alt='section-04' />
+          <Image className={styles['section-inner-image-content']} src={Section04Image} width={337} height={285} sizes="340px" layout='fixed' placeholder='blur' alt='section-04' />
         </div>
       </div>
     </div>

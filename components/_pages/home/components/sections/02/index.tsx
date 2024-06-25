@@ -24,8 +24,8 @@ const Section02 = () => {
             <div className={styles['section-inner-image-header-right']}></div>
           </div>
           {649 < windowSize.width
-            ? <Image className={styles['section-inner-image-content']} src={Section02PcImage} width={440} height={108} sizes="440px" layout='fixed' alt='section-02-pc'></Image>
-            : <Image className={styles['section-inner-image-content']} src={Section02MobileImage} width={243} height={304} sizes="250px" layout='fixed' alt='section-02-mobile'></Image>
+            ? <Image className={styles['section-inner-image-content']} src={Section02PcImage} width={440} height={108} placeholder='blur' sizes="440px" layout='fixed' alt='section-02-pc'></Image>
+            : <Image className={styles['section-inner-image-content']} src={Section02MobileImage} width={243} height={304} placeholder='blur' sizes="250px" layout='fixed' alt='section-02-mobile'></Image>
           }
         </div>
       </div>

@@ -29,7 +29,7 @@ const Section01 = () => {
           집단지성으로 완성하는 우리만의 채식 지도
         </div>
         <div className={styles['section-inner-image']}>
-          <Image src={Section01Image} width={343} height={550} sizes="400px" layout='fixed' alt='section-01' />
+          <Image src={Section01Image} width={343} height={550} priority sizes="400px" layout='fixed' placeholder='blur' alt='section-01' />
         </div>
         <button className={styles['section-inner-button']} onClick={()=>router.push('/search')}>지도 바로보기</button>
       </div>
