@@ -3,8 +3,8 @@
 import styles from './section.module.scss'
 import { useWindowSize } from '@/lib/hooks'
 import Image from 'next/image'
-import Section02Image from '@/public/images/home/section02.png'
-import Section02MobileImage from '@/public/images/home/section02-mobile.png'
+import Section02PcImage from '@/public/images/home/section02-pc.webp'
+import Section02MobileImage from '@/public/images/home/section02-mobile.webp'
 
 const Section02 = () => {
   const windowSize = useWindowSize()
@@ -24,8 +24,8 @@ const Section02 = () => {
             <div className={styles['section-inner-image-header-right']}></div>
           </div>
           {649 < windowSize.width
-            ? <Image className={styles['section-inner-image-content']} src={Section02Image} width={440} height={115} alt='section-01'></Image>
-            : <Image className={styles['section-inner-image-content']} src={Section02MobileImage} width={243} height={302} alt='section-01'></Image>
+            ? <Image className={styles['section-inner-image-content']} src={Section02PcImage} width={440} height={108} sizes="440px" layout='fixed' alt='section-02-pc'></Image>
+            : <Image className={styles['section-inner-image-content']} src={Section02MobileImage} width={243} height={304} sizes="250px" layout='fixed' alt='section-02-mobile'></Image>
           }
         </div>
       </div>
