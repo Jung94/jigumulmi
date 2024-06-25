@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import styles from './Bakery.module.scss'
+import { getOpeningStatus } from '@/lib/utils/getOpeningStatus'
 import type { PlaceSummary } from '@/types/place'
 
 type Props = {
@@ -20,7 +21,7 @@ const BakeryCard = ({ place, onClick }: Props) => {
   return place && (
     <div className={styles.bakery_card} onClick={()=>onClick(place)}>
       <div className={styles.card_image}>
-        <Image className={styles.image} fill src={place.images[0]} alt={place.name} />
+        <Image className={styles.image} fill src={place.imageUrl} alt={place.name} />
       </div>
       <div className={styles.card_info_wrap}>
         <div className={styles.top}>
@@ -29,7 +30,7 @@ const BakeryCard = ({ place, onClick }: Props) => {
             <div className={styles.card_desc}>비건 성지순례 오세요!</div>
           </div>
           {/* <div className={styles.right}>
-            <div className={`${styles.status} ${styles.open}`}>영업 중</div>
+            <div className={`${styles.status} ${styles.open}`}>{getOpeningStatus()}</div>
           </div> */}
         </div>
         <div className={styles.bottom}>

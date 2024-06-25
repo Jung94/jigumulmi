@@ -5,12 +5,11 @@ export type Place = {
   address: string
   contact: string
   menuList: {id: number, name: string}[]
+  imageList: { id: number, url: string, isMain: boolean }[],
   subwayStation: SubwayStation
   position: { latitude: number, longitude: number }
   openingHour: { openingHourMon: string, openingHourTue: string, openingHourWed: string, openingHourThu: string, openingHourFri: string, openingHourSat: string, openingHourSun: string }
   additionalInfo: string
-  mainImageUrl: string
-  // images: string[]
   overallReview: OverallReview
 }
 
@@ -25,5 +24,5 @@ export type PlaceSummary = {
   name: string
   subwayStation: SubwayStation
   position: { latitude: number, longitude: number }
-  images: string[]
+  imageUrl: string
 }

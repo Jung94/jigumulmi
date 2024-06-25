@@ -41,7 +41,7 @@ const DndItem = ({ id, name, isMain, handleDelete}: { id: number, name: string, 
   )
 }
 
-const DndImageItem = ({ id, url, isMain, handleDelete}: { id: string, url: string, isMain?: boolean, handleDelete: (id: string)=>void}) => {
+const DndImageItem = ({ id, url, isMain, handleDelete}: { id: number, url: string, isMain?: boolean, handleDelete: (id: number)=>void}) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id })
   const style = { transition, transform: CSS.Transform.toString(transform)}
 
@@ -75,6 +75,7 @@ export default function FormSection ({
   data: PlaceDetail, 
   setData: React.Dispatch<SetStateAction<PlaceDetail>> 
 }) {
+  console.log(data)
   const queryClient = useQueryClient()
   
   const [ stationName, setStationName ] = useState<string>('')
@@ -154,40 +155,36 @@ export default function FormSection ({
     }
   }
 
-  const getImageItemPos = (id: any, items: any[]) => items.findIndex(item => item === id)
+  const getImageItemPos = (id: number, imageList: {id: number, url: string, isMain: boolean}[]) => imageList.findIndex(image => image.id === id)
   const handleDragEndForImage = (activeId: number, overId: number) => {
     setData(prev => {
-      const items = prev.imageList!
-      const originalPos = getImageItemPos(activeId, items)
-      const newPos = getImageItemPos(overId, items)
-      const newList = arrayMove(items, originalPos, newPos)
+      const imageList = prev.imageList
+      const originalPos = getImageItemPos(activeId, imageList)
+      const newPos = getImageItemPos(overId, imageList)
+      const newList = arrayMove(imageList, originalPos, newPos)
       
       return {...prev, imageList: newList}
     })
   }
-  const handleDeleteSelectedImage = (url: string) => {
-    setData(prev => {return {...prev, imageList: prev.imageList!.filter(v => v !== url)}})
+  const handleDeleteSelectedImage = (id: number) => {
+    setData(prev => {return {...prev, imageList: prev.imageList!.filter(v => v.id !== id)}})
   }
   const handleKeydownForImage = (e: React.KeyboardEvent) => {
     const { key, nativeEvent } = e
     if (nativeEvent.isComposing || !imageUrl) return 
 
     if (key === 'Enter') {
-      // setData(prev => {
-      //   const newId = !!prev.imageList.length 
-      //     ? (Math.min(...prev.imageList.map(v => v)) < 0
-      //         ? Math.min(...prev.imageList.map(menu => menu.id)) - 1
-      //         : -1
-      //       )
-      //     : -1
-      //   return {...prev, imageList: [...prev.imageList, {id: newId, name: imageUrl}]}
-      // })
       setData(prev => {
-        if (prev.imageList.some(url => url === imageUrl)) {
+        const minId = Math.min(...prev.imageList.map(image => image.id))
+        let newId
+        if (minId >= 0) newId = -1
+          else newId = minId - 1
+
+        if (prev.imageList.some(image => image.url === imageUrl)) {
           alert('이미 등록된 이미지입니다.')
           return prev
         } else {
-          return {...prev, imageList: [...prev.imageList, imageUrl]}
+          return {...prev, imageList: [...prev.imageList, {id: newId, url: imageUrl, isMain: !!prev.imageList.length ? false : true}]}
         }
       })
       setImageUrl('')
@@ -278,13 +275,6 @@ export default function FormSection ({
           onChange={(v)=>handlePosition('longitude', v)} 
           style={{fontSize: '0.875rem'}} 
         />
-        {/* <Input 
-          type='text' 
-          name='대표 이미지' 
-          value={data.mainImageUrl ?? ''} 
-          onChange={(v)=>handleChange('mainImageUrl', v)} 
-          style={{fontSize: '0.875rem'}} 
-        /> */}
         <Input 
           type='text' 
           name='추가 정보' 
@@ -438,8 +428,8 @@ export default function FormSection ({
             {!!data.imageList.length &&
               <div className={styles['form-section-multi-select-box-dnd-context-preview']}>
                 <SortableContext items={data.imageList} strategy={horizontalListSortingStrategy}>
-                  {data.imageList.map((url: string, index: number) => 
-                    <DndImageItem key={url} id={url} url={url} isMain={index === 0} handleDelete={handleDeleteSelectedImage} />
+                  {data.imageList.map((image: {id: number, url: string, isMain: boolean}, index: number) => 
+                    <DndImageItem key={image.id} id={image.id} url={image.url} isMain={index === 0} handleDelete={handleDeleteSelectedImage} />
                   )}
                 </SortableContext>
               </div>

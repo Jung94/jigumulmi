@@ -41,7 +41,7 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
       {place && 
         <div className={styles.content}>
           <div className={styles.card_detail_carousel}>
-            <Image fill src={place.mainImageUrl} alt={place.name} style={{objectFit: 'cover'}} />
+            <Image fill src={place.imageList[0].url} alt={place.name} style={{objectFit: 'cover'}} />
           </div>
           <div className={styles.card_detail_content}>
             <div className={styles.title_wrap}>

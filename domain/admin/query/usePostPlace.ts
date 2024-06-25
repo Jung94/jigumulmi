@@ -9,8 +9,8 @@ export type MutationPostPlaceProps = {
   address: string
   contact: string
   menuList: string[] | null
+  imageList: {url: string, isMain: boolean}[]
   openingHour: Record<OpeningHourDay, string>
-  mainImageUrl: string
   placeUrl: string
   position: Record<Position, number>
   additionalInfo: string

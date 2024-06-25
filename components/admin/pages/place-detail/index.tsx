@@ -14,7 +14,7 @@ import type { Params, PlaceDetail } from './types';
 const defaultData = {
   id: null, // --
   name: '', // --
-  mainImageUrl: '', // --
+  // mainImageUrl: '', // --
   position: { latitude: '', longitude: '' }, // --
   subwayStationList: [],
   category: '', // --
@@ -58,6 +58,9 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
     let body: any = {
       ...data,
       menuList: !!data.menuList.length ? data.menuList.map(v => v.name) : null,
+      imageList: data.imageList.map((image, index) => {
+        return {url: image.url, isMain: index === 0 ? true : false}
+      }),
       placeUrl: '',
       position: {
         latitude: Number(data.position.latitude),
@@ -71,20 +74,21 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
     delete body.modifiedAt
     delete body.id
 
-    delete body.imageList
-    
     // 수정
     if (params.placeId) {
       body = { ...body, placeId: Number(params.placeId) }
       console.log(body)
       putPlace.mutate(body, { 
         onSuccess(data, variables, context) {
+          console.log(data)
           if (data.status === 204) {
             queryClient.refetchQueries({queryKey: ["places"]})
             queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId))])
             // queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId)), "places"])
             alert('수정이 완료되었습니다')
             // router.push('/admin/place?sort=1&page=1')
+          } else {
+            alert(`알 수 없는 에러 발생! 개발자를 호출해보아요!(${data.status})`)
           }
         }
       })
@@ -95,6 +99,8 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
             queryClient.refetchQueries({queryKey: ["places"]})
             alert('등록이 완료되었습니다')
             router.push('/admin/place?sort=1&page=1')
+          } else {
+            alert(`알 수 없는 에러 발생! 개발자를 호출해보아요!(${data.status})`)
           }
         }
       })
@@ -103,7 +109,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
 
   useEffect(()=>{
     if (!placeDetail?.data) return
-    setData({...placeDetail?.data, googlePlaceId: '', imageList: [placeDetail?.data.mainImageUrl]})
+    setData({...placeDetail?.data, googlePlaceId: ''})
   }, [placeDetail?.data])
 
   return (

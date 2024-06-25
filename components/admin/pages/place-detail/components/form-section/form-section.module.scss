@@ -81,6 +81,7 @@
       width: 100%;
       border-radius: 7px;
       background-color: map.get($--colors, gray-100);
+      overflow: auto;
       display: flex;
       justify-content: flex-start;
       gap: 0.5rem;

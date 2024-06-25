@@ -94,7 +94,7 @@ const PlaceDetailBottomSheet = ({
           </div>
           <div className={styles['detail-summary-content-right']}>
             <div className={styles['detail-summary-content-right-image-wrapper']}>
-              <Image fill src={place.mainImageUrl} alt={place.name} style={{objectFit: 'cover', borderRadius: '5px'}} />
+              <Image fill src={place.imageList[0].url} alt={place.name} style={{objectFit: 'cover', borderRadius: '5px'}} />
             </div>
           </div>
         </div>
