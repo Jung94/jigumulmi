@@ -359,7 +359,7 @@ export default function FormSection ({
             value={stationName} 
             placeholder='지하철역명 검색'
             onChange={(v)=>setStationName(v)} 
-            style={{fontSize: '0.875rem', width: '14rem'}} 
+            style={{fontSize: '0.875rem'}} 
           />
           <DndContext sensors={sensors} onDragEnd={e => handleDragEnd(e, handleDragEndForStation)} collisionDetection={closestCorners}>
             {!!data.subwayStationList.length &&
@@ -382,7 +382,7 @@ export default function FormSection ({
             placeholder='메뉴명 입력'
             onChange={(v)=>setMenuName(v)} 
             onKeyDown={handleKeydownForMenu}
-            style={{fontSize: '0.875rem', width: '14rem'}} 
+            style={{fontSize: '0.875rem'}} 
           />
           <DndContext sensors={sensors} onDragEnd={e => handleDragEnd(e, handleDragEndForMenu)} collisionDetection={closestCorners}>
             {!!data.menuList?.length &&
