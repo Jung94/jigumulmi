@@ -57,7 +57,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   const save = () => {
     let body: any = {
       ...data,
-      menuList: !!data.menuList.length ? data.menuList.map(v => v.name) : null,
+      menuList: !!data.menuList.length ? data.menuList.map(v => v.name) : [],
       imageList: data.imageList.map((image, index) => {
         return {url: image.url, isMain: index === 0 ? true : false}
       }),
@@ -66,7 +66,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
         latitude: Number(data.position.latitude),
         longitude: Number(data.position.longitude)
       },
-      subwayStationIdList: !!data.subwayStationList.length ? data.subwayStationList.map(v => v.id) : null,
+      subwayStationIdList: !!data.subwayStationList.length ? data.subwayStationList.map(v => v.id) : [],
     }
     delete body.subwayStationList
     delete body.subwayStation
@@ -77,10 +77,8 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
     // 수정
     if (params.placeId) {
       body = { ...body, placeId: Number(params.placeId) }
-      console.log(body)
       putPlace.mutate(body, { 
         onSuccess(data, variables, context) {
-          console.log(data)
           if (data.status === 204) {
             queryClient.refetchQueries({queryKey: ["places"]})
             queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId))])
