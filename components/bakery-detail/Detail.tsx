@@ -7,9 +7,19 @@ import Review from '@/components/bakery-detail/components/review/review'
 import { useAppSelector } from '@/lib/store/hooks'
 import type { Place } from '@/types/place'
 
+import Carousel from '@/components/Carousel/Carousel'
+
 const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boolean }) => {
   // console.log(place)
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
+
+  const getSlides = (imageList: { id: number, isMain: boolean, url: string }[]): string[] => {
+    const mainImg = imageList.find(img => img.isMain)?.url!
+    const restedImg = imageList.filter(img => !img.isMain)?.map(img => img.url)
+
+    return [mainImg, ...restedImg]
+  }
+
   const getOpeningHour = (v: string) => {
     if (v === 'openingHourMon') return '월'
     if (v === 'openingHourTue') return '화'
@@ -40,9 +50,10 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
       </div>
       {place && 
         <div className={styles.content}>
-          <div className={styles.card_detail_carousel}>
-            <Image fill src={place.imageList[0].url} alt={place.name} style={{objectFit: 'cover'}} />
+          <div className={`${styles.card_detail_carousel}`}>
+            <Carousel slides={getSlides(place.imageList)} />
           </div>
+
           <div className={styles.card_detail_content}>
             <div className={styles.title_wrap}>
               <div className={styles.title}>{place.name}</div>

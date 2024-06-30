@@ -77,8 +77,6 @@
   }
 
   .card_detail_carousel {
-    position: relative;
-    object-fit: cover;
     width: 100%;
     aspect-ratio: 3 / 2;
 
@@ -89,6 +87,7 @@
       max-width: 100%;
     }
   }
+
   .card_detail_content {
     padding: 0 1rem;
     display: flex;
