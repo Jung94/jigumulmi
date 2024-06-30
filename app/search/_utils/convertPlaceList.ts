@@ -6,6 +6,8 @@ export const convertPlaceList = (placeList: any[]): PlaceSummary[] => {
     return {
       id: place.id,
       name: place.name,
+      category: place.category,
+      currentOpeningInfo: place.currentOpeningInfo,
       subwayStation: place.subwayStation ?? [],
       position: {latitude: place.position.latitude, longitude: place.position.longitude},
       imageUrl: place.imageList[0].url,

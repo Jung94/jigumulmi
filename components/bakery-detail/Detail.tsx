@@ -121,9 +121,11 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
                       )
                     })}
                   </div>
-                  <div className={styles.additional_info}>
-                    {place.additionalInfo}
-                  </div>
+                  {!!place.additionalInfo &&
+                    <div className={styles.additional_info}>
+                      {place.additionalInfo}
+                    </div>
+                  }
                 </div>
               </>
             )}

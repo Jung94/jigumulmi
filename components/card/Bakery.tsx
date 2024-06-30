@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import styles from './Bakery.module.scss'
-import { getOpeningStatus } from '@/lib/utils/getOpeningStatus'
+import { getCurrentOpeningInfo } from '@/lib/utils/getCurrentOpeningInfo'
 import type { PlaceSummary } from '@/types/place'
 
 type Props = {
@@ -27,11 +27,13 @@ const BakeryCard = ({ place, onClick }: Props) => {
         <div className={styles.top}>
           <div className={styles.left}>
             <div className={styles.card_title}>{place.name}</div>
-            <div className={styles.card_desc}>비건 성지순례 오세요!</div>
+            <div className={styles.card_category}>{place.category}</div>
           </div>
-          {/* <div className={styles.right}>
-            <div className={`${styles.status} ${styles.open}`}>{getOpeningStatus()}</div>
-          </div> */}
+          <div className={styles.right}>
+            <div className={`${styles['status']} ${styles[`status-${getCurrentOpeningInfo(place.currentOpeningInfo).className}`]}`}>
+              {getCurrentOpeningInfo(place.currentOpeningInfo).info}
+            </div>
+          </div>
         </div>
         <div className={styles.bottom}>
           <div className={styles.subway_station_wrapper}>
