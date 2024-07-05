@@ -189,7 +189,6 @@ export default function Search() {
 
     return () => window.removeEventListener('popstate', handleShownDetailOnMobile)
   }, [])
-  console.log(placeList)
   
 
   return places?.data && (

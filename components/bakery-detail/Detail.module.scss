@@ -77,8 +77,6 @@
   }
 
   .card_detail_carousel {
-    position: relative;
-    object-fit: cover;
     width: 100%;
     aspect-ratio: 3 / 2;
 
@@ -89,6 +87,7 @@
       max-width: 100%;
     }
   }
+
   .card_detail_content {
     padding: 0 1rem;
     display: flex;
@@ -161,7 +160,7 @@
         height: 16px;
         color: white;
         font-size: 11px;
-        border-radius: 2px;
+        border-radius: 2.5px;
 
         display: flex;
         justify-content: center;
@@ -234,5 +233,14 @@
         align-items: center;
       }
     }
+  }
+
+  .additional_info {
+    margin-top: 6px;
+    padding: 8px;
+    color: map.get($--greys, '700');
+    font-size: 13px;
+    border-radius: 4px;
+    background-color: map.get($--greys, '200');
   }
 }
