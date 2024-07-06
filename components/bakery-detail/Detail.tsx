@@ -51,7 +51,7 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
       {place && 
         <div className={styles.content}>
           <div className={`${styles.card_detail_carousel}`}>
-            <Carousel slides={getSlides(place.imageList)} />
+            <Carousel slides={getSlides(place.imageList)} placeId={place.id} />
           </div>
 
           <div className={styles.card_detail_content}>
