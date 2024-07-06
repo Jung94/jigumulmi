@@ -1,6 +1,5 @@
 "use client"
 
-import Image from 'next/image'
 import styles from './Detail.module.scss'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
 import Review from '@/components/bakery-detail/components/review/review'
@@ -44,14 +43,12 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
   return place && isShownDetail && (
     <div className={styles.wrapper}>
       <div className={`${styles.loading} ${loading ? styles.show_loading : styles.hide_loading}`}>
-        {loading && 
-          <Spinner size='22px' color='#232323' />
-        }
+        <Spinner size='22px' color='#232323' />
       </div>
       {place && 
         <div className={styles.content}>
           <div className={`${styles.card_detail_carousel}`}>
-            <Carousel slides={getSlides(place.imageList)} />
+            <Carousel slides={getSlides(place.imageList)} placeId={place.id} />
           </div>
 
           <div className={styles.card_detail_content}>

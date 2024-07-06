@@ -8,10 +8,14 @@
 
 @keyframes show-loading {
   0% {
+    opacity: 0;
+    visibility: hidden;
     pointer-events: none;
     background-color: rgba(255, 255, 255, 0);
   }
   100% {
+    opacity: 1;
+    visibility: visible;
     pointer-events: all;
     background-color: rgba(255, 255, 255, 0.4);
   }
@@ -19,10 +23,14 @@
 
 @keyframes hide-loading {
   0% {
+    opacity: 1;
+    visibility: visible;
     pointer-events: all;
     background-color: rgba(255, 255, 255, 0.4);
   }
   100% {
+    opacity: 0;
+    visibility: hidden;
     pointer-events: none;
     background-color: rgba(255, 255, 255, 0);
   }
@@ -53,10 +61,10 @@
     z-index: 1;
   }
   .show_loading {
-    animation: show-loading 0.7s ease-out 0s 1 alternate both;
+    animation: show-loading 1s ease-out 0s 1 alternate both;
   }
   .hide_loading {
-    animation: hide-loading 0.7s ease-out 0s 1 alternate both;
+    animation: hide-loading 1s ease-out 0s 1 alternate both;
   }
 
   opacity: 0;

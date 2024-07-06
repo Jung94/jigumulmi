@@ -12,10 +12,11 @@ import useEmblaCarousel from 'embla-carousel-react'
 
 type PropType = {
   slides: string[]
+  placeId: number
 }
 
 const Carousel: React.FC<PropType> = (props) => {
-  const { slides } = props
+  const { slides, placeId } = props
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
@@ -27,6 +28,12 @@ const Carousel: React.FC<PropType> = (props) => {
     onPrevButtonClick,
     onNextButtonClick
   } = usePrevNextButtons(emblaApi)
+
+  React.useEffect(() => {
+    if (emblaApi && placeId) {
+      emblaApi.scrollTo(0, true);
+    }
+  }, [emblaApi, placeId]);
 
   return (
     <section className={styles['embla']}>
