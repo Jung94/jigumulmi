@@ -9,8 +9,8 @@ import type { Place } from '@/types/place'
 import Carousel from '@/components/Carousel/Carousel'
 
 const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boolean }) => {
-  // console.log(place)
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
+  // console.log(place)
 
   const getSlides = (imageList: { id: number, isMain: boolean, url: string }[]): string[] => {
     const mainImg = imageList.find(img => img.isMain)?.url!
