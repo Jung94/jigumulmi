@@ -177,10 +177,10 @@ const Header = () => {
       <nav className={styles.nav}>
         <button className={styles.links}>
           {1100 < windowSize.width &&
-            <Image src={Logo} width={100} height={25} alt='logo' style={{marginTop: '4px'}} onClick={handleClickLogo}></Image>
+            <Image src={Logo} width={115} height={21.8} alt='logo' style={{marginTop: '4px'}} onClick={handleClickLogo}></Image>
           }
           {windowSize.width <= 1100 &&
-            <Image src={Logo} width={85} height={22} alt='logo' style={{marginTop: '8px'}} onClick={handleClickLogo}></Image>
+            <Image src={Logo} width={90} height={17} alt='logo' style={{marginTop: '8px'}} onClick={handleClickLogo}></Image>
           }
         </button>
 

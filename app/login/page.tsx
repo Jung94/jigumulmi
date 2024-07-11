@@ -80,7 +80,7 @@ export default function LoginPage() {
             <Spinner size='30px' />
           </div>
         }
-        <Image src={Logo} width={110} height={30} alt='logo'></Image>
+        <Image src={Logo} width={130} height={24.6} alt='logo'></Image>
         <div className={styles.desc}>
           <div className={styles.text}>
             비정상적인 속도로 달려가는 지구의 속도에 멀미가 느껴지진 않나요?
