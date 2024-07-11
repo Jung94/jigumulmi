@@ -17,7 +17,34 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: 'Jigumulmi',
-  description: '세상을 구하라. 어-명이다!',
+  description: '지하철역 주변 가까운 비건 카페, 비건 베이커리 찾기',
+  keywords: [
+    "지구멀미",
+    "지구",
+    "비건",
+    "비건베이커리",
+    "비건카페",
+    "비건식당",
+    "비건빵",
+    "비건음식",
+    "비건지도",
+    "채식베이커리",
+    "통밀빵",
+    "다이어트간식",
+    "다이어트빵",
+    "통밀식빵",
+    "사워도우",
+    "건강한간식",
+    "베지테리언"
+  ],
+  openGraph: {
+    title: "지구멀미 - 비건 베이커리를 찾는 가장 쉬운 방법",
+    description: "지하철역 주변 가까운 비건 카페, 비건 베이커리 찾기",
+    url: "https://www.jigumulmi.com/",
+    siteName: "https://www.jigumulmi.com/",
+    images: ["https://contents.jigumulmi.com/marketing/jigumulmi_opengraph.png"],
+    type: "website"
+  },
 }
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
@@ -54,6 +81,27 @@ export default async function RootLayout({children}: {children: React.ReactNode}
             `
           }}
         />
+        <Script 
+          id="meta-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '520442230641321');
+            fbq('track', 'PageView');
+            `
+          }}
+        />
+        <noscript>
+          <img height="1" width="1" style={{display: "none"}} src="https://www.facebook.com/tr?id=520442230641321&ev=PageView&noscript=1" />
+        </noscript>
       </head>
       <body className={pretendard.className}>
         <Providers>
