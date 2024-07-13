@@ -7,6 +7,7 @@ import Providers from '@/lib/utils/Provider'
 import getQueryClient from '@/lib/utils/getQueryClient'
 import { Hydrate, dehydrate } from '@tanstack/react-query'
 import { getPlaceList } from '@/app/actions'
+// import { FacebookPixel } from "@/components/marketing"
 
 // const inter = Inter({ subsets: ['latin'] })
 const pretendard = localFont({
@@ -102,6 +103,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
         <noscript>
           <img height="1" width="1" style={{display: "none"}} src={"https://www.facebook.com/tr?id=1321800105443062&ev=PageView&noscript=1"} />
         </noscript>
+        {/* <FacebookPixel /> */}
       </head>
       <body className={pretendard.className}>
         <Providers>
