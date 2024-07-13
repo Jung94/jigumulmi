@@ -17,7 +17,7 @@ const pretendard = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Jigumulmi',
+  title: '지구멀미 - 비건 베이커리를 찾는 가장 쉬운 방법',
   description: '지하철역 주변 가까운 비건 카페, 비건 베이커리 찾기',
   keywords: [
     "지구멀미",
