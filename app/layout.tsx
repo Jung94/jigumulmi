@@ -56,6 +56,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
   return (
     <html lang="en">
       <head>
+        <meta name="naver-site-verification" content="75700d447f8d54a9d94333669ae3e3c2de749a14" />
         <Script 
           id="clarity-script"
           strategy="afterInteractive"
