@@ -26,7 +26,7 @@ const UserButton = ({ onOpen }: { onOpen: ()=>void }) => {
   )
 }
 
-export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, onClose: ()=>void }) => {
+export const UserPopup = ({ isAdmin, userNickname, onClose }: { isAdmin?: string, userNickname?: string, onClose: ()=>void }) => {
   const router = useRouter()
   const logout = usePostLogout()
   const queryClient = useQueryClient()
@@ -64,6 +64,10 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
         },
       }
     )
+  }
+
+  const handleClickGoToAdminPage = () => {
+    router.push('/admin')
   }
 
   // 회원 탈퇴
@@ -147,6 +151,11 @@ export const UserPopup = ({ userNickname, onClose }: { userNickname?: string, on
           <Button style={{width: '100%', height: '2rem', fontSize: '13px'}} onClick={userNickname ? handleLogout : handleLogin}>
             {userNickname ? '로그아웃' : '로그인'}
           </Button>
+          {isAdmin &&
+            <Button variant='outlined' style={{width: '100%', height: '2rem', fontSize: '13px'}} onClick={handleClickGoToAdminPage}>
+              어드민 페이지
+            </Button>
+          }
           {/* {userNickname &&
             <Button variant='outlined' style={{width: '100%', height: '2rem', fontSize: '13px'}} onClick={handleOpenDeregistrationModal}>회원 탈퇴</Button>
           } */}
@@ -162,7 +171,9 @@ const Header = () => {
   const pathname = usePathname()
   const windowSize = useWindowSize()
   const { data: userDetail } = useGetUserDetail()
+  console.log(userDetail?.data)
   const nickname: string | undefined = userDetail?.data?.nickname
+  const isAdmin: string | undefined = userDetail?.data?.isAdmin
   const [ shownUserModal, setShownUserModal ] = useState(false)
 
   const openUserModal = () => setShownUserModal(true)
@@ -189,7 +200,7 @@ const Header = () => {
             <SearchBar type='station' />
           }
           <UserButton onOpen={openUserModal} />
-          {shownUserModal && <UserPopup userNickname={nickname} onClose={closeUserModal} />}
+          {shownUserModal && <UserPopup isAdmin={isAdmin} userNickname={nickname} onClose={closeUserModal} />}
         </div>
       </nav>
     </header>
