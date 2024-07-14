@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import styles from './login.module.scss'
 import Image from 'next/image'
 import { useModal } from '@/lib/hooks'
-import { getCookie } from 'cookies-next'
+import { getCookie, setCookie, deleteCookie } from 'cookies-next'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { checkRegistered } from './actions'
@@ -23,10 +23,11 @@ export default function LoginPage() {
   const [ defaultNickname, setDefaultNickname ] = useState('')
   const sessionId = getCookie("JSESSIONID")
 
-  useEffect(()=>{
-    if (!sessionId) return
-    // console.log(sessionId)
-  }, [sessionId])
+  // useEffect(()=>{
+  //   const referrer = document.referrer;
+  //   console.log(referrer, sessionId)
+  //   if (referrer) setCookie("ji-login-prev-path", referrer)
+  // }, [])
 
   const handleLogin = () => {
     setIsLoading(true)
@@ -51,7 +52,9 @@ export default function LoginPage() {
 
       if (data.hasRegistered) { // 기존 회원
         // 로그인 페이지 이전 경로 기록 유무에 따른 페이지 이동
-        const prevPath: string | undefined = getCookie("ji-prev-path")
+        const prevPath: string | undefined = getCookie("ji-login-prev-path")
+        deleteCookie("ji-login-prev-path")
+
         if (prevPath) router.push(prevPath)
           else router.push('search')
       } else { // 신규 회원
