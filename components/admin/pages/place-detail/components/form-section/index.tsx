@@ -83,7 +83,6 @@ export default function FormSection ({
   const [ imageUrl, setImageUrl ] = useState<string>('')
   
   const { data: subwayStationList } = useGetPlaceSubway(stationName)
-  // console.log(data)
 
   const handleChange = (propName: string, value: string) => setData(prev => {return {...prev, [propName]: value}})
   const handlePosition = (propName: Position, value: string) => {
@@ -193,7 +192,6 @@ export default function FormSection ({
 
   const handleDragEnd = (event: any, callback: (activeId: number, overId: number)=>void) => {
     const { active, over } = event
-    console.log(active, over)
 
     if (active.id === over.id) return
     callback(active.id, over.id)
@@ -229,6 +227,17 @@ export default function FormSection ({
 
   return (
     <div className={styles['form-section']}>
+      <div className={styles['form-section-inputs-wrapper']}>
+        <Input 
+          type='text' 
+          name='구글 장소 ID' 
+          value={data.googlePlaceId} 
+          onChange={(v)=>handleChange('googlePlaceId', v)} 
+          style={{fontSize: '0.875rem'}} 
+        />
+        <Button type={data.googlePlaceId ? 'normal' : 'disabled'} onClick={handleGetData} style={{ alignSelf: 'flex-end', height: '40px' }}>데이터 불러오기</Button>
+      </div>
+
       <div className={styles['form-section-inputs-wrapper']}>
         <Input 
           type='text' 
@@ -436,17 +445,6 @@ export default function FormSection ({
             }
           </DndContext>
         </div>
-      </div>
-
-      <div className={styles['form-section-inputs-wrapper']}>
-        <Input 
-          type='text' 
-          name='구글 장소 ID' 
-          value={data.googlePlaceId} 
-          onChange={(v)=>handleChange('googlePlaceId', v)} 
-          style={{fontSize: '0.875rem'}} 
-        />
-        <Button type={data.googlePlaceId ? 'normal' : 'disabled'} onClick={handleGetData} style={{ alignSelf: 'flex-end', height: '40px' }}>데이터 불러오기</Button>
       </div>
     </div>
   )

@@ -4,14 +4,16 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Layout from '@/components/admin/layout/main';
 import MainLayout from '@/components/admin/layout/section/main';
 import HeaderSection from '@/components/admin/layout/section/header';
-import FilterBox from '@/components/admin/pages/place/components/filter-box';
-import TableSection from '@/components/admin/pages/place/components/table';
-import { useGetPlaceList } from '@/domain/admin/query';
+// import FilterBox from '@/components/admin/pages/member/components/filter-box';
+import TableSection from '@/components/admin/pages/member/components/table';
+import AsideSection from '@/components/admin/layout/section/aside';
+import UserDetail from '@/components/admin/pages/member/components/user-detail';
+import { useGetMemberList } from '@/domain/admin/query';
 import type { PageSearchParams } from './types';
 import type { Table } from '@/lib/types/table';
 import type { PlaceQueryParams } from '@/domain/admin/query/useGetPlaceList';
 
-export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnServer: PageSearchParams }) {
+export default function MembersPage({ searchParamsOnServer }: { searchParamsOnServer: PageSearchParams }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -19,14 +21,18 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
   const queryParams = {
     page: searchParamsOnServer.page ? Number(searchParamsOnServer.page) : 1,
     sort: searchParamsOnServer.sort ? Number(searchParamsOnServer.sort) : 1,
-    placeName: searchParamsOnServer.placeName ? searchParamsOnServer.placeName : '',
+  }
+
+  const [ selectedMember, setSelectedMember ] = useState<any>(null)
+
+  const handleClickMember = (member: any) => {
+    setSelectedMember(member)
   }
 
   // 모든 필터
   const [ filters, setFilters ] = useState<PlaceQueryParams>({
     page: queryParams.page,
     sort: queryParams.sort,
-    placeName: queryParams.placeName,
   })
 
   const [ tableData, setTableData ] = useState<Table>({
@@ -36,15 +42,14 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
     totalCount: 0,
   });
   
-  const { data: placeList } = useGetPlaceList(filters);
-  // console.log(placeList?.data)
+  const { data: memberList } = useGetMemberList(filters);
+  // console.log(memberList?.data)
 
   const handleSelect = (v: any, name: string) => {
     const params = new URLSearchParams(searchParams!)
     Object.entries(filters).forEach((e: any) => params.set(e[0], e[1]))
     params.set("page", "1")
-
-    if (name === 'placeName') params.set(name, v)
+    params.set(name, v.target.value)
 
     router.push(`${pathname}?${params.toString()}`)
   }
@@ -57,7 +62,7 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
   }
 
   useEffect(()=>{
-    if (!placeList?.data?.page) {
+    if (!memberList?.data?.page) {
       setTableData({
         items: [],
         currentPage: 1,
@@ -66,38 +71,38 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
       })
     } else {
       setTableData({
-        items: placeList.data.data,
-        currentPage: placeList.data.page.currentPage,
-        totalPage: placeList.data.page.totalPage,
-        totalCount: placeList.data.page.totalCount
+        items: memberList.data.data,
+        currentPage: memberList.data.page.currentPage,
+        totalPage: memberList.data.page.totalPage,
+        totalCount: memberList.data.page.totalCount
       })
     }
-  }, [placeList])
+  }, [memberList])
 
   useEffect(()=>{
     setFilters({
       page: queryParams.page,
       sort: queryParams.sort,
-      placeName: queryParams.placeName,
     })
-  }, [queryParams.page, queryParams.sort, queryParams.placeName])
+  }, [queryParams.page, queryParams.sort])
 
   return (
     <Layout row>
       <MainLayout>
-        <HeaderSection title='Place'>
-          <FilterBox 
-            filters={filters}
-            handleSelect={handleSelect}
-          />
-        </HeaderSection>
+        <HeaderSection title='Place' />
         <TableSection
           items={tableData.items}
           currentPage={tableData.currentPage}
           totalPage={tableData.totalPage}
           handlePage={handlePage}
+          handleClickRow={handleClickMember}
         />
       </MainLayout>
+      <AsideSection style={{padding: 0, width: '20rem'}}>
+        <UserDetail
+          member={selectedMember}
+        />
+      </AsideSection>
     </Layout>
   )
 }

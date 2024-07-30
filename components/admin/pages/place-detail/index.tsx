@@ -38,6 +38,7 @@ const defaultData = {
   registrantComment: '',
   isApproved: false, 
   googlePlaceId: '', 
+  kakaoPlaceId: '',
 }
 
 export default function PlaceDetailPage({ params }: { params: Params }) {
@@ -85,6 +86,8 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
             // queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId)), "places"])
             alert('수정이 완료되었습니다')
             // router.push('/admin/place?sort=1&page=1')
+          } else if (data.status === 400) {
+            alert('이미 등록된 장소입니다!')
           } else {
             alert(`알 수 없는 에러 발생! 개발자를 호출해보아요!(${data.status})`)
           }
@@ -97,6 +100,8 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
             queryClient.refetchQueries({queryKey: ["places"]})
             alert('등록이 완료되었습니다')
             router.push('/admin/place?sort=1&page=1')
+          } else if (data.status === 400) {
+            alert('이미 등록된 장소입니다!')
           } else {
             alert(`알 수 없는 에러 발생! 개발자를 호출해보아요!(${data.status})`)
           }

@@ -5,12 +5,12 @@ import { getCookie, setCookie, deleteCookie } from "cookies-next"
 export const baseURL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_API_URL : process.env.NEXT_PUBLIC_API_URL_DEV
 export const Axios = axios.create({ baseURL, withCredentials: true })
 
-const handleTokens = (accessToken: string | undefined, refreshToken: string | undefined) => {
-  if (accessToken && refreshToken) {
-    setCookie("_LB_AT", accessToken)
-    setCookie("_LB_RT", refreshToken)
-  }
-}
+// const handleTokens = (accessToken: string | undefined, refreshToken: string | undefined) => {
+//   if (accessToken && refreshToken) {
+//     setCookie("_LB_AT", accessToken)
+//     setCookie("_LB_RT", refreshToken)
+//   }
+// }
 
 Axios.interceptors.request.use(
   async (config) => {
@@ -40,7 +40,12 @@ Axios.interceptors.response.use(
     const res = error.response
     // console.log(res)
     if (res.status === 403) {
-      // console.log('403')
+      // console.log('403:', window.location.pathname)
+      if (window.location.pathname.split('/')[1] === 'admin') {
+        setCookie("ji-login-prev-path", window.location.pathname)
+        alert('로그인이 필요합니다.')
+        window.location.href = '/login'
+      }
       // await postAPI({apiURL: '/member/logout', body: {}})
       // alert('로그인이 필요합니다.')
     }
