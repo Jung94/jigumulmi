@@ -11,6 +11,7 @@ export type Place = {
   openingHour: { openingHourMon: string, openingHourTue: string, openingHourWed: string, openingHourThu: string, openingHourFri: string, openingHourSat: string, openingHourSun: string }
   additionalInfo: string
   overallReview: OverallReview
+  currentOpeningInfo: string,
 }
 
 export type PlaceForMarker = { id: number, name: string, latlng: any }

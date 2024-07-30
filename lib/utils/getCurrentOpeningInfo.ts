@@ -6,9 +6,6 @@ export const getCurrentOpeningInfo = (info: string): { info: string, className: 
     case '곧 영업 종료': 
       className = 'open'
       break
-    // case '곧 영업 종료': 
-    //   className = 'closed-soon'
-    //   break
     default: 
       className = 'closed'
       break

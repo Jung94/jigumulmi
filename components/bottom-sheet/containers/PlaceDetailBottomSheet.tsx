@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { ReactNode, memo, useRef, useState } from 'react'
 import styles from '../bottom-sheet.module.scss'
+import { getCurrentOpeningInfo } from '@/lib/utils/getCurrentOpeningInfo'
 import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import FloatingButton from '../FloatingButton'
@@ -19,6 +20,7 @@ const PlaceDetailBottomSheet = ({
   place,
   handleClickFloatBtn
 }: Props) => {
+  console.log(place)
   const getOpeningHour = (v: string) => {
     if (v === 'openingHourMon') return '월'
     if (v === 'openingHourTue') return '화'
@@ -76,6 +78,16 @@ const PlaceDetailBottomSheet = ({
             <div className={styles['detail-summary-content-left-title']}>{place.name}</div>
             <div className={styles['detail-summary-content-left-category']}>{place.category}</div>
             
+            <div className={styles['detail-summary-content-left-today-time']}>
+              {/* <span className={styles['detail-summary-content-left-today-time-label']}>영업 시간</span>&nbsp; */}
+              {/* <span className={styles['detail-summary-content-left-today-time-content']}>{todayTime}</span> */}
+              <span className={`
+                ${styles['detail-summary-content-left-today-time-content']} 
+                ${styles[`detail-summary-content-left-today-time-content-${getCurrentOpeningInfo(place.currentOpeningInfo).className}`]}
+              `}>
+                {getCurrentOpeningInfo(place.currentOpeningInfo).info}
+              </span>
+            </div>
             <div className={styles['detail-summary-content-left-review-star-rating']}>
               <div className={styles['detail-summary-content-left-review-star-rating-icon']}>
                 <svg width="16px" height="16px" strokeWidth="1.5" viewBox="0 0 24 24" fill='#0060AE' xmlns="http://www.w3.org/2000/svg" color="#000000">
@@ -86,10 +98,6 @@ const PlaceDetailBottomSheet = ({
               <div className={styles['detail-summary-content-left-review-count']}>
                 리뷰 {place.overallReview.totalCount}
               </div>
-            </div>
-            <div className={styles['detail-summary-content-left-today-time']}>
-              <span className={styles['detail-summary-content-left-today-time-label']}>영업 시간</span>&nbsp;
-              <span className={styles['detail-summary-content-left-today-time-content']}>{todayTime}</span>
             </div>
           </div>
           <div className={styles['detail-summary-content-right']}>

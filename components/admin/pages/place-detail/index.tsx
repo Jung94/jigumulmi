@@ -50,7 +50,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   const { data: placeDetail } = useGetPlaceDetail(
     params.placeId ? Number(params.placeId) : null
   )
-  console.log(data)
+  // console.log(data)
 
   const postPlace = usePostPlace()
   const putPlace = usePutPlace()
