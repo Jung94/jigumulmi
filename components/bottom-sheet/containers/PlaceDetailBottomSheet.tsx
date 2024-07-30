@@ -20,23 +20,17 @@ const PlaceDetailBottomSheet = ({
   place,
   handleClickFloatBtn
 }: Props) => {
-  console.log(place)
-  const getOpeningHour = (v: string) => {
-    if (v === 'openingHourMon') return '월'
-    if (v === 'openingHourTue') return '화'
-    if (v === 'openingHourWed') return '수'
-    if (v === 'openingHourThu') return '목'
-    if (v === 'openingHourFri') return '금'
-    if (v === 'openingHourSat') return '토'
-    if (v === 'openingHourSun') return '일'
-  }
-
-  const week = ['일', '월', '화', '수', '목', '금', '토']
-  const dayOfWeek = week[new Date().getDay()]
-  const todayTime = Object.entries(place.openingHour).find(h => getOpeningHour(h[0]) === dayOfWeek)?.[1]
-  
   const sheetRef = useRef<BottomSheetRef>(null)
   const [ isOpen, setIsOpen ] = useState(false)
+  console.log(sheetRef.current)
+
+  const handleOpenBottomSheet = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation()
+    sheetRef.current?.snapTo(({ snapPoints }) =>
+      Math.max(...snapPoints)
+    )
+    setIsOpen(true)
+  }
 
   return (
     <BottomSheet 
@@ -67,20 +61,13 @@ const PlaceDetailBottomSheet = ({
         })
       }}
     >
-      <div className={`${styles['detail-summary']} ${isOpen && styles['detail-summary-disabled']}`}>
+      <div className={`${styles['detail-summary']} ${isOpen && styles['detail-summary-disabled']}`} onClick={handleOpenBottomSheet}>
         <div className={styles['detail-summary-content']}>
           <div className={styles['detail-summary-content-left']}>
-            {/* <div className={styles['detail-summary-content-left-title']}>
-              <span className={styles['detail-summary-content-left-title-name']}>{place.name}</span>
-              <span className={styles['detail-summary-content-left-title-category']}>{place.category}</span>
-            </div> */}
-
             <div className={styles['detail-summary-content-left-title']}>{place.name}</div>
             <div className={styles['detail-summary-content-left-category']}>{place.category}</div>
             
             <div className={styles['detail-summary-content-left-today-time']}>
-              {/* <span className={styles['detail-summary-content-left-today-time-label']}>영업 시간</span>&nbsp; */}
-              {/* <span className={styles['detail-summary-content-left-today-time-content']}>{todayTime}</span> */}
               <span className={`
                 ${styles['detail-summary-content-left-today-time-content']} 
                 ${styles[`detail-summary-content-left-today-time-content-${getCurrentOpeningInfo(place.currentOpeningInfo).className}`]}
