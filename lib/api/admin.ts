@@ -9,4 +9,9 @@ export const APIadmin = {
    * @method get
    */
   getPlaceDetail: (placeId: number) => `/admin/place/detail/${placeId}`,
+  /**
+   * @description 유저 리스트 조회
+   * @method get
+   */
+  members: "/admin/member",
 }

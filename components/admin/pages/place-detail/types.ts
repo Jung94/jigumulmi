@@ -27,7 +27,6 @@ export type Menu = { id: number, name: string }
 export type PlaceDetail = {
   id: number | null,
   name: string,
-  // mainImageUrl: string,
   position: Record<Position, string>,
   subwayStationList: SubwayStation[],
   category: string,
@@ -42,5 +41,6 @@ export type PlaceDetail = {
   modifiedAt: string,
   registrantComment: string,
   isApproved: boolean,
+  kakaoPlaceId: string | null,
   googlePlaceId?: string, 
 }

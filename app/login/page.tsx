@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import styles from './login.module.scss'
 import Image from 'next/image'
 import { useModal } from '@/lib/hooks'
-import { getCookie, setCookie, deleteCookie } from 'cookies-next'
+import { getCookie, deleteCookie } from 'cookies-next'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { checkRegistered } from './actions'
@@ -21,13 +21,6 @@ export default function LoginPage() {
   const code = searchParams?.get("code") // string | null
   const [ isLoading, setIsLoading ] = useState(!!(code))
   const [ defaultNickname, setDefaultNickname ] = useState('')
-  const sessionId = getCookie("JSESSIONID")
-
-  // useEffect(()=>{
-  //   const referrer = document.referrer;
-  //   console.log(referrer, sessionId)
-  //   if (referrer) setCookie("ji-login-prev-path", referrer)
-  // }, [])
 
   const handleLogin = () => {
     setIsLoading(true)
