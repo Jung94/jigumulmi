@@ -19,12 +19,14 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
   const queryParams = {
     page: searchParamsOnServer.page ? Number(searchParamsOnServer.page) : 1,
     sort: searchParamsOnServer.sort ? Number(searchParamsOnServer.sort) : 1,
+    placeName: searchParamsOnServer.placeName ? searchParamsOnServer.placeName : '',
   }
 
   // 모든 필터
   const [ filters, setFilters ] = useState<PlaceQueryParams>({
     page: queryParams.page,
     sort: queryParams.sort,
+    placeName: queryParams.placeName,
   })
 
   const [ tableData, setTableData ] = useState<Table>({
@@ -35,13 +37,14 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
   });
   
   const { data: placeList } = useGetPlaceList(filters);
-  console.log(placeList?.data)
+  // console.log(placeList?.data)
 
   const handleSelect = (v: any, name: string) => {
     const params = new URLSearchParams(searchParams!)
     Object.entries(filters).forEach((e: any) => params.set(e[0], e[1]))
     params.set("page", "1")
-    params.set(name, v.target.value)
+
+    if (name === 'placeName') params.set(name, v)
 
     router.push(`${pathname}?${params.toString()}`)
   }
@@ -75,8 +78,9 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
     setFilters({
       page: queryParams.page,
       sort: queryParams.sort,
+      placeName: queryParams.placeName,
     })
-  }, [queryParams.page, queryParams.sort])
+  }, [queryParams.page, queryParams.sort, queryParams.placeName])
 
   return (
     <Layout row>
