@@ -34,6 +34,11 @@ export const Body = ({
             {el.subwayStation.stationName}
           </Td>
           <Td>
+            {!!el.googlePlaceId 
+              ? <div style={{width: '0.75rem', height: '0.75rem', borderRadius: '0.75rem', backgroundColor: '#0D9276'}}></div> 
+              : <div style={{width: '0.75rem', height: '0.75rem', borderRadius: '0.75rem', backgroundColor: '#EF4040'}}></div>}
+          </Td>
+          <Td>
             {el.isApproved 
               ? <div style={{width: '0.75rem', height: '0.75rem', borderRadius: '0.75rem', backgroundColor: '#0D9276'}}></div> 
               : <div style={{width: '0.75rem', height: '0.75rem', borderRadius: '0.75rem', backgroundColor: '#EF4040'}}></div>}
@@ -51,8 +56,8 @@ const TableSection = ({
   totalPage, 
   handlePage,
 }: TableProps) => {
-  const cols = ["25%", "10%", "15%", "30%", "20%"] // total: 100%
-  const columns = ["이름", "ID", "카테고리", "지하철", "승인 여부"]
+  const cols = ["25%", "10%", "15%", "25%", "10%", "15%"] // total: 100%
+  const columns = ["이름", "ID", "카테고리", "지하철", "구글 ID", "승인 여부"]
   const rowsPerPage = 15 // 한 페이지 내 row 개수
 
   const col = Col(cols)
