@@ -3,7 +3,7 @@ import { patchAPI } from "@/lib/api";
 import { APIadmin } from "@/lib/api/admin";
 
 export type MutationPatchPlaceProps = {
-  placeId: number
+  placeId: number | null
   googlePlaceId: string
 }
 

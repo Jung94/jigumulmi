@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import styles from './form-section.module.scss'
+import { useRouter, usePathname } from 'next/navigation'
 import { SetStateAction, useState } from 'react'
 import { Input } from '@/components/admin/form'
 import { Button } from '@/components/admin/button'
@@ -75,7 +76,10 @@ export default function FormSection ({
   data: PlaceDetail, 
   setData: React.Dispatch<SetStateAction<PlaceDetail>> 
 }) {
-  console.log(data)
+  // console.log(data)
+  
+  const router = useRouter()
+  const pathname = usePathname()
   const queryClient = useQueryClient()
   
   const [ stationName, setStationName ] = useState<string>('')
@@ -210,17 +214,32 @@ export default function FormSection ({
 
   const patchPlace = usePatchPlace()
   const handleGetData = (e: any) => {
-    const placeId = data.id!
+    const placeId = data.id
+    const moveToDetailPage = (placeId: number) => router.replace(`/admin/place/${placeId}`)
+    
     patchPlace.mutate({ placeId, googlePlaceId: data.googlePlaceId! }, { 
       onSuccess(data, variables, context) {
-        // console.log(data)
-        if (data.status === 204) {
+        if (data.status === 201) {
           alert('데이터 불러오기에 성공하였습니다.')
-          queryClient.refetchQueries({queryKey: [placeDetailQueryKey(placeId)]})
-        } else if (data.status === 500) alert('서버에 문제가 있습니다. 학준님께 문의해 주세요^^;;')
+          if (pathname === '/admin/place/creation') {
+            data.data.placeId && moveToDetailPage(data.data.placeId)
+          } else {
+            queryClient.refetchQueries({queryKey: [placeDetailQueryKey(placeId)]})
+          }
+        } else if (data.status === 200) {
+          alert('카카오에 등록되지 않은 장소입니다. 직접 정보를 입력해 주세요.')
+          if (pathname === '/admin/place/creation') {
+            data.data.placeId && moveToDetailPage(data.data.placeId)
+          }
+        } else if (data.status === 400) {
+          alert('이미 등록된 장소입니다.')
+        } else if (data.status === 500) {
+          alert('서버에 문제가 있습니다. 학준님께 문의해 주세요^^;;')
+        }
+        
       },
       onError(error, variables, context) {
-          console.log(error)
+        console.log(error)
       },
     })
   }
@@ -231,18 +250,27 @@ export default function FormSection ({
         <Input 
           type='text' 
           name='구글 장소 ID' 
-          value={data.googlePlaceId} 
+          value={data.googlePlaceId ?? ''} 
           onChange={(v)=>handleChange('googlePlaceId', v)} 
           style={{fontSize: '0.875rem'}} 
         />
         <Button type={data.googlePlaceId ? 'normal' : 'disabled'} onClick={handleGetData} style={{ alignSelf: 'flex-end', height: '40px' }}>데이터 불러오기</Button>
+      </div>
+      <div className={styles['form-section-inputs-wrapper']}>
+        <Input 
+          type='text' 
+          name='네이버 URL' 
+          value={data.placeUrl ?? ''} 
+          onChange={(v)=>handleChange('placeUrl', v)} 
+          style={{fontSize: '0.875rem'}} 
+        />
       </div>
 
       <div className={styles['form-section-inputs-wrapper']}>
         <Input 
           type='text' 
           name='이름' 
-          value={data.name} 
+          value={data.name ?? ''} 
           onChange={(v)=>handleChange('name', v)} 
           style={{fontSize: '0.875rem'}} 
         />

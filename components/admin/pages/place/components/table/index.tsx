@@ -1,6 +1,7 @@
 "use client"
 
-import { useRouter } from 'next/navigation'
+import { setCookie } from 'cookies-next'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Table, Th, Td, Tr } from '@/components/admin/table'
 import type { TableProps, BodyProps } from './types'
 
@@ -17,8 +18,14 @@ export const Body = ({
   rowsPerPage,
 }: BodyProps) => {
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   
   const handleClick = (placeId: number) => {
+    const params = new URLSearchParams(searchParams!)
+    const currentUrl = `${pathname}?${params.toString()}`
+    
+    setCookie("ji-admin-list-url", currentUrl)
     router.push(`/admin/place/${placeId}`)
   }
 

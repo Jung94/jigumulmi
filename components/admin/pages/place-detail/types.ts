@@ -27,6 +27,7 @@ export type Menu = { id: number, name: string }
 export type PlaceDetail = {
   id: number | null,
   name: string,
+  placeUrl: string,
   position: Record<Position, string>,
   subwayStationList: SubwayStation[],
   category: string,
