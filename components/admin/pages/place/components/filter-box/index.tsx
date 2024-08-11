@@ -13,9 +13,11 @@ const sortOptions = [
 ]
 
 const FilterBox = ({
+  isShownCreation,
   filters,
   handleSelect,
 }: {
+  isShownCreation: boolean
   filters: PlaceQueryParams
   handleSelect: (v: any, name: string)=>void
 }) => {
@@ -58,7 +60,9 @@ const FilterBox = ({
           width: '8rem'
         }}
       ></SelectBox.HiddenOption> */}
-      <Button type='normal' onClick={handleClickCreation} style={{height: '2.5rem', fontSize: '13px'}}>등록하기</Button>
+      {isShownCreation &&
+        <Button type='normal' onClick={handleClickCreation} style={{height: '2.5rem', fontSize: '13px'}}>등록하기</Button>
+      }
     </div>
   )
 }

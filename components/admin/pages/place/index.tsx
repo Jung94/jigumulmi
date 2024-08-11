@@ -4,6 +4,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Layout from '@/components/admin/layout/main';
 import MainLayout from '@/components/admin/layout/section/main';
 import HeaderSection from '@/components/admin/layout/section/header';
+import TabBox from '@/components/admin/pages/place/components/tab-box';
 import FilterBox from '@/components/admin/pages/place/components/filter-box';
 import TableSection from '@/components/admin/pages/place/components/table';
 import { useGetPlaceList } from '@/domain/admin/query';
@@ -20,6 +21,7 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
     page: searchParamsOnServer.page ? Number(searchParamsOnServer.page) : 1,
     sort: searchParamsOnServer.sort ? Number(searchParamsOnServer.sort) : 1,
     placeName: searchParamsOnServer.placeName ? searchParamsOnServer.placeName : '',
+    isFromAdmin: searchParamsOnServer.isFromAdmin ? Number(searchParamsOnServer.isFromAdmin) : 1,
   }
 
   // 모든 필터
@@ -27,6 +29,7 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
     page: queryParams.page,
     sort: queryParams.sort,
     placeName: queryParams.placeName,
+    isFromAdmin: queryParams.isFromAdmin,
   })
 
   const [ tableData, setTableData ] = useState<Table>({
@@ -44,7 +47,7 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
     Object.entries(filters).forEach((e: any) => params.set(e[0], e[1]))
     params.set("page", "1")
 
-    if (name === 'placeName') params.set(name, v)
+    if (name === 'placeName' || name === 'isFromAdmin') params.set(name, v)
 
     router.push(`${pathname}?${params.toString()}`)
   }
@@ -79,14 +82,16 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
       page: queryParams.page,
       sort: queryParams.sort,
       placeName: queryParams.placeName,
+      isFromAdmin: queryParams.isFromAdmin,
     })
-  }, [queryParams.page, queryParams.sort, queryParams.placeName])
+  }, [queryParams.page, queryParams.sort, queryParams.placeName, queryParams.isFromAdmin])
 
   return (
     <Layout row>
       <MainLayout>
-        <HeaderSection title='Place'>
+        <HeaderSection info={<TabBox active={filters.isFromAdmin} handleSelect={handleSelect} />}>
           <FilterBox 
+            isShownCreation={filters.isFromAdmin === 1}
             filters={filters}
             handleSelect={handleSelect}
           />

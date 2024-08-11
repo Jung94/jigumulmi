@@ -1,6 +1,7 @@
 "use client"
 
-import { useRouter } from 'next/navigation'
+import { setCookie } from 'cookies-next'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Table, Th, Td, Tr } from '@/components/admin/table'
 import type { TableProps, BodyProps } from './types'
 
@@ -17,8 +18,14 @@ export const Body = ({
   rowsPerPage,
 }: BodyProps) => {
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   
   const handleClick = (placeId: number) => {
+    const params = new URLSearchParams(searchParams!)
+    const currentUrl = `${pathname}?${params.toString()}`
+    
+    setCookie("ji-admin-list-url", currentUrl)
     router.push(`/admin/place/${placeId}`)
   }
 
@@ -32,6 +39,11 @@ export const Body = ({
           <Td>{el.category}</Td>
           <Td>
             {el.subwayStation.stationName}
+          </Td>
+          <Td>
+            {!!el.googlePlaceId 
+              ? <div style={{width: '0.75rem', height: '0.75rem', borderRadius: '0.75rem', backgroundColor: '#0D9276'}}></div> 
+              : <div style={{width: '0.75rem', height: '0.75rem', borderRadius: '0.75rem', backgroundColor: '#EF4040'}}></div>}
           </Td>
           <Td>
             {el.isApproved 
@@ -51,8 +63,8 @@ const TableSection = ({
   totalPage, 
   handlePage,
 }: TableProps) => {
-  const cols = ["25%", "10%", "15%", "30%", "20%"] // total: 100%
-  const columns = ["이름", "ID", "카테고리", "지하철", "승인 여부"]
+  const cols = ["25%", "10%", "15%", "25%", "10%", "15%"] // total: 100%
+  const columns = ["이름", "ID", "카테고리", "지하철", "구글 ID", "승인 여부"]
   const rowsPerPage = 15 // 한 페이지 내 row 개수
 
   const col = Col(cols)

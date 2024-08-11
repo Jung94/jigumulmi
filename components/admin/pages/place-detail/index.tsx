@@ -1,20 +1,22 @@
 "use client"
 import { useState, useEffect } from 'react';
+import { getCookie, deleteCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { placeDetailQueryKey } from '@/domain/admin/query/useGetPlaceDetail';
 import Layout from '@/components/admin/layout/main';
 import MainLayout from '@/components/admin/layout/section/main';
 import HeaderSection from '@/components/admin/layout/section/header';
+import FilterBox from '@/components/admin/pages/place-detail/components/filter-box';
 import FormSection from '@/components/admin/pages/place-detail/components/form-section';
-import { Button } from '@/components/admin/button';
-import { useGetPlaceDetail, usePostPlace, usePutPlace } from '@/domain/admin/query';
+import { useGetPlaceDetail, usePostPlace, usePutPlace, useDeletePlace } from '@/domain/admin/query';
+import { APIadmin } from "@/lib/api/admin";
 import type { Params, PlaceDetail } from './types';
 
 const defaultData = {
   id: null, // --
   name: '', // --
-  // mainImageUrl: '', // --
+  placeUrl: '', // --
   position: { latitude: '', longitude: '' }, // --
   subwayStationList: [],
   category: '', // --
@@ -50,19 +52,70 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   const { data: placeDetail } = useGetPlaceDetail(
     params.placeId ? Number(params.placeId) : null
   )
-  // console.log(data)
 
   const postPlace = usePostPlace()
   const putPlace = usePutPlace()
+  const deletePlace = useDeletePlace()
 
-  const save = () => {
+  const handleRegister = (body: any) => {
+    console.log(body)
+    postPlace.mutate(body, { 
+      onSuccess(data, variables, context) {
+        console.log(data)
+        if (data.status === 204) {
+          queryClient.refetchQueries({queryKey: [APIadmin.place]})
+          alert('등록이 완료되었습니다')
+          router.push('/admin/place?sort=1&page=1')
+        } else if (data.status === 400) {
+          alert('이미 등록된 장소입니다! : 등록 시')
+        } else {
+          alert(`알 수 없는 에러 발생! 개발자를 호출해보아요!(code: ${data.status})`)
+        }
+      }
+    })
+  }
+
+  const handleModify = (body: any) => {
+    putPlace.mutate(body, { 
+      onSuccess(data, variables, context) {
+        if (data.status === 204) {
+          queryClient.refetchQueries({queryKey: [APIadmin.place]})
+          queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId))])
+          alert('수정이 완료되었습니다')
+        } else if (data.status === 400) {
+          alert('이미 등록된 장소입니다!')
+        } else {
+          alert(`알 수 없는 에러 발생! 개발자를 호출해보아요!(${data.status})`)
+        }
+      }
+    })
+  }
+
+  const handleDelete = () => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return
+
+    deletePlace.mutate(
+      Number(params.placeId), { 
+        onSuccess(data, variables, context) {
+          if (data.status === 204) {
+            queryClient.refetchQueries({queryKey: [APIadmin.place]})
+            alert('삭제가 완료되었습니다')
+            const prevListUrl = getCookie('ji-admin-list-url')
+            router.push(prevListUrl ?? '/admin/place?sort=1&page=1&placeName=&isFromAdmin=1')
+          } else {
+            alert(`알 수 없는 에러 발생! 개발자를 호출해보아요!(${data.status})`)
+          }
+        }
+    })
+  }
+
+  const save = (data: PlaceDetail) => {
     let body: any = {
       ...data,
       menuList: !!data.menuList.length ? data.menuList.map(v => v.name) : [],
       imageList: data.imageList.map((image, index) => {
         return {url: image.url, isMain: index === 0 ? true : false}
       }),
-      placeUrl: '',
       position: {
         latitude: Number(data.position.latitude),
         longitude: Number(data.position.longitude)
@@ -75,51 +128,36 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
     delete body.modifiedAt
     delete body.id
 
+    // console.log(data, body)
+    // return
+    
     // 수정
     if (params.placeId) {
       body = { ...body, placeId: Number(params.placeId) }
-      putPlace.mutate(body, { 
-        onSuccess(data, variables, context) {
-          if (data.status === 204) {
-            queryClient.refetchQueries({queryKey: ["places"]})
-            queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId))])
-            // queryClient.invalidateQueries([placeDetailQueryKey(Number(params.placeId)), "places"])
-            alert('수정이 완료되었습니다')
-            // router.push('/admin/place?sort=1&page=1')
-          } else if (data.status === 400) {
-            alert('이미 등록된 장소입니다!')
-          } else {
-            alert(`알 수 없는 에러 발생! 개발자를 호출해보아요!(${data.status})`)
-          }
-        }
-      })
+      handleModify(body)
     } else { // 등록
-      postPlace.mutate(body, { 
-        onSuccess(data, variables, context) {
-          if (data.status === 204) {
-            queryClient.refetchQueries({queryKey: ["places"]})
-            alert('등록이 완료되었습니다')
-            router.push('/admin/place?sort=1&page=1')
-          } else if (data.status === 400) {
-            alert('이미 등록된 장소입니다!')
-          } else {
-            alert(`알 수 없는 에러 발생! 개발자를 호출해보아요!(${data.status})`)
-          }
-        }
-      })
+      handleRegister(body)
     }
   }
 
   useEffect(()=>{
+    return () => deleteCookie('ji-admin-list-url')
+  }, [])
+
+  useEffect(()=>{
     if (!placeDetail?.data) return
-    setData({...placeDetail?.data, googlePlaceId: ''})
+    setData({...placeDetail?.data})
   }, [placeDetail?.data])
 
   return (
     <Layout row>
       <MainLayout>
         <HeaderSection title={`${params.placeId ? `장소 수정${data ? ` (ID: ${data.id})` : ''}` : '장소 등록'}`}>
-          <Button onClick={save}>저장하기</Button>
+          <FilterBox 
+            isDetail={!!params.placeId}
+            save={() => save(data)}
+            handleDelete={handleDelete}
+          />
         </HeaderSection>
         <FormSection data={data} setData={setData} />
       </MainLayout>

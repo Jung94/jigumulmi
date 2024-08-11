@@ -4,11 +4,12 @@ import { getCurrentOpeningInfo } from '@/lib/utils/getCurrentOpeningInfo'
 import type { PlaceSummary } from '@/types/place'
 
 type Props = {
+  selected: boolean
   place: PlaceSummary
   onClick: (place: PlaceSummary)=>void
 }
 
-const BakeryCard = ({ place, onClick }: Props) => {
+const BakeryCard = ({ selected, place, onClick }: Props) => {
   const changeLineName = (subwayLineName: string) => {
     const nameList = subwayLineName.split('')
     
@@ -19,7 +20,7 @@ const BakeryCard = ({ place, onClick }: Props) => {
   }
 
   return place && (
-    <div className={styles.bakery_card} onClick={()=>onClick(place)}>
+    <div className={`${styles.bakery_card} ${selected ? styles.selected : ''}`} onClick={()=>onClick(place)}>
       <div className={styles.card_image}>
         <Image className={styles.image} fill src={place.imageUrl} alt={place.name} />
       </div>

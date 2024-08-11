@@ -1,7 +1,7 @@
 export const APIadmin = {
   /**
-   * @description 장소 리스트 조회 / 등록 / 수정
-   * @method get/post/put
+   * @description 장소 리스트 조회 / 등록 / 수정 / 삭제
+   * @method get/post/put/delete
    */
   place: "/admin/place",
   /**

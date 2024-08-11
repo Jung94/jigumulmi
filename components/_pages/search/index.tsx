@@ -205,7 +205,7 @@ export default function Search() {
             <BakeryDetail place={detail} loading={isFetching} />
             <div className={styles.cards}>
               {placeList.map((place: PlaceSummary) => (
-                <BakeryCard key={place.id} place={place} onClick={handleClickPlaceCard} />
+                <BakeryCard key={place.id} selected={place.id === Number(placeId)} place={place} onClick={handleClickPlaceCard} />
               ))}
               {placeList.length === 0 &&
                 <div className={styles.cards_empty}>
