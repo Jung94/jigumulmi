@@ -6,11 +6,11 @@ const TabBox = ({ active, handleSelect }: { active: number, handleSelect: (v: an
       <button 
         className={active === 1 ? styles.active : ''}
         onClick={()=>handleSelect(1, "isFromAdmin")}
-      >등록된 장소</button>
+      >관리자 등록</button>
       <button 
         className={active === 0 ? styles.active : ''}
         onClick={()=>handleSelect(0, "isFromAdmin")}
-      >유저 등록 신청 장소</button>
+      >유저 등록</button>
     </div>
   )
 }
