@@ -1,8 +1,9 @@
 "use client"
 
 import styles from './filter-box.module.scss'
-import { useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRef } from 'react'
+import { setCookie } from 'cookies-next'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/admin/button'
 import { SelectBox, Search } from '@/components/admin/form'
 import type { PlaceQueryParams } from '@/domain/admin/query/useGetPlaceList'
@@ -22,8 +23,14 @@ const FilterBox = ({
   handleSelect: (v: any, name: string)=>void
 }) => {
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const handleClickCreation = () => {
+    const params = new URLSearchParams(searchParams!)
+    const currentUrl = `${pathname}?${params.toString()}`
+    
+    setCookie("ji-admin-list-url", currentUrl)
     router.push('/admin/place/creation')
   }
 
