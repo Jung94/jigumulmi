@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { getCookie, deleteCookie } from 'cookies-next';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { placeDetailQueryKey } from '@/domain/admin/query/useGetPlaceDetail';
 import Layout from '@/components/admin/layout/main';
@@ -45,6 +45,7 @@ const defaultData = {
 
 export default function PlaceDetailPage({ params }: { params: Params }) {
   const router = useRouter()
+  const pathname = usePathname()
   const queryClient = useQueryClient()
 
   const [ data, setData ] = useState<PlaceDetail>(defaultData)
@@ -58,7 +59,6 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   const deletePlace = useDeletePlace()
 
   const handleRegister = (body: any) => {
-    console.log(body)
     postPlace.mutate(body, { 
       onSuccess(data, variables, context) {
         console.log(data)
@@ -141,7 +141,9 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   }
 
   useEffect(()=>{
-    return () => deleteCookie('ji-admin-list-url')
+    return () => {
+      if (pathname !== '/admin/place/creation') deleteCookie('ji-admin-list-url')
+    }
   }, [])
 
   useEffect(()=>{
