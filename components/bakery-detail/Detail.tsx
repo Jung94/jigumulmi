@@ -3,14 +3,18 @@
 import styles from './Detail.module.scss'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
 import Review from '@/components/bakery-detail/components/review/review'
-import { useAppSelector } from '@/lib/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
+import { update_is_shown_detail } from '@/lib/store/modules/search'
 import type { Place } from '@/types/place'
 
 import Carousel from '@/components/Carousel/Carousel'
 
 const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boolean }) => {
+  const dispatch = useAppDispatch()
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   // console.log(place)
+
+  const handleCloseDetail = () => dispatch(update_is_shown_detail(false))
 
   const getSlides = (imageList: { id: number, isMain: boolean, url: string }[]): string[] => {
     const mainImg = imageList.find(img => img.isMain)?.url!
@@ -47,6 +51,12 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
       </div>
       {place && 
         <div className={styles.content}>
+          <div className={styles["back-gradation"]}></div>
+          <button className={styles["close"]} onClick={handleCloseDetail}>
+            <svg width="32px" height="32px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+              <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"></path>
+            </svg>
+          </button>
           <div className={`${styles.card_detail_carousel}`}>
             <Carousel slides={getSlides(place.imageList)} placeId={place.id} />
           </div>

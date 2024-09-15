@@ -113,19 +113,9 @@ export default function Search() {
     kakaoKeywordSearch && kakaoKeywordSearch(value, getLocation)
   }
 
-  // useEffect(()=>{
-  //   if (!placeId && !stationId && !stationName && !detail && !!kakaoMapFunc) {
-  //     kakaoMapFunc.relayout()
-  //     kakaoMapFunc.setLevel(8)
-  //     panTo(37.523844561019224, 126.98021150388406)
-  //   }
-  // }, [placeId, stationId, stationName, detail, kakaoMapFunc])  
-
-    // 쿼리 스트림 place(=placeId) 변경 시 동작
   useEffect(()=>{
     if (!placeId) {
       setDetail(null)
-      dispatch(update_is_shown_detail(false))
 
       if (!!stationId && !!stationName) { // 역 검색 후 상세페이지 있는 상태에서 동일 역 재검색 시 리렌더링
         getLocationOfKeyword(stationName)
@@ -138,13 +128,12 @@ export default function Search() {
     if (1100 < windowSize.width) {
       // detail과 isShownDetail 값이 모두 존재할 때 상세페이지가 등장합니다. 
       // 등장 후에 relayout 메서드를 호출해야 새롭게 변경된 지도 영역에 맞춰 다시 지도를 그릴 수 있습니다.
-      if (!!kakaoMapFunc && !!detail && isShownDetail) { 
+      if (!!kakaoMapFunc && !!detail) { 
         kakaoMapFunc.relayout()
         kakaoMapFunc.setLevel(5)
         if (!!marker) panTo(marker.position.y, marker.position.x)
       }
       
-      !!placeId && dispatch(update_is_shown_detail(true))
     } else if (1100 >= windowSize.width) {
       if (!!kakaoMapFunc && !!detail) {
         kakaoMapFunc.relayout()
@@ -155,7 +144,7 @@ export default function Search() {
       !!placeId && dispatch(update_is_shown_detail(true))
     }
   }, [placeId, windowSize.width, detail, isShownDetail, kakaoMapFunc])
-
+  
   useEffect(()=>{ // 지하철역 검색 시
     if (!window.kakao || !kakaoMapFunc || !stationName) return 
     
