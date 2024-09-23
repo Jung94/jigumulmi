@@ -1,6 +1,6 @@
 "use clinet"
 
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import styles from './form-section.module.scss';
 import { Input } from '@/components/admin/form';
 
@@ -21,11 +21,9 @@ export type KakaoSearchedDocument = {
 
 export default function PlaceSearch({ handleSelect }: { handleSelect: (data: KakaoSearchedDocument)=>void}) {
   const categories = ["FD6", "CE7", "CT1"]; // 음식점, 카페, 문화시설
-  const [keyword, setKeyword] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
   const [options, setOptions] = useState<KakaoSearchedDocument[]>([]);
   const [isShownOptionBox, setIsShownOptionBox] = useState(false);
-
-  const handleChangeKeyword = (value: string) => setKeyword(value);
 
   const handleCloseOption = () => setIsShownOptionBox(false);
 
@@ -34,7 +32,7 @@ export default function PlaceSearch({ handleSelect }: { handleSelect: (data: Kak
     setIsShownOptionBox(false);
   };
 
-  useEffect(() => {
+  const handleSearchPlace = (keyword: string) => {
     async function fetchPosts() {
       let res = await fetch(`https://dapi.kakao.com/v2/local/search/keyword?query=${keyword}`, {
         method: "GET",
@@ -45,7 +43,8 @@ export default function PlaceSearch({ handleSelect }: { handleSelect: (data: Kak
       let data = await res.json();
       
       if (data?.documents) {
-        const filteredOptions = data.documents.filter((arr: KakaoSearchedDocument) => categories.some(v => v === arr.category_group_code));
+        let filteredOptions = data.documents.filter((arr: KakaoSearchedDocument) => categories.some(v => v === arr.category_group_code));
+        filteredOptions = filteredOptions.filter((arr: KakaoSearchedDocument) => arr.place_name.includes(keyword));
         setOptions(filteredOptions);
       }
     }
@@ -55,7 +54,13 @@ export default function PlaceSearch({ handleSelect }: { handleSelect: (data: Kak
     } else {
       setOptions([]);
     }
-  }, [keyword])
+  };
+
+  const handleKeyDownKeyword = (e: React.KeyboardEvent<Element>) => {
+    const { code, nativeEvent } = e;
+    if (nativeEvent.isComposing || !searchRef?.current?.value) return;
+    if (code === 'Enter') handleSearchPlace(searchRef?.current?.value);
+  };
 
   return (
     <div className={styles["place-search"]}>
@@ -63,10 +68,10 @@ export default function PlaceSearch({ handleSelect }: { handleSelect: (data: Kak
         <div className={styles["place-search-backdrop"]} onClick={handleCloseOption}></div>
       }
       <Input 
+        ref={searchRef}
         type='text' 
         name='장소 검색' 
-        value={keyword} 
-        onChange={(v)=>handleChangeKeyword(v)} 
+        onKeyDown={(e) => handleKeyDownKeyword(e)} 
         style={{fontSize: '0.875rem', zIndex: '1'}} 
       />
       {isShownOptionBox &&
