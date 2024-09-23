@@ -4,7 +4,7 @@ import styles from './kakaoMap.module.scss'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useWindowSize } from '@/lib/hooks'
-import { set_kakao_map_func, set_kakao_places_func, update_marker } from '@/lib/store/modules/search'
+import { set_kakao_map_func, set_kakao_places_func, update_marker, update_is_shown_detail } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import type { PlaceSummary, PlaceForMarker } from '@/types/place'
 
@@ -109,6 +109,7 @@ const KakaoMap = ({ placeList }: { placeList: PlaceSummary[] }) => {
       placeId: e.id,
       position: {x: e.latlng.La, y: e.latlng.Ma}
     }))
+    dispatch(update_is_shown_detail(true))
   }
 
   useEffect(()=>{

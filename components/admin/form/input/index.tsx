@@ -12,6 +12,8 @@ type Props = {
   placeholder?: string
   isChecked?: boolean
   disabled?: boolean
+  onBlur?: (e: React.FocusEvent<HTMLInputElement, Element>)=>void
+  onFocus?: (e: React.FocusEvent<HTMLInputElement, Element>)=>void
   onChange?: (v: any)=>void
   onKeyDown?: (e: KeyboardEvent)=>void
   handleButton?: ()=>ReactNode
@@ -27,6 +29,8 @@ const Input = forwardRef<Ref, Props>(function Input({
   placeholder,
   isChecked,
   disabled,
+  onBlur,
+  onFocus,
   onChange,
   onKeyDown,
   handleButton,
@@ -56,6 +60,8 @@ const Input = forwardRef<Ref, Props>(function Input({
               placeholder={placeholder} 
               onChange={(e)=>onChange && onChange(dataName ? e : e.target.value)} 
               onKeyDown={onKeyDown}
+              onFocus={onFocus}
+              onBlur={onBlur}
               style={style} 
             />
           </div>
