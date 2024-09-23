@@ -214,6 +214,15 @@ export default function FormSection ({
     })
   }
 
+  const handleChangeCategory = () => {};
+
+  const categoryOptions = [
+    {name: "음식점", value: 1},
+    {name: "카페", value: 2},
+    {name: "제로웨이스트샵", value: 3},
+    {name: "재활용센터", value: 4},
+  ];
+
   return (
     <div className={styles['form-section']}>
       <div className={styles['form-section-inputs-wrapper']}>
@@ -237,13 +246,22 @@ export default function FormSection ({
           onChange={(v)=>handleChange('name', v)} 
           style={{fontSize: '0.875rem'}} 
         />
-        <Input 
+        {/* <Input 
           type='text' 
           name='카테고리' 
           value={data.category ?? ''} 
           onChange={(v)=>handleChange('category', v)} 
           style={{fontSize: '0.875rem'}} 
-        />
+        /> */}
+        <SelectBox.HiddenOption
+          name="sort" 
+          label='카테고리'
+          options={categoryOptions}
+          selected={categoryOptions.find(v => String(v.value) === data.category)?.value ?? 2}
+          onClick={(e)=>handleChange('category', e.target.value)}
+          style={{minWidth: '8rem', maxWidth: '8rem'}}
+          styleLabel={{fontSize: '0.8rem'}} 
+        ></SelectBox.HiddenOption>
         <Input 
           type='text' 
           name='주소' 
