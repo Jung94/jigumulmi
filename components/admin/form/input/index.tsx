@@ -6,7 +6,7 @@ type Ref = HTMLInputElement;
 type Props = {
   name?: string
   type?: string
-  value: any
+  value?: any
   alert?: {error: boolean, message: string}
   dataName?: string
   placeholder?: string
