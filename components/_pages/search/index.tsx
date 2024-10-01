@@ -54,7 +54,6 @@ export default function Search() {
 
   const [ placeList, setPlaceList ] = useState<PlaceSummary[]>([])
   const { data: places } = useGetPlaceList(stationId === null ? null : Number(stationId)) // null: all
-  // console.log(places?.data)
 
   const [ detail, setDetail ] = useState(null)
   const handleResetDetail = () => setDetail(null)
@@ -114,11 +113,18 @@ export default function Search() {
   }
 
   useEffect(()=>{
+    // console.log(placeId, detail, isShownDetail, stationId)
     if (!placeId) {
       setDetail(null)
 
       if (!!stationId && !!stationName) { // 역 검색 후 상세페이지 있는 상태에서 동일 역 재검색 시 리렌더링
         getLocationOfKeyword(stationName)
+      }
+
+      if (!!kakaoMapFunc && !detail && !isShownDetail) {
+        kakaoMapFunc.relayout()
+        kakaoMapFunc.setLevel(8)
+        if (!!marker) panTo(37.523844561019224, 126.98021150388406)
       }
       return
     }
@@ -194,7 +200,7 @@ export default function Search() {
             <BakeryDetail place={detail} loading={isFetching} />
             <div className={styles.cards}>
               {placeList.map((place: PlaceSummary) => (
-                <BakeryCard key={place.id} selected={place.id === Number(placeId)} place={place} onClick={handleClickPlaceCard} />
+                <BakeryCard key={place.id} selected={isShownDetail && place.id === Number(placeId)} place={place} onClick={handleClickPlaceCard} />
               ))}
               {placeList.length === 0 &&
                 <div className={styles.cards_empty}>

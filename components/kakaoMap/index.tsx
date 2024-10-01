@@ -1,7 +1,7 @@
 "use client"
 
 import styles from './kakaoMap.module.scss'
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useWindowSize } from '@/lib/hooks'
 import { set_kakao_map_func, set_kakao_places_func, update_marker, update_is_shown_detail } from '@/lib/store/modules/search'
@@ -30,14 +30,28 @@ const KakaoMap = ({ placeList }: { placeList: PlaceSummary[] }) => {
     setPositionList(positions)
   }
 
+  const marker = useAppSelector(((state) => state.search.marker))
+  const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
+
   useEffect(()=>{
-    // if (!kakaoMapFunc || !stationId) return
     if (!kakaoMapFunc) return
     
     if (!!stationId) kakaoMapFunc.setLevel(5)
-      else kakaoMapFunc.setLevel(8)
+      else {
+        kakaoMapFunc.relayout()
+        kakaoMapFunc.setLevel(8)
+        if (!!marker) panTo(37.523844561019224, 126.98021150388406)
+    }
+    
     createPositionList(placeList)
+
   }, [kakaoMapFunc, placeList])
+
+  function panTo(x: number, y: number) {
+    const moveLatLon = new window.kakao.maps.LatLng(x, y) // 이동할 위도 경도 위치 생성
+    
+    kakaoMapFunc.panTo(moveLatLon); // 지도 중심을 부드럽게 이동시킵니다. (만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동)
+  }
 
   useEffect(()=>{
     const kakaoMapScript = document.createElement('script')
@@ -182,19 +196,28 @@ const KakaoMap = ({ placeList }: { placeList: PlaceSummary[] }) => {
     }
   }, [placeId])
 
-  // 모바일 환경에서 bottom sheet 열기/닫기 이벤트에 따라 지도의 중심 이동
-  // useEffect(()=>{
-  //   if (isShownBottomSheet) {
-  //     // const mapHeight = mapRef.current?.offsetHeight
-  //     dispatch(update_location({x: String(parseFloat(location.x) - 0.025), y: location.y}))
-  //   } else if (isShownBottomSheet === false) {
-  //     dispatch(update_location({x: String(parseFloat(location.x) + 0.025), y: location.y}))
-  //   }
-  // }, [isShownBottomSheet])
-
   return (
-    <div ref={mapRef} id='kakao_map' className={styles.container}></div>
+    <div ref={mapRef} id='kakao_map' className={styles.container}>
+      <div className={styles['category']}>
+        <div className={styles['category-item']}>
+          <svg width="15px" height="15px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M6 20H9M12 20H9M9 20V15" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M17 20V12C17 12 19.5 11 19.5 9C19.5 7.24264 19.5 4.5 19.5 4.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M17 8.5V4.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M4.49999 11C5.49991 13.1281 8.99999 15 8.99999 15C8.99999 15 12.5001 13.1281 13.5 11C14.5795 8.70257 13.5 4.5 13.5 4.5L4.49999 4.5C4.49999 4.5 3.42047 8.70257 4.49999 11Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+          <span>음식점</span>
+        </div>
+        <div className={styles['category-item']}>
+          <svg width="15px" height="15px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M17 11.6V15C17 18.3137 14.3137 21 11 21H9C5.68629 21 3 18.3137 3 15V11.6C3 11.2686 3.26863 11 3.6 11H16.4C16.7314 11 17 11.2686 17 11.6Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M12 9C12 8 12.7143 7 14.1429 7V7C15.7208 7 17 5.72081 17 4.14286V3.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M8 9V8.5C8 6.84315 9.34315 5.5 11 5.5V5.5C12.1046 5.5 13 4.60457 13 3.5V3" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M16 11H18.5C19.8807 11 21 12.1193 21 13.5C21 14.8807 19.8807 16 18.5 16H17" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+          <span>카페</span>
+        </div>
+        <div className={styles['category-item']}>
+          <svg width="15px" height="15px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M7 21C7 21 7.5 16.5 11 12.5" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M19.1297 4.24224L19.7243 10.4167C20.0984 14.3026 17.1849 17.7626 13.2989 18.1367C9.486 18.5039 6.03191 15.7168 5.66477 11.9039C5.29763 8.09099 8.09098 4.70237 11.9039 4.33523L18.475 3.70251C18.8048 3.67074 19.098 3.91239 19.1297 4.24224Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+          <span>제로웨이스트샵</span>
+        </div>
+        <div className={styles['category-item']}>
+          <svg width="13px" height="13px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M21.1679 8C19.6247 4.46819 16.1006 2 11.9999 2C6.81459 2 2.55104 5.94668 2.04932 11" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M17 8H21.4C21.7314 8 22 7.73137 22 7.4V3" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M2.88146 16C4.42458 19.5318 7.94874 22 12.0494 22C17.2347 22 21.4983 18.0533 22 13" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M7.04932 16H2.64932C2.31795 16 2.04932 16.2686 2.04932 16.6V21" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+          <span style={{ paddingLeft: '2px' }}>재활용센터</span>
+        </div>
+      </div>
+    </div>
   )
 }
 
-export default KakaoMap
+export default memo(KakaoMap)
