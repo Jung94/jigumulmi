@@ -8,7 +8,7 @@ export default function useGetMemberList ({sort, page}: MembersQueryParams) {
   const response = useQuery(
     [APIadmin.members, sort, page],
     () => getAPI(
-      APIadmin.members, { direction: sort === 1 ? 'ASC' : 'DESC', page }
+      APIadmin.members, { direction: sort === 1 ? 'ASC' : 'DESC', page: page - 1 }
     ), {
       // enabled: !(subwayStationId && placeId)
     })
