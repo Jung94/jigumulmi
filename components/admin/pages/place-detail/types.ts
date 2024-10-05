@@ -30,7 +30,7 @@ export type PlaceDetail = {
   placeUrl: string,
   position: Record<Position, string>,
   subwayStationList: SubwayStation[],
-  category: string,
+  categoryList: any[],
   address: string,
   contact: string,
   menuList: Menu[],
@@ -43,5 +43,4 @@ export type PlaceDetail = {
   registrantComment: string,
   isApproved: boolean,
   kakaoPlaceId: string | null,
-  googlePlaceId?: string, 
 }

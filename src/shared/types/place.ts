@@ -5,6 +5,6 @@ export type RecyclingCenter = '재활용센터'
 export type MainCategory = '음식점' | '카페' | '제로웨이스트샵' | '재활용센터'
 export type SubCategory = Restaurant | Cafe | ZeroWasteShop | RecyclingCenter
 export type Category = {
-  group: MainCategory;
-  detail: SubCategory;
+  categoryGroup: MainCategory;
+  category: SubCategory;
 }

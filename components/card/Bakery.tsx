@@ -28,7 +28,7 @@ const BakeryCard = ({ selected, place, onClick }: Props) => {
         <div className={styles.top}>
           <div className={styles.left}>
             <div className={styles.card_title}>{place.name}</div>
-            <div className={styles.card_category}>{place.category}</div>
+            <div className={styles.card_category}>{place.categoryList.map(c => c.categoryGroup).filter((v, i) => place.categoryList.map(c => c.categoryGroup).indexOf(v) === i)}</div>
           </div>
           <div className={styles.right}>
             <div className={`${styles['status']} ${styles[`status-${getCurrentOpeningInfo(place.currentOpeningInfo).className}`]}`}>
