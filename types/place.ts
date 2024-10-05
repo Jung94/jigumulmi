@@ -1,7 +1,7 @@
 export type Place = {
   id: number
   name: string
-  category: string
+  categoryList: any[]
   address: string
   contact: string
   menuList: {id: number, name: string}[]
@@ -23,7 +23,7 @@ export type SubwayStation = { id: number, isMain: boolean, stationName: string, 
 export type PlaceSummary = {
   id: number
   name: string
-  category: string
+  categoryList: any[]
   currentOpeningInfo: string
   subwayStation: SubwayStation
   position: { latitude: number, longitude: number }
