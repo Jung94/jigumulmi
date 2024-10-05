@@ -1,7 +1,7 @@
 export type Place = {
   id: number
   name: string
-  category: string
+  categoryList: any[]
   address: string
   contact: string
   menuList: {id: number, name: string}[]
