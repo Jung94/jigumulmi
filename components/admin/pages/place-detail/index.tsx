@@ -19,7 +19,7 @@ const defaultData = {
   placeUrl: '', // --
   position: { latitude: '', longitude: '' }, // --
   subwayStationList: [],
-  category: '', // --
+  categoryList: [], // --
   address: '', // --
   contact: '', // --
   menuList: [], // --
@@ -39,7 +39,6 @@ const defaultData = {
   modifiedAt: '',
   registrantComment: '',
   isApproved: false, 
-  googlePlaceId: '', 
   kakaoPlaceId: '',
 }
 
@@ -154,7 +153,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   return (
     <Layout row>
       <MainLayout>
-        <HeaderSection title={`${params.placeId ? `장소 수정${data ? ` (ID: ${data.id})` : ''}` : '장소 등록'}`}>
+        <HeaderSection title={`${params.placeId ? `장소 수정${data ? ` (ID: ${data.id}, KakaoID: ${data.kakaoPlaceId ?? "-"})` : ''}` : '장소 등록'}`}>
           <FilterBox 
             isDetail={!!params.placeId}
             save={() => save(data)}

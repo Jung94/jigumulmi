@@ -1,6 +1,7 @@
 "use client"
 
 import styles from './Detail.module.scss'
+import { useWindowSize } from '@/lib/hooks'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
 import Review from '@/components/bakery-detail/components/review/review'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
@@ -11,6 +12,7 @@ import Carousel from '@/components/Carousel/Carousel'
 
 const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boolean }) => {
   const dispatch = useAppDispatch()
+  const windowSize = useWindowSize()
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   // console.log(place)
 
@@ -51,12 +53,16 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
       </div>
       {place && 
         <div className={styles.content}>
-          <div className={styles["back-gradation"]}></div>
-          <button className={styles["close"]} onClick={handleCloseDetail}>
-            <svg width="32px" height="32px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
-              <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"></path>
-            </svg>
-          </button>
+          {1100 < windowSize.width &&
+            <>
+              <div className={styles["back-gradation"]}></div>
+              <button className={styles["close"]} onClick={handleCloseDetail}>
+                <svg width="32px" height="32px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                  <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"></path>
+                </svg>
+              </button>
+            </>
+          }
           <div className={`${styles.card_detail_carousel}`}>
             <Carousel slides={getSlides(place.imageList)} placeId={place.id} />
           </div>
@@ -64,7 +70,7 @@ const PlaceDetail = ({ place, loading }: { place?: Place | null, loading?: boole
           <div className={styles.card_detail_content}>
             <div className={styles.title_wrap}>
               <div className={styles.title}>{place.name}</div>
-              <div className={styles.category}>{place.category}</div>
+              <div className={styles.category}>{[...new Set(place.categoryList.map(c => c.categoryGroup))].join(', ')}</div>
             </div>
             
             <div className={styles.section}>

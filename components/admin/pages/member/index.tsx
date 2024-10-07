@@ -11,7 +11,7 @@ import UserDetail from '@/components/admin/pages/member/components/user-detail';
 import { useGetMemberList } from '@/domain/admin/query';
 import type { PageSearchParams } from './types';
 import type { Table } from '@/lib/types/table';
-import type { PlaceQueryParams } from '@/domain/admin/query/useGetPlaceList';
+import type { MembersQueryParams } from '@/domain/admin/query/useGetMemberList';
 
 export default function MembersPage({ searchParamsOnServer }: { searchParamsOnServer: PageSearchParams }) {
   const router = useRouter()
@@ -30,7 +30,7 @@ export default function MembersPage({ searchParamsOnServer }: { searchParamsOnSe
   }
 
   // 모든 필터
-  const [ filters, setFilters ] = useState<PlaceQueryParams>({
+  const [ filters, setFilters ] = useState<MembersQueryParams>({
     page: queryParams.page,
     sort: queryParams.sort,
   })
@@ -43,7 +43,6 @@ export default function MembersPage({ searchParamsOnServer }: { searchParamsOnSe
   });
   
   const { data: memberList } = useGetMemberList(filters);
-  // console.log(memberList?.data)
 
   const handleSelect = (v: any, name: string) => {
     const params = new URLSearchParams(searchParams!)

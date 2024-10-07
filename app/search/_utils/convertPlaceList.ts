@@ -6,7 +6,7 @@ export const convertPlaceList = (placeList: any[]): PlaceSummary[] => {
     return {
       id: place.id,
       name: place.name,
-      category: place.category,
+      categoryList: place.categoryList,
       currentOpeningInfo: place.currentOpeningInfo,
       subwayStation: place.subwayStation ?? [],
       position: {latitude: place.position.latitude, longitude: place.position.longitude},

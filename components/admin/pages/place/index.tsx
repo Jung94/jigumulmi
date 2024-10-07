@@ -40,7 +40,6 @@ export default function SeasonsPage({ searchParamsOnServer }: { searchParamsOnSe
   });
   
   const { data: placeList } = useGetPlaceList(filters);
-  // console.log(placeList?.data)
 
   const handleSelect = (v: any, name: string) => {
     const params = new URLSearchParams(searchParams!)

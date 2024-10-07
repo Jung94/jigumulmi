@@ -1,4 +1,5 @@
 import styles from './search.module.scss';
+import { useSearchParams } from 'next/navigation';
 import Button from '@/components/button';
 import BakeryCard from '@/components/card/Bakery';
 import type { PlaceSummary } from '@/types/place';
@@ -14,6 +15,8 @@ const SearchContent = ({
   handleClickPlaceCard,
   handleOpenRegistrationBakeryModal
 }: Props) => {
+  const searchParams = useSearchParams()
+  const placeId = searchParams?.get("place") // string | null
 
   return (
     <div className={styles.bakery_cards_wrapper}>
@@ -21,7 +24,7 @@ const SearchContent = ({
         ? (
           <div className={styles.bakery_cards}>
             {placeList.map((place: PlaceSummary) => (
-              <BakeryCard key={place.id} place={place} onClick={handleClickPlaceCard} />
+              <BakeryCard key={place.id} selected={place.id === Number(placeId)} place={place} onClick={handleClickPlaceCard} />
             ))}
           </div>
         )

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import styles from './form-section.module.scss'
-import { SetStateAction, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import { Input } from '@/components/admin/form'
 import { SelectBox } from '@/components/admin/form'
 import { useGetPlaceSubway } from '@/domain/search/query'
@@ -13,6 +13,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { SortableContext, horizontalListSortingStrategy, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable'
 import type { PlaceDetail, Position, SubwayStation, OpeningHourDay, Menu } from '../../types'
 import type { KakaoSearchedDocument } from './place-search'
+import type { SubCategory } from '@/src/shared/types/place'
 
 const DndItem = ({ id, name, isMain, handleDelete}: { id: number, name: string, isMain?: boolean, handleDelete: (id: number)=>void}) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id })
@@ -80,6 +81,7 @@ export default function FormSection ({
   const { data: subwayStationList } = useGetPlaceSubway(stationName)
 
   const handleChange = (propName: string, value: string) => setData(prev => {return {...prev, [propName]: value}})
+  
   const handlePosition = (propName: Position, value: string) => {
     setData((prev: PlaceDetail) => {
       let position = {...prev.position}
@@ -206,6 +208,7 @@ export default function FormSection ({
     setData(prev => {
       return {
         ...prev,
+        kakaoPlaceId: data.id,
         name: data.place_name,
         contact: data.phone,
         address: data.road_address_name,
@@ -214,14 +217,66 @@ export default function FormSection ({
     })
   }
 
-  const handleChangeCategory = () => {};
-
   const categoryOptions = [
-    {name: "음식점", value: 1},
-    {name: "카페", value: 2},
-    {name: "제로웨이스트샵", value: 3},
-    {name: "재활용센터", value: 4},
-  ];
+    {name: "음식점 - 한식", value: 1},
+    {name: "음식점 - 일식", value: 2},
+    {name: "음식점 - 중식", value: 3},
+    {name: "음식점 - 양식", value: 4},
+    {name: "카페 - 음료", value: 5},
+    {name: "카페 - 간식", value: 6},
+    {name: "제로웨이스트샵", value: 7},
+    {name: "재활용센터", value: 8},
+  ]
+
+  const getCategoryValue = (subCategory: SubCategory) => {
+    switch (subCategory) {
+      case '한식': return 1
+      case '일식': return 2
+      case '중식': return 3
+      case '양식': return 4
+      case '음료': return 5
+      case '간식': return 6
+      case '제로웨이스트샵':  return 7
+      case '재활용센터':  return 8
+    }
+  }
+
+  const getCategory = (value: number) => {
+    switch (value) {
+      case 1: 
+        return { categoryGroup: '음식점', category: '한식' }
+      case 2: 
+        return { categoryGroup: '음식점', category: '일식' }
+      case 3: 
+        return { categoryGroup: '음식점', category: '중식' }
+      case 4: 
+        return { categoryGroup: '음식점', category: '양식' }
+      case 5: 
+        return { categoryGroup: '카페', category: '음료' }
+      case 6: 
+        return { categoryGroup: '카페', category: '간식' }
+      case 7: 
+        return { categoryGroup: '제로웨이스트샵', category: '제로웨이스트샵' }
+      case 8: 
+        return { categoryGroup: '재활용센터', category: '재활용센터' }
+    }
+  }
+
+  const convertCategoryToValue = (categoryList: any[]) => {
+    if (categoryList.length === 0) return []
+    return categoryList.map(category => getCategoryValue(category.category)).sort()
+  }
+
+  const handleChangeCategory = (v: number) => {
+    setData(prev => {
+      const subCategory = getCategory(v)!.category
+      if (prev.categoryList.find(c => c.category === subCategory)) {
+        return {...prev, categoryList: prev.categoryList.filter(c => c.category !== subCategory)}
+      } else {
+        return {...prev, categoryList: [...prev.categoryList, getCategory(v)].sort()}
+      }
+    })
+  }
 
   return (
     <div className={styles['form-section']}>
@@ -246,22 +301,6 @@ export default function FormSection ({
           onChange={(v)=>handleChange('name', v)} 
           style={{fontSize: '0.875rem'}} 
         />
-        {/* <Input 
-          type='text' 
-          name='카테고리' 
-          value={data.category ?? ''} 
-          onChange={(v)=>handleChange('category', v)} 
-          style={{fontSize: '0.875rem'}} 
-        /> */}
-        <SelectBox.HiddenOption
-          name="sort" 
-          label='카테고리'
-          options={categoryOptions}
-          selected={categoryOptions.find(v => String(v.value) === data.category)?.value ?? 2}
-          onClick={(e)=>handleChange('category', e.target.value)}
-          style={{minWidth: '8rem', maxWidth: '8rem'}}
-          styleLabel={{fontSize: '0.8rem'}} 
-        ></SelectBox.HiddenOption>
         <Input 
           type='text' 
           name='주소' 
@@ -276,6 +315,18 @@ export default function FormSection ({
           onChange={(v)=>handleChange('contact', v)} 
           style={{fontSize: '0.875rem'}} 
         />
+      </div>
+
+      <div className={styles['form-section-inputs-wrapper']}>
+        <SelectBox.HiddenOption
+          multi
+          name="sort" 
+          label='카테고리'
+          options={categoryOptions}
+          selected={convertCategoryToValue(data.categoryList)}
+          onClick={(e)=>handleChangeCategory(Number(e.target.value))}
+          styleLabel={{fontSize: '0.8rem'}} 
+        ></SelectBox.HiddenOption>
       </div>
       
       <div className={styles['form-section-inputs-wrapper']}>
