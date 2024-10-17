@@ -50,7 +50,7 @@ const HeaderPC = () => {
         {pathname === '/search' &&
           <div className={styles['right-search']}>
             <button className={styles['right-search-all']} onClick={handleSearchAll}>전체</button>
-            <SearchBar type='station' />
+            <SearchBar />
           </div>
         }
         <UserButton onOpen={openUserModal} />

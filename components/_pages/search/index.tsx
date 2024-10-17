@@ -10,7 +10,6 @@ import BakeryCard from '@/components/card/Bakery'
 import BakeryDetail from '@/components/bakery-detail/Detail'
 import PlaceListBottomSheet from '@/components/bottom-sheet/containers/PlaceListBottomSheet'
 import PlaceDetailBottomSheet from '@/components/bottom-sheet/containers/PlaceDetailBottomSheet'
-// import BottomSheet from '@/components/bottom-sheet'
 import { SearchContent } from '@/components/bottom-sheet/contents'
 
 import KakaoMap from '@/components/kakaoMap'
@@ -44,16 +43,23 @@ export default function Search() {
   const dispatch = useAppDispatch()
   const windowSize = useWindowSize()
   const searchParams = useSearchParams()
-  const stationId = searchParams?.get("stationId") // string | null
+  const stationId = searchParams?.get("stationId") ?? null // string | null
   const stationName = searchParams?.get("stationName") // string | null
   const placeId = searchParams?.get("place") // string | null
+  const placeName = searchParams?.get("placeName") ?? null // string | null
+  const category = searchParams?.get("category") ?? null // string | null
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   const marker = useAppSelector(((state) => state.search.marker))
   const kakaoMapFunc = useAppSelector(((state) => state.search.kakaoMap))
   const kakaoKeywordSearch = useAppSelector(((state) => state.search.kakaoKeywordSearch))
+  console.log(placeName, category)
 
   const [ placeList, setPlaceList ] = useState<PlaceSummary[]>([])
-  const { data: places } = useGetPlaceList(stationId === null ? null : Number(stationId)) // null: all
+  const { data: places } = useGetPlaceList(
+    stationId === null ? null : Number(stationId),
+    placeName,
+    category
+  )
 
   const [ detail, setDetail ] = useState(null)
   const handleResetDetail = () => setDetail(null)

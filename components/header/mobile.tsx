@@ -39,7 +39,7 @@ const HeaderMobile = () => {
             </svg>
           </button>
           {pathname === '/search' &&
-            <SearchBar type='station' />
+            <SearchBar />
           }
         </div>
         <div className={`${styles['section']} ${styles['section-right']}`}>
