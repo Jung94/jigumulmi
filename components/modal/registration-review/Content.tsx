@@ -10,7 +10,7 @@ import RequestLoginContent from '@/components/modal/request-login/Content';
 import { usePostRegisterReview } from '@/domain/review/query';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { placeDetailQueryKey } from '@/domain/search/query/useGetPlaceDetail';
+import { placeDetailQueryKey } from '@/domain/place/query/useGetPlaceDetail';
 import { usePutRegisterReview } from '@/domain/review/query';
 import { APIreview } from "@/lib/api/review";
 

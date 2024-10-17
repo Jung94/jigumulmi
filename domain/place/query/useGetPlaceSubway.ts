@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAPI } from "@/lib/api";
-import { APIsearch } from "@/lib/api/search";
+import { APIplace } from "@/lib/api/place";
 
 export default function useGetPlaceSubway (stationName: string) {
   const response = useQuery(
-    [APIsearch.getSubwayStations, stationName],
+    [APIplace.getSubwayStations, stationName],
     () => getAPI(
-      APIsearch.getSubwayStations,
+      APIplace.getSubwayStations,
       { stationName: stationName }
     ), {
       enabled: !!stationName

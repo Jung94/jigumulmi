@@ -5,7 +5,7 @@ import styles from './searchBar.module.scss'
 import { useWindowSize } from '@/lib/hooks'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { STATIONS } from '@/lib/json/subwayStation.json'
-import { useGetPlaceSubway } from '@/domain/search/query'
+import { useGetPlaceSubway } from '@/domain/place/query'
 
 declare global {
   interface Window {

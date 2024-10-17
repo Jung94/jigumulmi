@@ -21,7 +21,7 @@ import { update_is_shown_detail, update_marker } from '@/lib/store/modules/searc
 import { useModal } from '@/lib/hooks'
 import RegistrationBakeryContent from '@/components/modal/registration-bakery/Content'
 import type { PlaceSummary } from '@/types/place'
-import { useGetPlaceList, useGetPlaceDetail } from '@/domain/search/query'
+import { useGetPlaceList, useGetPlaceDetail } from '@/domain/place/query'
 import { convertPlaceList } from '@/app/search/_utils/convertPlaceList'
 
 type KakaoSearchResult = {
