@@ -21,7 +21,7 @@ import {
   useDeleteReviewReply
 } from '@/domain/review/query';
 import { useGetUserDetail } from '@/domain/account/query'
-import { placeDetailQueryKey } from '@/domain/search/query/useGetPlaceDetail';
+import { placeDetailQueryKey } from '@/domain/place/query/useGetPlaceDetail';
 import { APIreview } from "@/lib/api/review";
 
 type ReviewReply = {

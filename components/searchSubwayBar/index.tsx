@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './searchBar.module.scss'
 import { useWindowSize } from '@/lib/hooks'
-import { useGetPlaceSubway } from '@/domain/search/query'
+import { useGetPlaceSubway } from '@/domain/place/query'
 
 declare global {
   interface Window {

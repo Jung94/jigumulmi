@@ -151,7 +151,7 @@
     width: 15rem;
     overflow: hidden;
     border-radius: 10px;
-    border: 1.5px solid #333;
+    border: 1px solid #232323;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
     background-color: map.get($--greys, "50");
     display: flex;
@@ -162,7 +162,7 @@
       position: relative;
       width: 100%;
       transition: all 0.12s;
-      border-bottom: 1.5px solid #222;
+      border-bottom: 1px solid #232323;
   
       &::after {
         display: block;

@@ -30,7 +30,7 @@ const PlaceListBottomSheet = ({
           <FloatingButton onClick={handleClickFloatBtn} />
         </div>
       }
-      defaultSnap={({ maxHeight }) => 360}
+      defaultSnap={({ maxHeight }) => 35}
       snapPoints={({ minHeight, maxHeight }) => [
         35,
         360
