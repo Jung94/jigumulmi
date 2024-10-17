@@ -53,6 +53,17 @@
                background-color: map.get($--greys, "200");
             }
          }
+
+         &-selected {
+            color: #f9f9f9;
+            background-color: map.get($--colors, 'brick-red');
+
+            @media (min-width: 1101px) {
+               &:hover {
+                  background-color: map.get($--colors, 'brick-red');
+               }
+            }
+         }
       }
    }
 }

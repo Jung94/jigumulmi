@@ -52,7 +52,6 @@ export default function Search() {
   const marker = useAppSelector(((state) => state.search.marker))
   const kakaoMapFunc = useAppSelector(((state) => state.search.kakaoMap))
   const kakaoKeywordSearch = useAppSelector(((state) => state.search.kakaoKeywordSearch))
-  console.log(placeName, category)
 
   const [ placeList, setPlaceList ] = useState<PlaceSummary[]>([])
   const { data: places } = useGetPlaceList(
@@ -119,7 +118,6 @@ export default function Search() {
   }
 
   useEffect(()=>{
-    // console.log(placeId, detail, isShownDetail, stationId)
     if (!placeId) {
       setDetail(null)
 

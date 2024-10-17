@@ -38,8 +38,9 @@ const SearchBar = () => {
     setIsShownSelectbox(prev => !prev)
   }
 
-  const handleSearchType = (searchType: string) => {
-    setSearchType(searchType)
+  const handleSearchType = (type: string) => {
+    if (type !== searchType) setValue('')
+    setSearchType(type)
     setIsShownSelectbox(false)
   }
 
