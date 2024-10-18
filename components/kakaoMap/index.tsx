@@ -35,7 +35,11 @@ const KakaoMap = ({ placeList }: { placeList: PlaceSummary[] }) => {
 
 
   useEffect(()=>{
-    if (!kakaoMapFunc || category) return
+    if (!kakaoMapFunc) return
+    if (category) {
+      createPositionList(placeList)
+      return
+    }
     
     if (!!stationId) kakaoMapFunc.setLevel(5)
       else {
