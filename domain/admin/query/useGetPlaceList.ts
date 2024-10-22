@@ -10,7 +10,7 @@ export type PlaceQueryParams = {
 }
 
 type Queries = { 
-  direction: 'ASC' | 'DESC'
+  sort: 'ASC' | 'DESC'
   page: number
   placeName?: string
   isFromAdmin: boolean
@@ -18,7 +18,7 @@ type Queries = {
 
 
 export default function useGetPlaceList ({sort, page, placeName, isFromAdmin}: PlaceQueryParams) {
-  let queries: Queries = { direction: sort === 1 ? 'ASC' : 'DESC', page, isFromAdmin: isFromAdmin === 0 ? false : true }
+  let queries: Queries = { sort: sort === 1 ? 'ASC' : 'DESC', page, isFromAdmin: isFromAdmin === 0 ? false : true }
   if (placeName) queries['placeName'] = placeName
 
   const response = useQuery(

@@ -10,7 +10,6 @@ import BakeryCard from '@/components/card/Bakery'
 import BakeryDetail from '@/components/bakery-detail/Detail'
 import PlaceListBottomSheet from '@/components/bottom-sheet/containers/PlaceListBottomSheet'
 import PlaceDetailBottomSheet from '@/components/bottom-sheet/containers/PlaceDetailBottomSheet'
-// import BottomSheet from '@/components/bottom-sheet'
 import { SearchContent } from '@/components/bottom-sheet/contents'
 
 import KakaoMap from '@/components/kakaoMap'
@@ -21,7 +20,7 @@ import { update_is_shown_detail, update_marker } from '@/lib/store/modules/searc
 import { useModal } from '@/lib/hooks'
 import RegistrationBakeryContent from '@/components/modal/registration-bakery/Content'
 import type { PlaceSummary } from '@/types/place'
-import { useGetPlaceList, useGetPlaceDetail } from '@/domain/search/query'
+import { useGetPlaceList, useGetPlaceDetail } from '@/domain/place/query'
 import { convertPlaceList } from '@/app/search/_utils/convertPlaceList'
 
 type KakaoSearchResult = {
@@ -44,17 +43,22 @@ export default function Search() {
   const dispatch = useAppDispatch()
   const windowSize = useWindowSize()
   const searchParams = useSearchParams()
-  const stationId = searchParams?.get("stationId") // string | null
+  const stationId = searchParams?.get("stationId") ?? null // string | null
   const stationName = searchParams?.get("stationName") // string | null
   const placeId = searchParams?.get("place") // string | null
+  const placeName = searchParams?.get("placeName") ?? null // string | null
+  const category = searchParams?.get("category") ?? null // string | null
   const isShownDetail = useAppSelector(((state) => state.search.isShownDetail))
   const marker = useAppSelector(((state) => state.search.marker))
   const kakaoMapFunc = useAppSelector(((state) => state.search.kakaoMap))
   const kakaoKeywordSearch = useAppSelector(((state) => state.search.kakaoKeywordSearch))
 
   const [ placeList, setPlaceList ] = useState<PlaceSummary[]>([])
-  const { data: places } = useGetPlaceList(stationId === null ? null : Number(stationId)) // null: all
-  // console.log(places?.data)
+  const { data: places } = useGetPlaceList(
+    stationId === null ? null : Number(stationId),
+    placeName,
+    category
+  )
 
   const [ detail, setDetail ] = useState(null)
   const handleResetDetail = () => setDetail(null)
@@ -119,6 +123,12 @@ export default function Search() {
 
       if (!!stationId && !!stationName) { // 역 검색 후 상세페이지 있는 상태에서 동일 역 재검색 시 리렌더링
         getLocationOfKeyword(stationName)
+      }
+
+      if (!!kakaoMapFunc && !detail && !isShownDetail) {
+        kakaoMapFunc.relayout()
+        kakaoMapFunc.setLevel(8)
+        if (!!marker) panTo(37.523844561019224, 126.98021150388406)
       }
       return
     }
@@ -194,7 +204,7 @@ export default function Search() {
             <BakeryDetail place={detail} loading={isFetching} />
             <div className={styles.cards}>
               {placeList.map((place: PlaceSummary) => (
-                <BakeryCard key={place.id} selected={place.id === Number(placeId)} place={place} onClick={handleClickPlaceCard} />
+                <BakeryCard key={place.id} selected={isShownDetail && place.id === Number(placeId)} place={place} onClick={handleClickPlaceCard} />
               ))}
               {placeList.length === 0 &&
                 <div className={styles.cards_empty}>

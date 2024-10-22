@@ -10,6 +10,11 @@ export const APIplace = {
    */
   getPlaceDetail: (placeId: number) => `/place/detail/${placeId}`,
   /**
+   * @description 지하철역 조회
+   * @method get
+   */
+  getSubwayStations: "/place/subway",
+  /**
    * @description 장소 등록
    * @method post
    */
