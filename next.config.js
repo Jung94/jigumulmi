@@ -2,10 +2,10 @@
 const nextConfig = {
   reactStrictMode: false,
   eslint: {
-    ignoreDuringBuilds: true
+    ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true
+    ignoreBuildErrors: true,
   },
   images: {
     remotePatterns: [
@@ -13,7 +13,15 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'search.pstatic.net',
       },
-    ]
+      // {
+      //   protocol: 'https',
+      //   hostname: 'encrypted-tbn0.gstatic.com',
+      // },
+      // {
+      //   protocol: 'https',
+      //   hostname: 'cdn.prod.website-files.com',
+      // },
+    ],
   },
   experimental: {
     missingSuspenseWithCSRBailout: false,
