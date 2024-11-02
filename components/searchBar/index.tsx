@@ -176,7 +176,7 @@ const SearchBar = () => {
             </svg>
           </span>
           <span className={styles['selectbox-content']}>
-            {searchType === 'subwayStation' ? '지하철역' : '가게명'}
+            {searchType === 'subwayStation' ? '지하철역' : '업체명'}
           </span>
         </div>
         {isShownSelectbox &&
@@ -189,12 +189,12 @@ const SearchBar = () => {
               <div 
                 className={`${styles['selectbox-optionbox-item']} ${searchType === 'placeName' ? styles[`selectbox-selected`] : ''}`}
                 onClick={() => handleSearchType('placeName')}
-              >가게명</div>
+              >업체명</div>
             </div>
           </div>
         }
       </div>
-      <input ref={inputRef} type='text' placeholder={searchType === 'subwayStation' ? '지하철역' : '가게명'} value={value} onChange={handleChangeInput} onKeyDown={handleKeyArrow} />
+      <input ref={inputRef} type='text' placeholder={searchType === 'subwayStation' ? '지하철역' : '업체명'} value={value} onChange={handleChangeInput} onKeyDown={handleKeyArrow} />
       {!!value &&
         <div className={styles.erase_all_text} onClick={eraseAllText}>
           <svg width="19px" height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000" strokeWidth="1.5">
