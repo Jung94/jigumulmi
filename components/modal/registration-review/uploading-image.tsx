@@ -9,18 +9,14 @@ type PreviewImage = {
   file: File | null
 }
 
-const UploadingImage = () => {
+const UploadingImage = ({
+  previewImages, 
+  setPreviewImages
+}: {
+  previewImages: PreviewImage[]
+  setPreviewImages: React.Dispatch<React.SetStateAction<PreviewImage[]>>
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [previewImages, setPreviewImages] = useState<PreviewImage[]>([
-    // {
-    //   url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVazU5n-usbOWL6e9ahoC9s53h-FsvViyPbA&s',
-    //   file: null
-    // },
-    // {
-    //   url: 'https://cdn.prod.website-files.com/60f85e33b5a89c61fcd8377d/64ee3dd5567468ffe4502bed_Thumbnail.png',
-    //   file: null
-    // },
-  ])
 
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target

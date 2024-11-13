@@ -41,6 +41,30 @@
     }
   }
 
+  &_image_preview {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+
+    &_image {
+      position: relative;
+      border-radius: 7px;
+      overflow: hidden;
+
+      &::after {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+      }
+
+      &_content {
+        object-fit: cover;
+      }
+    }
+  }
+
   &_rating {
     color: map.get($--greys, "500");
     font-size: 12px;

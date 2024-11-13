@@ -13,14 +13,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'search.pstatic.net',
       },
-      // {
-      //   protocol: 'https',
-      //   hostname: 'encrypted-tbn0.gstatic.com',
-      // },
-      // {
-      //   protocol: 'https',
-      //   hostname: 'cdn.prod.website-files.com',
-      // },
+      {
+        protocol: 'https',
+        hostname: 'contents-dev.jigumulmi.com',
+      },
     ],
   },
   experimental: {

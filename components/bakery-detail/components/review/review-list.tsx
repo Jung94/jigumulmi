@@ -1,11 +1,13 @@
 "use client"
 
+import Image from 'next/image';
 import styles from './review-list.module.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import User from '@/public/icons/User';
 import Check from '@/public/icons/Check';
 import XMark from '@/public/icons/XMark';
+import FullScreenImagePreview from '@/src/shared/ui/full-screen-image-preview';
 import Spinner from '@/public/icons/LoadingSpinnerWhite';
 import { useModal } from '@/lib/hooks';
 import RequestLoginContent from '@/components/modal/request-login/Content';
@@ -36,6 +38,7 @@ type ReviewReply = {
     createdAt: string
   }
 }
+
 type Review = {
   id: number
   content: string
@@ -56,6 +59,11 @@ type Review = {
     likeReactionId: any
     likeReactionCount: number
   }
+  imageList: {
+    id: number
+    s3Key: string
+    createdAt: string
+  }[]
 }
 
 const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
@@ -132,6 +140,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
       type='put'
       reviewId={review.id}
       curRating={review.rating}
+      curImages={review.imageList.map(img => { return { url: process.env.NEXT_PUBLIC_CDN + img.s3Key, file: null}})}
       curReview={review.content}
       onClose={handleCloseRegistrationReviewModal} 
     />,
@@ -167,7 +176,17 @@ const ReviewCard = ({ review }: { review: Review }) => {
     replyCount: review.replyCount 
   });
 
+  const [selectedImage, setSelectedImage] = useState("")
+
+  const handleClickPreviewImage = (path: string) => {
+    setSelectedImage(path)
+  }
+
   return (
+    <>
+    {/* {!!selectedImage && 
+      <FullScreenImagePreview path={selectedImage} />
+    } */}
     <div className={styles.review_card}>
       <div className={styles.review_card_header}>
         <div className={styles.review_card_header_left}>
@@ -183,6 +202,26 @@ const ReviewCard = ({ review }: { review: Review }) => {
           </div>
         }
       </div>
+      {!!review.imageList.length && 
+        <div className={styles.review_card_image_preview}>
+          {review.imageList.map((rImage) => {
+            return (
+              <div 
+                key={rImage.id} 
+                className={styles.review_card_image_preview_image}
+                // onClick={() => handleClickPreviewImage(rImage.s3Key)}
+              >
+                <Image 
+                  fill
+                  src={process.env.NEXT_PUBLIC_CDN + rImage.s3Key}
+                  alt='preview-image'
+                  className={styles.review_card_image_preview_image_content}
+                />
+              </div>
+            )
+          })}
+        </div>
+      }
       {!review.deletedAt &&
         <div className={styles.review_card_rating}>
           <div className={styles.review_card_rating_star}>
@@ -265,6 +304,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
       {DeletionReviewModal.Dialog}
       {RegistrationReviewModal.Dialog}
     </div>
+    </>
   );
 };
 

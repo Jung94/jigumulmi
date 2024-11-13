@@ -15,6 +15,11 @@ import { placeDetailQueryKey } from '@/domain/place/query/useGetPlaceDetail';
 import { usePutRegisterReview } from '@/domain/review/query';
 import { APIreview } from "@/lib/api/review";
 
+type PreviewImage = {
+  url: string
+  file: File | null
+}
+
 const Star = ({ active, onClick }: { active: boolean, onClick: ()=>void }) => {
   return (
     <button type='button' className={styles["star-button"]} onClick={onClick}>
@@ -29,12 +34,14 @@ const RegistrationReviewContent = ({
   type='post',
   reviewId,
   curRating,
+  curImages,
   curReview,
   onClose
 }: {
   type: 'post' | 'put'
   reviewId?: number
   curRating?: number
+  curImages?: PreviewImage[]
   curReview?: string
   onClose: ()=>void
 }) => {
@@ -46,7 +53,9 @@ const RegistrationReviewContent = ({
   const [ placeholder ] = useState("소중한 리뷰를 남겨주세요");
   const [ rating, setRating ] = useState<number>(curRating ?? 0);
   const [ review, setReview ] = useState<string>(curReview ?? "");
+  const [ previewImages, setPreviewImages ] = useState<PreviewImage[]>(curImages ?? []);
   const [ loading, setLoading ] = useState(false);
+  console.log(curImages, type)
 
   const handleRating = (order: number) => setRating(order);
 
@@ -58,6 +67,7 @@ const RegistrationReviewContent = ({
   const handleClose = () => {
     setRating(curRating ?? 0)
     setReview(curReview ?? "")
+    setPreviewImages(curImages ?? [])
     onClose()
   }
 
@@ -80,8 +90,9 @@ const RegistrationReviewContent = ({
     }
 
     if (type === 'post') {
-      setReview('')
       setRating(0)
+      setReview('')
+      setPreviewImages([])
     }
     
     SuccessModal.close()
@@ -97,13 +108,27 @@ const RegistrationReviewContent = ({
   function handleCloseRequestLoginModal() { RequestLoginModal.close()}
 
   const mutatePostReview = async () => {
+    if (!selectedPlace) return
+    
+    const formData = new FormData()
+    
+    formData.append("placeId", selectedPlace)
+    formData.append("rating", String(rating))
+    formData.append("content", review)
+    
+    for (let i = 0; i < previewImages.length; i++) {
+      const imageFile = previewImages[i].file
+      if (imageFile instanceof File && imageFile.size > 0) {
+        formData.append("image", imageFile)
+      }
+    }
+
     setLoading(true)
 
     registerReview.mutate(
-      { placeId: Number(selectedPlace), rating, content: review },
+      formData,
       {
         onSuccess: async (data) => {
-          console.log(data)
           setLoading(false)
 
           if (data.status === 201) {
@@ -187,7 +212,7 @@ const RegistrationReviewContent = ({
           <div className={styles.title}>
             리뷰
           </div>
-          <UploadingImage />
+          <UploadingImage previewImages={previewImages} setPreviewImages={setPreviewImages} />
           <textarea id='review' name='review' maxLength={400} placeholder={placeholder} value={review} onChange={handleReview} />
         </div>
 

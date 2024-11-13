@@ -129,7 +129,7 @@
     flex-direction: column;
 
     .header {
-      padding: 1rem 0 0.5rem;
+      padding: 1.125rem 0 1rem;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -161,50 +161,6 @@
         align-items: center;
       }
     }
-
-    .header_wrap {
-      position: relative;
-      padding: 1.25rem 0 0.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .title_wrap {
-        width: 100%;
-        padding: 0 2rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 4px;
-  
-        .title {
-          color: #222;
-          font-size: 18px;
-          font-weight: 700;
-        }
-        .category {
-          color: map.get($--greys, '500');
-          font-size: 13px;
-        }
-      }
-
-      .heart_icon {
-        padding: 3px;
-        border-radius: 4px;
-        position: absolute;
-        top: 1.05rem;
-        right: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        &:hover {
-          background-color: map.get($--colors, 'gray-200');
-        }
-      }
-    }
-    
   }
 }
 
@@ -239,7 +195,7 @@
 
     .subway {
       &-wrapper {
-        margin-top: 3px;
+        margin-top: 7px;
         display: flex;
         justify-content: flex-start;
         align-items: center;
