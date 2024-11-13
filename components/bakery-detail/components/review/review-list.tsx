@@ -140,7 +140,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
       type='put'
       reviewId={review.id}
       curRating={review.rating}
-      curImages={review.imageList.map(img => { return { url: process.env.NEXT_PUBLIC_CDN + img.s3Key, file: null}})}
+      curImages={review.imageList.map(img => { return { id: img.id, url: process.env.NEXT_PUBLIC_CDN + img.s3Key, file: null}})}
       curReview={review.content}
       onClose={handleCloseRegistrationReviewModal} 
     />,

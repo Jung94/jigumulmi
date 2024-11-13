@@ -16,6 +16,7 @@ import { usePutRegisterReview } from '@/domain/review/query';
 import { APIreview } from "@/lib/api/review";
 
 type PreviewImage = {
+  id: number | null
   url: string
   file: File | null
 }
@@ -146,10 +147,34 @@ const RegistrationReviewContent = ({
 
   const mutatePutReview = () => {
     if (!reviewId) return
+    
+    const formData = new FormData()
+    
+    formData.append("reviewId", String(reviewId))
+    formData.append("rating", String(rating))
+    formData.append("content", review)
+
+    const newImage = previewImages.filter(img => !!img.file)
+    const trashImageIds = curImages && curImages.length > 0 
+      ? curImages.map(i => i.id).filter(id => !previewImages.map(i => i.id).includes(id))
+      : []
+
+    for (let i = 0; i < newImage.length; i++) {
+      const imageFile = newImage[i].file
+      if (imageFile instanceof File && imageFile.size > 0) {
+        formData.append("newImage", imageFile)
+      }
+    }
+    
+    for (let i = 0; i < trashImageIds.length; i++) {
+      const imageId = trashImageIds[i]
+      formData.append("trashImageId", String(imageId))
+    }
+
     setLoading(true)
 
     putReview.mutate(
-      { reviewId, rating, content: review },
+      formData,
       {
         onSuccess: async (data) => {
           console.log(data)
