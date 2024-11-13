@@ -17,7 +17,7 @@ import type { OverallReview } from '@/types/place';
 export default function Review({ placeId, data }: { placeId: number, data: OverallReview }) {
   const { data: userDetail } = useGetUserDetail()
   const { data: review } = useGetReview(placeId)
-  // console.log('review:', review?.data, data)
+  console.log('review:', review?.data, data)
   // console.log('userDetail:', !!(userDetail?.status === 200), userDetail?.status)
 
   const RequestLoginModal = useModal(
