@@ -15,6 +15,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'contents.jigumulmi.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'contents-dev.jigumulmi.com',
       },
     ],
