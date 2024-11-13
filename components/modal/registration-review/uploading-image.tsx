@@ -5,6 +5,7 @@ import Image from 'next/image'
 import styles from './registration-review.module.scss'
 
 type PreviewImage = {
+  id: number | null
   url: string
   file: File | null
 }
@@ -22,6 +23,7 @@ const UploadingImage = ({
     const { files } = e.target
 
     if (files && files?.length > 0) {
+      if (previewImages.length + files.length > 5) return alert('이미지는 최대 5장까지 업로드 가능합니다.')
       const limitSize = 1024 ** 2 * 10
       let exceeded = false
 
@@ -39,7 +41,7 @@ const UploadingImage = ({
         setPreviewImages((prev: PreviewImage[]) => {
           return [
             ...Array.from(files).map((file: File) => {
-              return { url: URL.createObjectURL(file), file: file }
+              return { id: null, url: URL.createObjectURL(file), file: file }
             }),
             ...prev
           ]
