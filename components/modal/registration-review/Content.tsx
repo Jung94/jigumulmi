@@ -55,7 +55,6 @@ const RegistrationReviewContent = ({
   const [ review, setReview ] = useState<string>(curReview ?? "");
   const [ previewImages, setPreviewImages ] = useState<PreviewImage[]>(curImages ?? []);
   const [ loading, setLoading ] = useState(false);
-  console.log(curImages, type)
 
   const handleRating = (order: number) => setRating(order);
 
