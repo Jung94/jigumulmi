@@ -38,25 +38,29 @@ Axios.interceptors.response.use(
   },
   async (error) => {
     const res = error.response
-    // console.log(res)
+    const isAdminPage = window.location.pathname.split('/')[1] === 'admin'
+
     if (res.status === 403) {
-      // console.log('403:', window.location.pathname)
-      if (window.location.pathname.split('/')[1] === 'admin') {
+      if (isAdminPage) {
         setCookie("ji-login-prev-path", window.location.pathname)
         alert('로그인이 필요합니다.')
         window.location.href = '/login'
       }
-      // await postAPI({apiURL: '/member/logout', body: {}})
-      // alert('로그인이 필요합니다.')
     }
-    // if (res.status === 401) {
-    //   alert(res.data.detail)
-    //   deleteCookie("_LB_AT")
-    //   deleteCookie("_LB_RT")
-    //   deleteCookie("_LB_group")
-    //   window.location.href = '/'
-    //   return
-    // } else if (res.status === 499) {
+    if (res.status === 401) {
+      if (isAdminPage) {
+        setCookie("ji-login-prev-path", window.location.pathname)
+        alert('로그인이 필요합니다.')
+        window.location.href = '/login'
+      }
+      // alert(res.data.detail)
+      // deleteCookie("_LB_AT")
+      // deleteCookie("_LB_RT")
+      // deleteCookie("_LB_group")
+      // window.location.href = '/'
+      // return
+    }
+    // else if (res.status === 499) {
     //   const resToken = await postAPI({apiURL: '/account/reissued/token', body: {}})
     //   if (resToken.status === 201) {
     //     const headers = resToken.headers
