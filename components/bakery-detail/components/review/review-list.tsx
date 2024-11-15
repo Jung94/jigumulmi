@@ -7,9 +7,8 @@ import { useSearchParams } from 'next/navigation';
 import User from '@/public/icons/User';
 import Check from '@/public/icons/Check';
 import XMark from '@/public/icons/XMark';
-import FullScreenImagePreview from '@/src/shared/ui/full-screen-image-preview';
 import Spinner from '@/public/icons/LoadingSpinnerWhite';
-import { useModal } from '@/lib/hooks';
+import { useModal, useImagePreview } from '@/lib/hooks';
 import RequestLoginContent from '@/components/modal/request-login/Content';
 import RegistrationReviewContent from '@/components/modal/registration-review/Content';
 import DeletionReviewContent from '@/components/modal/deletion-review/Content';
@@ -176,17 +175,13 @@ const ReviewCard = ({ review }: { review: Review }) => {
     replyCount: review.replyCount 
   });
 
-  const [selectedImage, setSelectedImage] = useState("")
+  const handleClickPreviewImage = (path: string) => ImagePreview.open(path)
 
-  const handleClickPreviewImage = (path: string) => {
-    setSelectedImage(path)
-  }
+  const ImagePreview = useImagePreview({
+    disabledBackdropClosing: true
+  })
 
   return (
-    <>
-    {/* {!!selectedImage && 
-      <FullScreenImagePreview path={selectedImage} />
-    } */}
     <div className={styles.review_card}>
       <div className={styles.review_card_header}>
         <div className={styles.review_card_header_left}>
@@ -209,7 +204,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
               <div 
                 key={rImage.id} 
                 className={styles.review_card_image_preview_image}
-                // onClick={() => handleClickPreviewImage(rImage.s3Key)}
+                onClick={() => handleClickPreviewImage(rImage.s3Key)}
               >
                 <Image 
                   fill
@@ -301,10 +296,10 @@ const ReviewCard = ({ review }: { review: Review }) => {
           )
       )
       }
+      {ImagePreview.create()}
       {DeletionReviewModal.Dialog}
       {RegistrationReviewModal.Dialog}
     </div>
-    </>
   );
 };
 
