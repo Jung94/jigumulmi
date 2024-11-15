@@ -1,0 +1,102 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+@mixin keyframes($name){
+  @keyframes #{$name}{
+    @content;
+  }
+}
+@mixin animate($animation,$delay,$duration,$fillMode,$timingFunction){
+  animation-name: $animation;
+  animation-delay: $delay;
+  animation-duration: $duration;
+  animation-fill-mode: $fillMode;
+  animation-iteration-count: 1;
+  animation-timing-function: $timingFunction;
+}
+
+@mixin fade-in {
+  @include keyframes(fadeIn){
+    0%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+    }
+  }
+  @include animate(fadeIn, 0s, 0.15s, none, ease);
+}
+
+@mixin scale-in {
+  @include keyframes(scaleIn){
+    0%{
+      transform: scale(.97) translate(-50%, -50%);
+      opacity: 0;
+    }
+    100%{
+      transform: scale(1) translate(-50%, -50%);
+      opacity: 1;
+    }
+  }
+  @include animate(scaleIn, 0s, 0.15s, none, ease);
+}
+
+.image-preview {
+  &::backdrop {
+    @include fade-in;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  @include scale-in;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: left;
+  background-color: transparent;
+  border: none;
+
+  @media (width <= 450px) {
+    padding: 2.5rem 0;
+  }
+
+  @media (width <= 370px) {
+    width: 100%;
+  }
+
+  &-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: #eee;
+
+    @media (width <= 450px) {
+      top: 0.25rem;
+      right: 0.25rem;
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
+
+  &-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform .1s ease;
+    
+    &-image {
+      object-fit: contain;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.08),0px 1px 1px rgba(0,0,0,.02),0px 8px 16px -4px rgba(0,0,0,.04),0px 24px 32px -8px rgba(0,0,0,.06);
+    }
+  }
+}
