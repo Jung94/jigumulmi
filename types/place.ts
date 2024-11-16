@@ -7,6 +7,7 @@ export type Place = {
   menuList: {id: number, name: string}[]
   imageList: { id: number, url: string, isMain: boolean }[],
   subwayStation: SubwayStation
+  reviewImageList: ReviewImage[]
   position: { latitude: number, longitude: number }
   openingHour: { openingHourMon: string, openingHourTue: string, openingHourWed: string, openingHourThu: string, openingHourFri: string, openingHourSat: string, openingHourSun: string }
   additionalInfo: string
@@ -15,6 +16,8 @@ export type Place = {
 }
 
 export type PlaceForMarker = { id: number, name: string, latlng: any }
+
+export type ReviewImage = { id: number, s3Key: string, createdAt: string }
 
 export type OverallReview = { totalCount: number, averageRating: number, statistics: {1: number, 2: number, 3: number, 4: number, 5: number} }
 

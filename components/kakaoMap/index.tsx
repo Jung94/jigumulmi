@@ -206,7 +206,9 @@ const KakaoMap = ({ placeList }: { placeList: PlaceSummary[] }) => {
     if (category === categoryName) {
       params.delete('category')
     } else {
+      params.delete('place')
       params.set('category', categoryName)
+      dispatch(update_is_shown_detail(false))
     }
     router.push(`search?${params.toString()}`)
   }

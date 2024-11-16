@@ -23,6 +23,7 @@ const UploadingImage = ({
     const { files } = e.target
 
     if (files && files?.length > 0) {
+      console.log(previewImages.length, files.length)
       if (previewImages.length + files.length > 5) return alert('이미지는 최대 5장까지 업로드 가능합니다.')
       const limitSize = 1024 ** 2 * 10
       let exceeded = false

@@ -24,6 +24,7 @@ import {
 import { useGetUserDetail } from '@/domain/account/query'
 import { placeDetailQueryKey } from '@/domain/place/query/useGetPlaceDetail';
 import { APIreview } from "@/lib/api/review";
+import type { ReviewImage } from '@/types/place';
 
 type ReviewReply = {
   id: number
@@ -58,11 +59,7 @@ type Review = {
     likeReactionId: any
     likeReactionCount: number
   }
-  imageList: {
-    id: number
-    s3Key: string
-    createdAt: string
-  }[]
+  imageList: ReviewImage[]
 }
 
 const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
@@ -185,7 +182,9 @@ const ReviewCard = ({ review }: { review: Review }) => {
     <div className={styles.review_card}>
       <div className={styles.review_card_header}>
         <div className={styles.review_card_header_left}>
-          <div className={styles.review_card_header_left_profile_image}></div>
+          <div className={styles.review_card_header_left_profile_image}>
+            <User size='18px' color='#333' />
+          </div>
           <div className={styles.review_card_header_left_user_nickname}>{review.member.nickname}</div>
         </div>
         {!review.deletedAt &&
@@ -412,7 +411,7 @@ const ReviewReplyForm = ({ reviewId=0, reviewReplyId=0, method, content='', muta
     <div className={styles.review_reply}>
       {method === 'post' &&
         <div className={styles.review_reply_user_icon}>
-          <User size='17px' />
+          <User size='17px' color='#333' />
         </div>
       }
       <textarea ref={textareaRef} rows={1} value={reply} onChange={handleChangeReply} />
