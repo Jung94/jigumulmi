@@ -22,7 +22,6 @@ const PlaceDetailBottomSheet = ({
 }: Props) => {
   const sheetRef = useRef<BottomSheetRef>(null)
   const [ isOpen, setIsOpen ] = useState(false)
-  console.log(sheetRef.current)
 
   const handleOpenBottomSheet = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
