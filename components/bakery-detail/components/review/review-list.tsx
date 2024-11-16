@@ -24,6 +24,7 @@ import {
 import { useGetUserDetail } from '@/domain/account/query'
 import { placeDetailQueryKey } from '@/domain/place/query/useGetPlaceDetail';
 import { APIreview } from "@/lib/api/review";
+import type { ReviewImage } from '@/types/place';
 
 type ReviewReply = {
   id: number
@@ -58,11 +59,7 @@ type Review = {
     likeReactionId: any
     likeReactionCount: number
   }
-  imageList: {
-    id: number
-    s3Key: string
-    createdAt: string
-  }[]
+  imageList: ReviewImage[]
 }
 
 const ReReviewCard = ({ reviewReply }: { reviewReply: ReviewReply }) => {
