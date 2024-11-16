@@ -5,6 +5,7 @@ import Button from '@/components/button';
 import NoLogin from './no-login';
 import NoReview from './no-review';
 import RatingSection from './rating';
+import ImageListSection from './image-list';
 import ReviewListSection from './review-list';
 import { useModal } from '@/lib/hooks';
 import RequestLoginContent from '@/components/modal/request-login/Content';
@@ -13,12 +14,20 @@ import { checkIsLogin } from '@/domain/account/query/useGetUserDetail';
 import { useGetReview } from '@/domain/review/query';
 import { useGetUserDetail } from '@/domain/account/query';
 import type { OverallReview } from '@/types/place';
+import type { Place } from '@/types/place'
 
-export default function Review({ placeId, data }: { placeId: number, data: OverallReview }) {
+export default function Review({ 
+  place, 
+  data, 
+  handleOpenImageGallery 
+}: { 
+  place: Place 
+  data: OverallReview
+  handleOpenImageGallery: () => void
+ }) {
   const { data: userDetail } = useGetUserDetail()
-  const { data: review } = useGetReview(placeId)
-  console.log('review:', review?.data, data)
-  // console.log('userDetail:', !!(userDetail?.status === 200), userDetail?.status)
+  const { data: review } = useGetReview(place.id)
+  // console.log('review:', review?.data, data)
 
   const RequestLoginModal = useModal(
     <RequestLoginContent
@@ -58,6 +67,7 @@ export default function Review({ placeId, data }: { placeId: number, data: Overa
       {(data.totalCount !== 0 || review.data.some(r => r.replyCount > 0))
         ? (<>
           <RatingSection data={data}/>
+          <ImageListSection reviewImageList={place.reviewImageList} handleOpenImageGallery={handleOpenImageGallery} />
           {review.data &&
             <ReviewListSection reviewList={review.data} />
           }
