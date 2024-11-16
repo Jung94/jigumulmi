@@ -95,7 +95,7 @@ const SearchBar = () => {
       if (nowIndex === -1) {  // 검색창에 있을 때
         if (windowSize.width <= 1100) inputRef.current?.blur()  // 모바일 - 키보드 이동(return) 클릭시 키보드 닫힘(input focus를 삭제)
 
-        handleSearchPlaceName()
+        searchType === 'placeName' && handleSearchPlaceName()
       } else selectAutoSearchResult()  // 자동 검색 박스 안에 있을 때
     }
 
