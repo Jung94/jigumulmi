@@ -13,7 +13,6 @@ const ReviewImageGallery = ({
   reviewImageList: ReviewImage[] 
   handleCloseImageGallery: () => void
 }) => {
-  console.log(reviewImageList)
   const ImagePreview = useImagePreview(reviewImageList, { disabledBackdropClosing: true })
   const handleClickPreviewImage = (startIndex: number) => ImagePreview.open(startIndex)
 

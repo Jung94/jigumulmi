@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import styles from './Detail.module.scss'
 import { useWindowSize } from '@/lib/hooks'
-import Carousel from '@/components/carousel'
+import Carousel from '@/components/slide/Slide'
 import ImageGallery from './components/image-gallery'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
 import Review from '@/components/place-detail/components/review/review'
