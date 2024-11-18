@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, useState, useEffect } from 'react';
-import ImagePreview from '@/components/image-preview';
+import { useRef, useState, useEffect } from 'react'
+import ImagePreview from '@/components/image-preview'
 
 type Options = {
   disabledBackdropClosing?: boolean
@@ -10,33 +10,34 @@ type Options = {
 }
 
 export default function useImagePreview (
+  pathList: any[],
   { disabledBackdropClosing, disabledEscKey, style }: Options={}
 ) {
-  const dialogRef = useRef<HTMLDialogElement | null>(null);
-  const [path, setPath] = useState("")
+  const imagePreviewRef = useRef<HTMLDialogElement | null>(null)
+  const [startIndex, setStartIndex] = useState(0)
 
-  const open = (path: string) => {
-    setPath(path)
-    dialogRef.current?.showModal();
+  const open = (startIndex: number) => {
+    setStartIndex(startIndex)
+    imagePreviewRef.current?.showModal()
   }
 
   const close = () => {
-    dialogRef.current?.close();
+    imagePreviewRef.current?.close()
   }
 
-  const create = () => <ImagePreview ref={dialogRef} handleClose={close} path={path} style={style} />;
+  const create = () => <ImagePreview ref={imagePreviewRef} handleClose={close} startIndex={startIndex} pathList={pathList} style={style} />
 
   useEffect(()=>{
-    dialogRef.current?.addEventListener("click", (e: any) => {
-      if (!!(dialogRef.current === e.target) && !disabledBackdropClosing) close();
+    imagePreviewRef.current?.addEventListener("click", (e: any) => {
+      if (!!(imagePreviewRef.current === e.target) && !disabledBackdropClosing) close()
     });
 
     if (disabledEscKey) {
-      dialogRef.current?.addEventListener('cancel', (event) => {
-        event.preventDefault();
-      });
+      imagePreviewRef.current?.addEventListener('cancel', (event) => {
+        event.preventDefault()
+      })
     }
   }, [])
 
-  return { create, open, close };
-};
+  return { create, open, close }
+}

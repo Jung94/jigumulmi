@@ -172,11 +172,9 @@ const ReviewCard = ({ review }: { review: Review }) => {
     replyCount: review.replyCount 
   });
 
-  const handleClickPreviewImage = (path: string) => ImagePreview.open(path)
-
-  const ImagePreview = useImagePreview({
-    disabledBackdropClosing: true
-  })
+  
+  const ImagePreview = useImagePreview(review.imageList, { disabledBackdropClosing: true })
+  const handleClickPreviewImage = (startIndex: number) => ImagePreview.open(startIndex)
 
   return (
     <div className={styles.review_card}>
@@ -198,12 +196,12 @@ const ReviewCard = ({ review }: { review: Review }) => {
       </div>
       {!!review.imageList.length && 
         <div className={styles.review_card_image_preview}>
-          {review.imageList.map((rImage) => {
+          {review.imageList.map((rImage, index) => {
             return (
               <div 
                 key={rImage.id} 
                 className={styles.review_card_image_preview_image}
-                onClick={() => handleClickPreviewImage(rImage.s3Key)}
+                onClick={() => handleClickPreviewImage(index)}
               >
                 <Image 
                   fill
