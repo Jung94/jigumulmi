@@ -16,8 +16,8 @@ const ReviewImageList = ({
   const nRestImage = reviewImageList.length - 4
   const fourImageList = reviewImageList.slice(0, 4)
   const isOverFourImages = reviewImageList.length > 4
-  const ImagePreview = useImagePreview({ disabledBackdropClosing: true })
-  const handleClickPreviewImage = (path: string) => ImagePreview.open(path)
+  const ImagePreview = useImagePreview(reviewImageList, { disabledBackdropClosing: true })
+  const handleClickPreviewImage = (startIndex: number) => ImagePreview.open(startIndex)
 
   return (
     <div className={styles['image-list']}>
@@ -27,7 +27,7 @@ const ReviewImageList = ({
             key={rImage.id} 
             className={styles['image-list-image']}
             onClick={() => (index !== 3 || !isOverFourImages) 
-              ? handleClickPreviewImage(rImage.s3Key)
+              ? handleClickPreviewImage(index)
               : handleOpenImageGallery()
             }
           >

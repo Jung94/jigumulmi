@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import styles from './Bakery.module.scss'
+import styles from './place.module.scss'
 import { getCurrentOpeningInfo } from '@/lib/utils/getCurrentOpeningInfo'
 import type { PlaceSummary } from '@/types/place'
 

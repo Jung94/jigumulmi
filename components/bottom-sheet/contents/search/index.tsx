@@ -1,7 +1,7 @@
 import styles from './search.module.scss';
 import { useSearchParams } from 'next/navigation';
 import Button from '@/components/button';
-import BakeryCard from '@/components/card/Bakery';
+import BakeryCard from '@/components/card/place';
 import type { PlaceSummary } from '@/types/place';
 
 type Props = {

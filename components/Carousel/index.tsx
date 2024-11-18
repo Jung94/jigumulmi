@@ -1,13 +1,12 @@
 import React from 'react'
 import Image from 'next/image'
 import styles from './carousel.module.scss'
-import { EmblaOptionsType } from 'embla-carousel'
-import { DotButton, useDotButton } from './CarouselDotButton'
+import { DotButton, useDotButton } from './dot-button'
 import {
   PrevButton,
   NextButton,
   usePrevNextButtons
-} from './CarouselArrowButtons'
+} from './arrow-buttons'
 import useEmblaCarousel from 'embla-carousel-react'
 
 type PropType = {
@@ -15,7 +14,7 @@ type PropType = {
   placeId: number
 }
 
-const Carousel: React.FC<PropType> = (props) => {
+const Carousel = (props: PropType) => {
   const { slides, placeId } = props
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
 
