@@ -15,7 +15,6 @@ export default function useImagePreview (
 ) {
   const imagePreviewRef = useRef<HTMLDialogElement | null>(null)
   const [startIndex, setStartIndex] = useState(0)
-  console.log(startIndex)
 
   const open = (startIndex: number) => {
     setStartIndex(startIndex)
