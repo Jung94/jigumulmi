@@ -13,8 +13,9 @@ const ReviewImageGallery = ({
   reviewImageList: ReviewImage[] 
   handleCloseImageGallery: () => void
 }) => {
-  const ImagePreview = useImagePreview({ disabledBackdropClosing: true })
-  const handleClickPreviewImage = (path: string) => ImagePreview.open(path)
+  console.log(reviewImageList)
+  const ImagePreview = useImagePreview(reviewImageList, { disabledBackdropClosing: true })
+  const handleClickPreviewImage = (startIndex: number) => ImagePreview.open(startIndex)
 
   return (
     <div className={styles['image-gallery']}>
@@ -28,12 +29,12 @@ const ReviewImageGallery = ({
       </div>
       <div className={styles['image-gallery-list-outer']}>
       <div className={styles['image-gallery-list']}>
-        {reviewImageList.map(rImage => {
+        {reviewImageList.map((rImage, index) => {
           return (
             <div 
               key={rImage.id} 
               className={styles['image-gallery-list-image']}
-              onClick={() => handleClickPreviewImage(rImage.s3Key)}
+              onClick={() => handleClickPreviewImage(index)}
             >
               <Image 
                 fill

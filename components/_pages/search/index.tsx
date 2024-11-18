@@ -6,8 +6,8 @@ import { useWindowSize } from '@/lib/hooks'
 import Link from 'next/link'
 import styles from './search.module.scss'
 import Button from '@/components/button'
-import BakeryCard from '@/components/card/Bakery'
-import BakeryDetail from '@/components/bakery-detail/Detail'
+import BakeryCard from '@/components/card/place'
+import PlaceDetail from '@/components/place-detail/Detail'
 import PlaceListBottomSheet from '@/components/bottom-sheet/containers/PlaceListBottomSheet'
 import PlaceDetailBottomSheet from '@/components/bottom-sheet/containers/PlaceDetailBottomSheet'
 import { SearchContent } from '@/components/bottom-sheet/contents'
@@ -201,7 +201,7 @@ export default function Search() {
         {/* PC ver */}
         {1100 < windowSize.width &&
           <div className={styles.bakeries_wrap}>
-            <BakeryDetail place={detail} loading={isFetching} />
+            <PlaceDetail place={detail} loading={isFetching} />
             <div className={styles.cards}>
               {placeList.map((place: PlaceSummary) => (
                 <BakeryCard key={place.id} selected={isShownDetail && place.id === Number(placeId)} place={place} onClick={handleClickPlaceCard} />
@@ -240,7 +240,7 @@ export default function Search() {
         (detail
           ? (
             <PlaceDetailBottomSheet place={detail} handleClickFloatBtn={handleOpenRegistrationBakeryModal}>
-              <BakeryDetail place={detail} />
+              <PlaceDetail place={detail} />
             </PlaceDetailBottomSheet>
           )
           : (
