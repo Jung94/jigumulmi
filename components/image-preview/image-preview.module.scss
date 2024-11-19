@@ -100,9 +100,9 @@
     
     &-content {
       position: relative;
-      object-fit: contain;
       flex: 0 0 100%;
       min-width: 0;
+      border: 1px solid transparent;
       transition: transform .1s ease;
       
       &-image {
