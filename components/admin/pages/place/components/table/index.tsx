@@ -38,7 +38,7 @@ export const Body = ({
           <Td>{el.id}</Td>
           <Td>{el.categoryList.map(category => category.category).join(', ')}</Td>
           <Td>
-            {el.subwayStation.stationName}
+            {el.subwayStation?.stationName}
           </Td>
           <Td>
             {el.isApproved 
