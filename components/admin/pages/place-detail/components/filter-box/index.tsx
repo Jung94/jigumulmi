@@ -1,18 +1,21 @@
 "use client"
 
+import React from 'react'
 import styles from './filter-box.module.scss'
 import { useRouter } from 'next/navigation'
 import { getCookie } from 'cookies-next'
 import { Button } from '@/components/admin/button'
 
 const FilterBox = ({
-  isDetail,
+  isModifyingPage,
   save,
-  handleDelete
+  handleDelete,
+  handleCheckActiveSaveButton
 }: {
-  isDetail: boolean
-  save: ()=>void
-  handleDelete: ()=>void
+  isModifyingPage: boolean
+  save: () => void
+  handleDelete: () => void
+  handleCheckActiveSaveButton: () => boolean
 }) => {
   const router = useRouter()
 
@@ -29,10 +32,10 @@ const FilterBox = ({
         </svg>
         &nbsp;List
       </Button>
-      <Button onClick={save}>
-        {isDetail ? '수정하기' : '등록하기'}
+      <Button type={handleCheckActiveSaveButton() ? 'normal' : 'disabled'} onClick={save}>
+        {isModifyingPage ? '수정하기' : '등록하기'}
       </Button>
-      {isDetail &&
+      {isModifyingPage &&
         <Button type='deletion' onClick={handleDelete}>
           삭제하기
         </Button>
@@ -41,4 +44,4 @@ const FilterBox = ({
   )
 }
 
-export default FilterBox
+export default React.memo(FilterBox)
