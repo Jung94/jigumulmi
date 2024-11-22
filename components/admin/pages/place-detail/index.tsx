@@ -49,9 +49,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
 
   const [ data, setData ] = useState<PlaceDetail>(defaultData)
 
-  const { data: placeDetail } = useGetPlaceDetail(
-    params.placeId ? Number(params.placeId) : null
-  )
+  const { data: placeDetail } = useGetPlaceDetail(params.placeId ? Number(params.placeId) : null)
 
   const postPlace = usePostPlace()
   const putPlace = usePutPlace()
@@ -108,7 +106,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
     })
   }
 
-  const save = (data: PlaceDetail) => {
+  const save = () => {
     let body: any = {
       ...data,
       menuList: !!data.menuList.length ? data.menuList.map(v => v.name) : [],
@@ -127,11 +125,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
     delete body.modifiedAt
     delete body.id
 
-    // console.log(data, body)
-    // return
-    
-    // 수정
-    if (params.placeId) {
+    if (params.placeId) { // 수정
       body = { ...body, placeId: Number(params.placeId) }
       handleModify(body)
     } else { // 등록
@@ -150,14 +144,61 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
     setData({...placeDetail?.data})
   }, [placeDetail?.data])
 
+  const handleCheckActiveSaveButton = () => {
+    if (!!params.placeId) {
+      const initialData = placeDetail?.data
+      if (!initialData) return false
+
+      const isSameCategory = 
+        initialData.categoryList.length === data.categoryList.length
+        && initialData.categoryList.map(x => x.category).filter(c => !data.categoryList.map(x => x.category).includes(c)).concat(data.categoryList.map(x => x.category).filter(c => !initialData.categoryList.map(x => x.category).includes(c))).length === 0
+
+      const isSameSubwayStation = 
+        initialData.subwayStationList.length === data.subwayStationList.length
+        && initialData.subwayStationList.map(x => x.id).filter(id => !data.subwayStationList.map(x => x.id).includes(id)).concat(data.subwayStationList.map(x => x.id).filter(id => !initialData.subwayStationList.map(x => x.id).includes(id))).length === 0
+
+      const isSameMenu = 
+        initialData.menuList.length === data.menuList.length
+        && initialData.menuList.map(x => x.id).filter(id => !data.menuList.map(x => x.id).includes(id)).concat(data.menuList.map(x => x.id).filter(id => !initialData.menuList.map(x => x.id).includes(id))).length === 0
+      
+      const isSameImage = 
+        initialData.imageList.length === data.imageList.length
+        && initialData.imageList.map(x => x.id).filter(id => !data.imageList.map(x => x.id).includes(id)).concat(data.imageList.map(x => x.id).filter(id => !initialData.imageList.map(x => x.id).includes(id))).length === 0
+      
+      if (initialData.kakaoPlaceId === data.kakaoPlaceId
+        && initialData.name === data.name // 이름
+        && initialData.address === data.address // 주소
+        && initialData.contact === data.contact // 연락처
+        && initialData.placeUrl === data.placeUrl // 네이버 URL
+        && initialData.isApproved === data.isApproved // 승인 여부
+        && initialData.additionalInfo === data.additionalInfo // 추가 정보
+        && initialData.position.latitude === data.position.latitude // 위도
+        && initialData.position.longitude === data.position.longitude // 경도
+        && initialData.openingHour.openingHourMon === data.openingHour.openingHourMon
+        && initialData.openingHour.openingHourTue === data.openingHour.openingHourTue
+        && initialData.openingHour.openingHourWed === data.openingHour.openingHourWed
+        && initialData.openingHour.openingHourThu === data.openingHour.openingHourThu
+        && initialData.openingHour.openingHourFri === data.openingHour.openingHourFri
+        && initialData.openingHour.openingHourSat === data.openingHour.openingHourSat
+        && initialData.openingHour.openingHourSun === data.openingHour.openingHourSun
+        && isSameMenu // 메뉴
+        && isSameImage // 이미지
+        && isSameCategory // 카테고리
+        && isSameSubwayStation // 지하철역
+      ) return false
+        else return true
+    } else return true
+  }
+
   return (
     <Layout row>
       <MainLayout>
         <HeaderSection title={`${params.placeId ? `장소 수정${data ? ` (ID: ${data.id}, KakaoID: ${data.kakaoPlaceId ?? "-"})` : ''}` : '장소 등록'}`}>
           <FilterBox 
-            isDetail={!!params.placeId}
-            save={() => save(data)}
+            isModifyingPage={!!params.placeId}
+            save={save}
             handleDelete={handleDelete}
+            handleCheckActiveSaveButton={handleCheckActiveSaveButton}
           />
         </HeaderSection>
         <FormSection data={data} setData={setData} />
