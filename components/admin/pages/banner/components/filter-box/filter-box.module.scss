@@ -1,0 +1,10 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
