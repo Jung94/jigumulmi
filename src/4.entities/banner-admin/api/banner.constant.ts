@@ -1,0 +1,1 @@
+export const BANNER_ADMIN_PATH = '/admin/banner'

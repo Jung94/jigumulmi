@@ -1,0 +1,1 @@
+export const PLACE_ADMIN_PATH = '/admin/place'
