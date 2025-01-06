@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import styles from './banner.module.scss'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/src/shared/ui/admin'
@@ -11,7 +12,7 @@ export default function BannerPage() {
   const navigateBannerDetail = () => router.push('/admin/banner/registration')
 
   return (
-    <>
+    <Suspense>
       <Header title="배너 관리">
         <Button onClick={navigateBannerDetail}>배너 생성</Button>
       </Header>
@@ -19,6 +20,6 @@ export default function BannerPage() {
         <BannerTable />
         <div className={styles['banner-empty']}></div>
       </div>
-    </>
+    </Suspense>
   )
 }
