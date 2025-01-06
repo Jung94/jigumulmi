@@ -1,16 +1,18 @@
-import { Button } from './button'
+import { Tr, Td, Th, Table } from './table'
+import { Button, NewTabButton, PreviousPageButton } from './button'
 import { Form, Input, Search, SelectBox, SearchSubway } from './form'
-import { Table, Tr, Td, Th } from './table'
 
 export {
+  Tr,
+  Td,
+  Th,
+  Table, 
   Button,
+  NewTabButton,
+  PreviousPageButton,
   Form,
   Input, 
   Search,
   SelectBox,
   SearchSubway,
-  Table, 
-  Tr,
-  Td,
-  Th,
 }

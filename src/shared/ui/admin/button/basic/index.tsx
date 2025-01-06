@@ -57,6 +57,7 @@ export default function Button({
     const Icon = () => (
       <span className={`
         ${styles['icon']}
+        ${styles[`icon-${size}`]}
         ${styles[`icon-${iconPos}`]}
       `}>{icon}</span>
     )
