@@ -1,7 +1,7 @@
 export const adminMenus = [
   {
     value: 1, 
-    name: 'Place', 
+    name: '장소 관리', 
     icon: 'DashboardIcon', 
     path: 'admin/place',
     query: 'sort=1&page=1',
@@ -11,8 +11,16 @@ export const adminMenus = [
     value: 2, 
     name: '유저 관리', 
     icon: 'UsersIcon', 
-    path: 'admin/members',
+    path: 'admin/member',
     query: 'page=1',
+    subMenu: []
+  },
+  {
+    value: 3, 
+    name: '배너 관리', 
+    icon: 'ProjectIcon', 
+    path: 'admin/banner',
+    query: '',
     subMenu: []
   },
   // {

@@ -8,7 +8,7 @@ export const APIadmin = {
    * @description 장소 상세 조회
    * @method get
    */
-  getPlaceDetail: (placeId: number) => `/admin/place/detail/${placeId}`,
+  getPlaceDetail: (placeId: number) => `/admin/place/${placeId}`,
   /**
    * @description 유저 리스트 조회
    * @method get

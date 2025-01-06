@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { getCookie, deleteCookie } from 'cookies-next';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { placeDetailQueryKey } from '@/domain/admin/query/useGetPlaceDetail';
 import Layout from '@/components/admin/layout/main';
@@ -42,14 +42,15 @@ const defaultData = {
   kakaoPlaceId: '',
 }
 
-export default function PlaceDetailPage({ params }: { params: Params }) {
+export default function PlaceDetailPage() {
   const router = useRouter()
+  const params = useParams()
   const pathname = usePathname()
   const queryClient = useQueryClient()
 
   const [ data, setData ] = useState<PlaceDetail>(defaultData)
 
-  const { data: placeDetail } = useGetPlaceDetail(params.placeId ? Number(params.placeId) : null)
+  const { data: placeDetail } = useGetPlaceDetail(params?.placeId ? Number(params.placeId) : null)
 
   const postPlace = usePostPlace()
   const putPlace = usePutPlace()
@@ -145,7 +146,7 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   }, [placeDetail?.data])
 
   const handleCheckActiveSaveButton = () => {
-    if (!!params.placeId) {
+    if (!!params?.placeId) {
       const initialData = placeDetail?.data
       if (!initialData) return false
 
@@ -193,9 +194,9 @@ export default function PlaceDetailPage({ params }: { params: Params }) {
   return (
     <Layout row>
       <MainLayout>
-        <HeaderSection title={`${params.placeId ? `장소 수정${data ? ` (ID: ${data.id}, KakaoID: ${data.kakaoPlaceId ?? "-"})` : ''}` : '장소 등록'}`}>
+        <HeaderSection title={`${params?.placeId ? `장소 수정${data ? ` (ID: ${data.id}, KakaoID: ${data.kakaoPlaceId ?? "-"})` : ''}` : '장소 등록'}`}>
           <FilterBox 
-            isModifyingPage={!!params.placeId}
+            isModifyingPage={!!params?.placeId}
             save={save}
             handleDelete={handleDelete}
             handleCheckActiveSaveButton={handleCheckActiveSaveButton}

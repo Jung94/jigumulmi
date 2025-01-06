@@ -1,0 +1,257 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.tr {
+  cursor: pointer;
+
+  &:hover {
+    background-color: map.get($--colors, "gray_1");
+  }
+}
+.tr_active {
+  background-color: map.get($--colors, "blue-200");
+  
+  &:hover {
+    background-color: map.get($--colors, "blue-200");
+  }
+}
+.tr_disabled {
+  cursor: default;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.tr_is_selected {
+  background-color: map.get($--colors, "gray_1");
+}
+
+.td {
+  padding: 0.75rem 0.25rem;
+  font-size: 13px;
+  word-break: break-all;
+  width: 100%;
+}
+
+.th {
+  padding: 0.5rem;
+  height: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.container {
+  position: relative;
+  height: 100%; // important
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  background-color: white;
+  border: 1px solid map.get($--colors, "gray-300");
+  
+  .table-wrapper {
+    height: 100%;
+    overflow-y: auto; // important
+  }
+
+  .footer {
+    width: 100%;
+    height: 50px;
+    border-top: 1px solid map.get($--colors, "gray-300");
+    display: flex;
+    align-items: center;
+  }
+}
+
+.table {
+  width: 100%;
+  color: map.get($--colors, 'gray-1000');
+  table-layout: fixed;
+  border: none;
+  border-collapse: collapse;
+
+  thead {
+    position: sticky;
+    top: 0px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0.25px 0 0 map.get($--colors, "gray-300");
+
+    tr {
+      border-bottom: 1px solid map.get($--colors, "gray-300");
+    }
+
+    .order {
+      padding: 0.125rem;
+      font-size: 13px;
+      font-weight: 500;
+      word-break: break-all;
+    }
+  }
+
+  tbody tr {
+    // border-top: 0.5px solid map.get($--colors, "gray-alpha-400");
+    border-top: 0.5px solid map.get($--colors, "gray-300");
+  }
+  th:first-child,
+  td:first-child {
+    width: 4.5rem;
+  }
+
+}
+
+// rowSpan 2 이상인 경우 스크롤 시 border 고정 안 되는 이슈 - https://holystory-dev.com/273
+.custom {
+  border-collapse: separate;
+  border-spacing: 0;
+
+  th, td {
+    border-bottom: 0.5px solid map.get($--colors, 'gray-300');
+  }
+  
+}
+
+.empty_msg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination {
+  position: relative;
+  padding: 0 1rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pagination_section {
+  display: flex;
+  justify-content: center;
+
+  .pagination_box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+
+    .page_number_box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .page_number {
+        padding: 1px 0.2rem 0;
+        min-width: 24px;
+        height: 24px;
+        user-select: none;
+        color: map.get($--colors, "gray-600");
+        border-radius: 5px;
+        border: 1px solid transparent;
+        transition: all 0s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+          color: map.get($--colors, "gray-900");
+          border: 1px solid map.get($--colors, "gray-200");
+          background-color: map.get($--colors, "gray-100");
+        }
+      }
+      .active {
+        color: map.get($--colors, "gray-1000");
+        border: 1px solid map.get($--colors, "gray-500");
+        background-color: map.get($--colors, "gray-100");
+
+        &:hover {
+          color: map.get($--colors, "gray-1000");
+          border: 1px solid map.get($--colors, "gray-500");
+          background-color: map.get($--colors, "gray-100");
+          cursor: default;
+        }
+      }
+    }
+
+    .pagination_arrow_box {
+      display: flex;
+
+      .button-arrow {
+        width: 24px;
+        height: 24px;
+        color: map.get($--colors, "gray-400");
+        pointer-events: none;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: default;
+      }
+      .arrow-active {
+        pointer-events: auto;
+        color: map.get($--colors, "gray-1000");
+
+        &:hover {
+          border: 1px solid map.get($--colors, "gray-200");
+          background-color: map.get($--colors, "gray-100");
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.currentAndTotalPage {
+  font-size: 13px;
+  color: map.get($--colors, "gray-800");
+
+  span {
+    padding: 0 1px;
+  }
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: map.get($--colors, "blue-300");
+  }
+
+  &-icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .disabled {
+    background-color: map.get($--colors, "gray-300");
+  }
+  .active {
+    background-color: map.get($--colors, "blue-700");
+  }
+}
+
+.banner-circle {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.75rem;
+
+  &-blue {
+    background-color: map.get($--colors, "green-800");
+  }
+
+  &-red {
+    background-color: map.get($--colors, "red-700");
+  }
+}

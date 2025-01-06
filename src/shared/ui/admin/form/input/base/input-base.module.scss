@@ -1,0 +1,9 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.text-input {
+
+  &::placeholder {
+    color: map.get($--colors, "gray-500")
+  }
+}

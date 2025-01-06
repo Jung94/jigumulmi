@@ -1,11 +1,11 @@
-import Header from '@/components/header'
-import Search from '@/components/_pages/search'
+'use client'
+import { Suspense } from "react";
+import SearchPage from "./search-page";
 
-export default async function SearchPage() {
+export default function Page() {
   return (
-    <>
-      <Header />
-      <Search />
-    </>
-  )
+    <Suspense>
+      <SearchPage />
+    </Suspense>
+  );
 }

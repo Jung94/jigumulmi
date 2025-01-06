@@ -1,0 +1,23 @@
+$header-height: 40px; // 제목이 위치한 top 높이
+
+.header {
+  min-height: $header-height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    word-break: keep-all;
+    display: flex;
+    align-items: center;
+  }
+
+  .control {
+    align-items: center;
+    gap: 0.5rem;
+    display: flex;
+  }
+}

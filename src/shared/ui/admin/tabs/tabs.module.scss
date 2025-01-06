@@ -1,0 +1,49 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.tabs {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &-list {
+    padding: 4px;
+    border-radius: 9px;
+    background-color: map.get($--colors, 'gray-100');
+    display: flex;
+  }
+
+  &-trigger {
+    width: 100%;
+    padding: 8px 10px;
+    font-weight: 500;
+    border-radius: 7px;
+    background-color: transparent;
+    color: map.get($--colors, 'gray-800');
+    transition: all 0.15s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &.active {
+      color: map.get($--colors, 'gray-1000');
+      border-color: #0070f3;
+      background-color: map.get($--colors, 'background-100');
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);
+    }
+  }
+
+  &-content {
+    overflow: hidden;
+    display: none;
+    
+    &-visible {
+      display: block;
+    }
+    &-hidden {
+      display: none;
+    }
+  }
+}
