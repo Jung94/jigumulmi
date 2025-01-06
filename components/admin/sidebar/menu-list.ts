@@ -20,7 +20,7 @@ export const adminMenus = [
     name: '배너 관리', 
     icon: 'ProjectIcon', 
     path: 'admin/banner',
-    query: 'bannerPage=1&placePage=1',
+    query: '',
     subMenu: []
   },
   // {

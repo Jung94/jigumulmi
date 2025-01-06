@@ -1,53 +1,46 @@
+'use client'
 
-"use client"
-import { useId, KeyboardEvent, forwardRef } from 'react';
-import styles from './search.module.scss';
-import Image from 'next/image';
-import searchIcon from '@/public/images/search.svg';
+import Image from 'next/image'
+import React, { forwardRef } from 'react'
+import styles from './search.module.scss'
+import searchIcon from '@/public/images/search.svg'
+import { TextInput } from '@/src/shared/ui/admin/form/input/base'
 
-type Ref = HTMLInputElement;
 type Props = {
-  type?: string
   name?: string
-  value?: any
   defaultValue?: any
   placeholder?: string
   disabled?: boolean
-  onClick?: (e: any)=>void
-  onChange?: (e: any)=>void
-  onKeyDown?: (e: KeyboardEvent)=>void
+  onSearch: () => void
   style?: any
 }
-const Search = forwardRef<Ref, Props>(function Search({
-  type='text',
+
+const Search = forwardRef<HTMLInputElement, Props>(function Search({
   name='', 
-  value,
   defaultValue,
   placeholder,
   disabled,
-  onClick,
-  onChange,
-  onKeyDown,
+  onSearch,
   style,
 }, ref) {
-  const inputId = useId();
-  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return 
+    if (e.code === 'Enter') onSearch()
+  }
+
   return (
-    <div className={styles.container} style={style}>
-      <input 
-        ref={ref}
-        name={name + inputId} 
-        type={type} 
-        value={onChange && value} 
-        defaultValue={defaultValue}
-        disabled={disabled}
-        placeholder={placeholder}
-        onChange={onChange && onChange} 
-        onKeyDown={onKeyDown}
-      />
-      <div className={styles.icon_wrap} onClick={onClick}>
+    <div className={styles['search']} style={style}>
+      <div className={styles['search-icon']} onClick={onSearch}>
         <Image src={searchIcon} width={16} height={16} alt='search-input' />
       </div>
+      <TextInput 
+        ref={ref}
+        name={name} 
+        disabled={disabled}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        onKeyDown={handleKeyDown}
+      />
     </div>
   )
 })

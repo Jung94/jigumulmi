@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import styles from './table.module.scss'
 import ArrowLeftIcon from "@/public/icons/table/pg-arrow-left"
@@ -36,22 +36,25 @@ export default function Pagination({
 
   return (
     <div className={styles.pagination}>
+      <div className={styles.currentAndTotalPage}>
+        <span>{currentPage}</span> of <span>{totalPage}</span>
+      </div>
       <div className={styles.pagination_section}>
         <div className={styles.pagination_box}>
           <div className={[`${styles.pagination_arrow_box}`, `${styles.arrow_left}`].join(" ")}>
             <button
               type="button"
               onClick={() => handleArrow(isActiveLeftTwo, 1)}
-              className={[`${styles.arrow_icon_box}`, isActiveLeftTwo && `${styles.active_arrow}`].join(" ")}
+              className={`${styles['button-arrow']} ${isActiveLeftTwo && styles['arrow-active']}`}
             >
-              <ArrowLeftTwoIcon disabled={!isActiveLeftTwo} />
+              <ArrowLeftTwoIcon />
             </button>
             <button
               type="button"
               onClick={() => handleArrow(isActiveLeft, startPage - 1)}
-              className={[`${styles.arrow_icon_box}`, isActiveLeft && `${styles.active_arrow}`].join(" ")}
+              className={`${styles['button-arrow']} ${isActiveLeft && styles['arrow-active']}`}
             >
-              <ArrowLeftIcon disabled={!isActiveLeft} />
+              <ArrowLeftIcon />
             </button>
           </div>
 
@@ -72,23 +75,19 @@ export default function Pagination({
             <button
               type="button"
               onClick={() => handleArrow(isActiveRight, endPage + 1)}
-              className={[`${styles.arrow_icon_box}`, isActiveRight && `${styles.active_arrow}`].join(" ")}
+              className={`${styles['button-arrow']} ${isActiveRight && styles['arrow-active']}`}
             >
-              <ArrowRightIcon disabled={!isActiveRight} />
+              <ArrowRightIcon />
             </button>
             <button
               type="button"
               onClick={() => handleArrow(isActiveRightTwo, totalPage)}
-              className={[`${styles.arrow_icon_box}`, isActiveRightTwo && `${styles.active_arrow}`].join(" ")}
+              className={`${styles['button-arrow']} ${isActiveRightTwo && styles['arrow-active']}`}
             >
-              <ArrowRightTwoIcon disabled={!isActiveRightTwo} />
+              <ArrowRightTwoIcon />
             </button>
           </div>
         </div>
-      </div>
-
-      <div className={styles.currentAndTotalPage}>
-        <span>{currentPage}</span> of <span>{totalPage}</span>
       </div>
     </div>
   )

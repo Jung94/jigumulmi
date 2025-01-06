@@ -82,14 +82,14 @@ export default function table({
                 onClick={() => handleArrow(isActiveLeftTwo, 1)}
                 className={[`${styles.arrow_icon_box}`, isActiveLeftTwo && `${styles.active_arrow}`].join(" ")}
               >
-                <ArrowLeftTwoIcon disabled={!isActiveLeftTwo} />
+                <ArrowLeftTwoIcon />
               </button>
               <button
                 type="button"
                 onClick={() => handleArrow(isActiveLeft, startPage - 1)}
                 className={[`${styles.arrow_icon_box}`, isActiveLeft && `${styles.active_arrow}`].join(" ")}
               >
-                <ArrowLeftIcon disabled={!isActiveLeft} />
+                <ArrowLeftIcon />
               </button>
             </div>
 
@@ -112,14 +112,14 @@ export default function table({
                 onClick={() => handleArrow(isActiveRight, endPage + 1)}
                 className={[`${styles.arrow_icon_box}`, isActiveRight && `${styles.active_arrow}`].join(" ")}
               >
-                <ArrowRightIcon disabled={!isActiveRight} />
+                <ArrowRightIcon />
               </button>
               <button
                 type="button"
                 onClick={() => handleArrow(isActiveRightTwo, totalPage)}
                 className={[`${styles.arrow_icon_box}`, isActiveRightTwo && `${styles.active_arrow}`].join(" ")}
               >
-                <ArrowRightTwoIcon disabled={!isActiveRightTwo} />
+                <ArrowRightTwoIcon />
               </button>
             </div>
           </div>

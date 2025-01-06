@@ -1,10 +1,11 @@
-"use client"
-import { ReactNode, KeyboardEvent, useId, forwardRef } from 'react';
-import styles from './input.module.scss';
+'use client'
+
+import { ReactNode, KeyboardEvent, forwardRef } from 'react'
+import styles from './input.module.scss'
 
 type Ref = HTMLInputElement;
 type Props = {
-  name?: string
+  name: string
   type?: string
   value?: any
   alert?: {error: boolean, message: string}
@@ -14,14 +15,14 @@ type Props = {
   disabled?: boolean
   onBlur?: (e: React.FocusEvent<HTMLInputElement, Element>)=>void
   onFocus?: (e: React.FocusEvent<HTMLInputElement, Element>)=>void
-  onChange?: (v: any)=>void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>)=>void
   onKeyDown?: (e: KeyboardEvent)=>void
   handleButton?: ()=>ReactNode
   styleLabel?: any
   style?: any
 }
 const Input = forwardRef<Ref, Props>(function Input({
-  name='', 
+  name, 
   type='text',
   value,
   alert,
@@ -37,28 +38,27 @@ const Input = forwardRef<Ref, Props>(function Input({
   styleLabel,
   style,
 }, ref) {
-  const inputId = useId();
-  
   return (
     <div className={styles.container}>
       <div className={styles.label_button_wrap}>
         <label className={styles.label}>
-          {name &&
+          {/* {name &&
             <div className={styles.label_name} style={styleLabel}>
               {name}
             </div>
-          }
+          } */}
           <div className={styles.input_wrap}>
             <input 
               ref={ref}
               disabled={disabled}
               className={`${value && typeof isChecked === 'boolean' && !isChecked && styles.error} ${disabled && styles.disabled}`}
-              name={name + inputId} 
+              name={name} 
               type={type} 
               value={value} 
               data-name={dataName}
               placeholder={placeholder} 
-              onChange={(e)=>onChange && onChange(dataName ? e : e.target.value)} 
+              // onChange={(e)=>onChange && onChange(dataName ? e : e.target.value)} 
+              onChange={(e)=>onChange && onChange(e)} 
               onKeyDown={onKeyDown}
               onFocus={onFocus}
               onBlur={onBlur}

@@ -12,7 +12,7 @@ type Props = {
   selected?: any
   selectHeight?: string
   style?: any
-  onClick: (v: any)=>void
+  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void
 }
 
 const SelectBox = ({

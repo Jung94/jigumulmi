@@ -1,9 +1,7 @@
-$top-height: 0rem; // 제목이 위치한 top 높이
-
 .container {
   position: relative;
   width: 100%;
-  height: calc(100% - $top-height);
+  height: 100%;
 
   display: flex;
   flex-direction: column;

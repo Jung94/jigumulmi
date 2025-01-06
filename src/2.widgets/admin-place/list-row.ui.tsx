@@ -2,24 +2,25 @@
 
 import { ROWS_PER_PAGE } from './list.constant'
 import { useSearchParams } from 'next/navigation'
-import { Tr, Td, BooleanCircle } from '@/src/shared/ui/table'
+import { Tr, Td, Checkbox, BooleanCircle } from '@/src/shared/ui/table'
 import { getRowOrder } from '@/src/shared/ui/table/table.util'
-import type { Place } from '@/src/4.entities/place-admin/types/PlaceTypes'
+import type { Place } from '@/src/4.entities/place-admin/model/types'
 
 type Props = {
   rows: Place[] | undefined;
-  selectedRows?: any
+  selectedIdList: number[]
+  handleCheckbox: (placeId: number) => void
 }
 
-export default function PlaceTableRows<T extends object>({
+export default function PlaceTableRows({
   rows,
-  selectedRows
+  selectedIdList,
+  handleCheckbox
 }: Props) {
   const searchParams = useSearchParams()
   const currentPage = searchParams?.get("page") ? Number(searchParams.get("page")) : 1
 
-  const handleClick = (id: number) => {
-  }
+  const handleRowClick = (placeId: number) => handleCheckbox(placeId)
 
   if (!rows) return
 
@@ -27,13 +28,15 @@ export default function PlaceTableRows<T extends object>({
     <>
       {rows.map((row: Place, index: number) => {
         return (
-          // <Tr key={row.id} active={isActive} onClick={()=>handleClick(row.id)}>
-          <Tr key={row.id} onClick={()=>handleClick(row.id)}>
+          <Tr key={row.id} onClick={() => handleRowClick(row.id)}>
+            <Td>
+              <Checkbox isActive={selectedIdList.includes(row.id)} />
+            </Td>
             <Td>{getRowOrder(index, currentPage, ROWS_PER_PAGE)}</Td>
             <Td>{row.name}</Td>
             <Td>{row.id}</Td>
             <Td>{row.categoryList.map(c => c.category).join(', ')}</Td>
-            <Td>{row.subwayStation.stationName}</Td>
+            <Td>{row.subwayStation?.stationName}</Td>
             <Td>
               <BooleanCircle value={row.isApproved} />
             </Td>

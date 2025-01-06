@@ -1,13 +1,15 @@
 'use client'
 
+import { useState } from 'react'
+import PlaceTableRows from './list-row.ui'
 import { Table } from '@/src/shared/ui/table'
 import { useQueryParams } from '@/src/shared/hooks'
 import { HEAD, COL_WIDTH_LIST } from './list.constant'
-import useFetchPlaces from '@/src/4.entities/place-admin/queries/useFetchPlaces'
-import PlaceTableRows from './list-row.ui'
+import { useFetchPlaceList } from '@/src/4.entities/place-admin/model/queries'
 
 export default function PlaceTable() {
-  const defaultQuery = { 
+  const [selectedIdList, setSelectedIdList] = useState<number[]>([])
+  const { queryParams, updateQueryParams } = useQueryParams({
     page: 1, 
     size: 15, 
     sort: 'ASC', // id,asc
@@ -16,30 +18,45 @@ export default function PlaceTable() {
     subwayStationId: null, 
     categoryGroup: null, 
     showLikedOnly: null 
+  })
+  const { data: placeData, isLoading, error } = useFetchPlaceList(queryParams)
+
+  const handleCheckbox = (placeId: number) => {
+    setSelectedIdList((prev) => {
+      const hasId = prev.includes(placeId)
+      if (hasId) return prev.filter(id => id !== placeId)
+        else return [...prev, placeId].sort((a, b) => a - b) // 오름차순
+    })
   }
-  const queryParams = useQueryParams(defaultQuery)
-  const { data: placeData, isLoading, error } = useFetchPlaces(queryParams)
 
-  // const { page: pageData, data: placeList } = placeData!
-  // console.log(pageData, placeList)
+  const handleHeadCheckbox = () => {
+    const placeList = placeData?.data
+    if (!placeList) return
+    if (selectedIdList.length < placeList.length) setSelectedIdList(placeList.map(place => place.id))
+      else setSelectedIdList([])
+  }
 
-  // const head = Head({
-  //   rows: items,
-  //   columns: ["이름", "checkbox"],
-  //   checked: !!(items.length !== 0 && items.every((item: {id: number, name: string}) => selectedRows.includes(item.id))),
-  //   handleCheckbox: handleCheckbox
-  // });
-  // const body = Body({
-  //   data: items, 
-  //   currentPage, 
-  //   selectedRows,
-  //   onClick: handleSelectRow
-  // });
+  const Head = Table.Head({ 
+    headList: HEAD,
+    checkInfo: { 
+      checked: !!(
+        !!placeData?.data.length 
+        && placeData.data.every(place => selectedIdList.includes(place.id))
+      ), 
+      onCheck: handleHeadCheckbox 
+    }
+  })
+  const Body = PlaceTableRows({ 
+    rows: placeData?.data, 
+    selectedIdList,
+    handleCheckbox 
+  })
 
-  const Head = Table.Head(HEAD)
-  const Body = PlaceTableRows({ rows: placeData?.data })
+  const handlePage = (newPage: number) => {
+    updateQueryParams({ page: newPage.toString() })
+  }
 
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading || !placeData) return <p>Loading...</p>
   if (error) return <p>Error!</p>
 
   return (
@@ -47,7 +64,9 @@ export default function PlaceTable() {
       headContents={Head} 
       bodyContents={Body} 
       colWidthList={COL_WIDTH_LIST} 
-      hasNoPagination
+      totalPage={placeData.page.totalPage}
+      currentPage={placeData.page.currentPage}
+      handlePage={handlePage}
     />
   )
 }

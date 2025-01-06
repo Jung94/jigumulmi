@@ -1,40 +1,23 @@
-$top-height: 4rem; // 제목이 위치한 top 높이
+$header-height: 40px; // 제목이 위치한 top 높이
 
-.container {
-  // height: $top-height;
+.header {
+  min-height: $header-height;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
 
-  .title_wrap {
-    // border: 1px solid blue;
-    width: 100%;
+  .title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    word-break: keep-all;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+  }
+
+  .control {
+    align-items: center;
     gap: 0.5rem;
-
-    .title {
-      // border: 1px solid red;
-      // padding-top: 1.5rem;
-      width: 100%;
-      max-width: fit-content;
-      // height: 100%;
-      font-size: 1.25rem;
-      font-weight: 600;
-      word-break: keep-all;
-
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-    }
-
-    .has_info {
-      padding: 0;
-    }
-    .info_wrap {
-      width: 100%;
-      height: 100%;
-    }
+    display: flex;
   }
 }

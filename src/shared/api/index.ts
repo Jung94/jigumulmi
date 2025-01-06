@@ -7,8 +7,7 @@ import { Axios } from './api.config'
  */
 
 export const getAPI = async ({ url, params }: { url: string, params?: any }) => {
-  console.log("\x1B[1m[getAPI] ", url, params)
-
+  console.log("\x1B[1m[getAPI] ", { url, params })
   try {
     const response = await Axios.get(url, { params })
     return response
@@ -17,20 +16,20 @@ export const getAPI = async ({ url, params }: { url: string, params?: any }) => 
   }
 }
 
-export const postAPI = async ({ apiURL, body, config }: { apiURL: string, body?: any, config?: any }) => {
-  console.log("\x1B[1m[postAPI] ", {apiURL, body, config})
+export const postAPI = async ({ url, body, config }: { url: string, body?: any, config?: any }) => {
+  console.log("\x1B[1m[postAPI] ", { url, body, config })
   try {
-    const response = await Axios.post(apiURL, body, config)
+    const response = await Axios.post(url, body, config)
     return response
   } catch (error: any) {
     return error.response
   }
 }
 
-export const putAPI = async (data: any) => {
-  console.log("\x1B[1m[putAPI] ", data)
+export const putAPI = async ({ url, body, config }: { url: string, body?: any, config?: any }) => {
+  console.log("\x1B[1m[putAPI] ", { url, body, config })
   try {
-    const response = await Axios.put(data.apiURL, data.body)
+    const response = await Axios.put(url, body, config)
     return response
   } catch (error: any) {
     return error.response
