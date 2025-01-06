@@ -4,7 +4,6 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Layout from '@/components/admin/layout/main';
 import MainLayout from '@/components/admin/layout/section/main';
 import HeaderSection from '@/components/admin/layout/section/header';
-// import FilterBox from '@/components/admin/pages/member/components/filter-box';
 import TableSection from '@/components/admin/pages/member/components/table';
 import AsideSection from '@/components/admin/layout/section/aside';
 import UserDetail from '@/components/admin/pages/member/components/user-detail';
@@ -44,15 +43,6 @@ export default function MembersPage({ searchParamsOnServer }: { searchParamsOnSe
   
   const { data: memberList } = useGetMemberList(filters);
 
-  const handleSelect = (v: any, name: string) => {
-    const params = new URLSearchParams(searchParams!)
-    Object.entries(filters).forEach((e: any) => params.set(e[0], e[1]))
-    params.set("page", "1")
-    params.set(name, v.target.value)
-
-    router.push(`${pathname}?${params.toString()}`)
-  }
-
   const handlePage = (page: number) => {
     const params = new URLSearchParams(searchParams!)
     params.set("page", `${page}`)
@@ -88,7 +78,7 @@ export default function MembersPage({ searchParamsOnServer }: { searchParamsOnSe
   return (
     <Layout row>
       <MainLayout>
-        <HeaderSection title='Place' />
+        <HeaderSection title='유저 관리' />
         <TableSection
           items={tableData.items}
           currentPage={tableData.currentPage}

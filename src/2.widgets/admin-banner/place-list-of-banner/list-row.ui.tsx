@@ -2,6 +2,7 @@
 
 import { ROWS_PER_PAGE } from './list.constant'
 import { useSearchParams } from 'next/navigation'
+import { NewTabButton } from '@/src/shared/ui/admin'
 import { Tr, Td, Checkbox } from '@/src/shared/ui/table'
 import { getRowOrder } from '@/src/shared/ui/table/table.util'
 import type { AssignedPlace } from '@/src/4.entities/banner-admin/model/types'
@@ -38,7 +39,15 @@ export default function PlaceTableRows({
             <Td>{row.subwayStation?.stationName}</Td>
             <Td>{row.categoryList.map(c => c.category).join(', ')}</Td>
             <Td>{row.district}</Td>
-            {/* <Td></Td> // 상세페이지 target: _blank */}
+            <Td>
+              <NewTabButton 
+                size='small' 
+                variant='filled'
+                href={`/admin/place/${row.id}`}
+              >
+                자세히
+              </NewTabButton>
+            </Td>
           </Tr>
         )
       })}
