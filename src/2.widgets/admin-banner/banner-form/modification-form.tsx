@@ -2,6 +2,7 @@
 
 import { ChangeEvent, MouseEvent, useState, useEffect } from 'react'
 import styles from './registration-form.module.scss'
+import { useRouter } from 'next/navigation'
 import UploadingImage from './uploading-image'
 import { useQueryClient } from '@tanstack/react-query'
 import ToggleSwitch from '@/src/shared/ui/toggle-switch'
@@ -10,6 +11,7 @@ import { initialStateForBanner } from './banner-form.constant'
 import { 
   useFetchBanner, 
   useUpdateBanner, 
+  useDeleteBanner,
   updateBannerOuterImage,
   useUpdateBannerInnerImage
 } from '@/src/4.entities/banner-admin/model/queries'
@@ -17,8 +19,10 @@ import bannerQueryKey from '@/src/4.entities/banner-admin/model/queries/query-ke
 import type { Banner } from '@/src/4.entities/banner-admin/model/types'
 
 export default function ModificationFrom({ bannerId }: { bannerId: number }) {
+  const router = useRouter()
   const queryClient = useQueryClient()
-  const bannerMutation = useUpdateBanner()
+  const updateMutation = useUpdateBanner()
+  const deleteMutation = useDeleteBanner()
   const outerImageMutation = updateBannerOuterImage()
   const innerImageMutation = useUpdateBannerInnerImage()
   const { data: banner } = useFetchBanner(bannerId)
@@ -89,7 +93,7 @@ export default function ModificationFrom({ bannerId }: { bannerId: number }) {
     e.preventDefault()
     if (!banner) return
     try {
-      await bannerMutation.mutateAsync({
+      await updateMutation.mutateAsync({
         bannerId: banner.id, 
         data: { title: formData.title, isActive: formData.isActive }
       })
@@ -98,6 +102,20 @@ export default function ModificationFrom({ bannerId }: { bannerId: number }) {
     } catch (error) {
       alert("배너 수정을 실패하였습니다. 개발자에게 문의해 주세요!")
       console.error("Failed to update banner:", error)
+    }
+  }
+
+  const handleDeleteBanner = async (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+    e.preventDefault()
+    if (!banner) return
+    if (!window.confirm('정말 삭제하시겠습니까?')) return
+    try {
+      await deleteMutation.mutateAsync({ bannerId })
+      alert('배너가 삭제되었습니다.')
+      router.push('/admin/banner')
+    } catch (error) {
+      alert("배너 삭제를 실패하였습니다. 개발자에게 문의해 주세요!")
+      console.error("Failed to delete banner:", error)
     }
   }
 
@@ -124,7 +142,10 @@ export default function ModificationFrom({ bannerId }: { bannerId: number }) {
             />
           </Form.Control>
         </Form.Item>
-        <Button disabled={checkForUpdates()} onClick={handleUpdateBanner}>수정하기</Button>
+        <div className={styles['registration-form-button']}>
+          <Button color='red' onClick={handleDeleteBanner}>삭제하기</Button>
+          <Button disabled={checkForUpdates()} onClick={handleUpdateBanner} style={{ width: '100%' }}>수정하기</Button>
+        </div>
         <Form.Divider />
         <div className={styles['registration-form-upload-wrapper']}>
           <Form.Item name='메인 이미지'>
