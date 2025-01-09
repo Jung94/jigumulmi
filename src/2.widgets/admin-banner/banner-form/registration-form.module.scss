@@ -11,6 +11,11 @@
   flex-direction: column;
   gap: 1rem;
 
+  &-button {
+    display: flex;
+    gap: 0.5rem;
+  }
+
   &-upload-wrapper {
     display: flex;
     gap: 1rem;

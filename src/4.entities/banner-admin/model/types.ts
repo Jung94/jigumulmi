@@ -44,6 +44,8 @@ export type UpdatePlaceListVariables = {
   data: { placeIdList: number[] };
 }
 
+export type DeleteBannerVariables = { bannerId: number; }
+
 export type DeletePlaceListVariables = UpdatePlaceListVariables
 
 export type UpdateBannerOuterImageVariables = {
