@@ -50,7 +50,10 @@ export default function PlaceFilter({
   }
 
   const handleRegionChange = (e) => {
-    updateQueryParams({ region: !!e ? e.target.value : null })
+    updateQueryParams({ 
+      region: !!e ? e.target.value : null,
+      districtId: null
+    })
   }
 
   const handleDistrictChange = (e) => {
