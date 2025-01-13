@@ -9,6 +9,7 @@ import { bannerAmdinAPI } from '@/src/4.entities/banner-admin/api/banner.constan
 import { useFetchRegionList, useFetchDistrictList } from '@/src/4.entities/place-admin/model/queries'
 
 const placeCategoryGroups = [
+  {name: '전체', value: ''},
   {name: '음식점', value: '음식점'},
   {name: '카페', value: '카페'},
   {name: '제로웨이스트샵', value: '제로웨이스트샵'},
@@ -124,21 +125,25 @@ export default function PlaceFilter({
         <SelectBox.HiddenOption
           placeholder='카테고리'
           options={placeCategoryGroups}
-          selectedValue={queryParams.placeCategoryGroup ?? ''}
+          selectedValue={queryParams.placeCategoryGroup}
           onClick={handleCategoryChange}
           styleShowBox={{ height: '32px' }} 
         ></SelectBox.HiddenOption>
         <SelectBox.HiddenOption
           placeholder='광역시도'
-          options={regionList ? regionList.map(r => ({ name: r, value: r })) : []}
-          selectedValue={queryParams.region ?? ''}
+          options={regionList 
+            ? [{name: '전체', value: null}, ...regionList.map(r => ({ name: r, value: r }))] 
+            : []}
+          selectedValue={queryParams.region}
           onClick={handleRegionChange}
           styleShowBox={{ height: '32px' }} 
         ></SelectBox.HiddenOption>
         <SelectBox.HiddenOption
           placeholder='시군구'
           disabled={!queryParams.region}
-          options={districtList ? districtList.map(d => ({ name: d.title, value: d.id })) : []}
+          options={districtList 
+            ? [{name: '전체', value: null}, ...districtList.map(d => ({ name: d.title, value: d.id })) ]
+            : []}
           selectedValue={queryParams.districtId ? Number(queryParams.districtId) : null}
           onClick={handleDistrictChange}
           styleShowBox={{ height: '32px' }} 
