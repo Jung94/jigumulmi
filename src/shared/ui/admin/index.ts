@@ -1,3 +1,4 @@
+import ToggleSwitch from './toggle-switch'
 import { Tr, Td, Th, Table } from './table'
 import { Button, NewTabButton, PreviousPageButton } from './button'
 import { Form, Input, Search, SelectBox, SearchSubway } from './form'
@@ -15,4 +16,5 @@ export {
   Search,
   SelectBox,
   SearchSubway,
+  ToggleSwitch,
 }

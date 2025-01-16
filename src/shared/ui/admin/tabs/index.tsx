@@ -54,10 +54,12 @@ function TabsTrigger({
 function TabsContent({ 
   children, 
   value, 
+  basicStyle,
   style 
 }: { 
   children: ReactNode
   value: string
+  basicStyle?: boolean
   style?: Record<string, string>
 }) {
   const { activeTab } = useTabsContext()
@@ -67,6 +69,7 @@ function TabsContent({
       style={style}
       className={`
         ${styles['tabs-content']} 
+        ${!!basicStyle ? styles['tabs-content-basic-style'] : ''}
         ${activeTab === value ? styles['tabs-content-visible'] : styles['tabs-content-hidden']}
       `}
     >

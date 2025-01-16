@@ -38,10 +38,22 @@
   &-content {
     overflow: hidden;
     display: none;
-    
+
     &-visible {
       display: block;
     }
+    
+    &-basic-style {
+      padding: 1rem;
+      background-color: white;
+      border-radius: 0.4rem;
+      border: 1px solid map.get($--colors, 'gray-300');
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
     &-hidden {
       display: none;
     }

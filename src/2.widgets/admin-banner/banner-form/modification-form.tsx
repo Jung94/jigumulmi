@@ -5,8 +5,7 @@ import styles from './registration-form.module.scss'
 import { useRouter } from 'next/navigation'
 import UploadingImage from './uploading-image'
 import { useQueryClient } from '@tanstack/react-query'
-import ToggleSwitch from '@/src/shared/ui/toggle-switch'
-import { Button, Form, Input } from '@/src/shared/ui/admin'
+import { Button, Form, Input, ToggleSwitch } from '@/src/shared/ui/admin'
 import { initialStateForBanner } from './banner-form.constant'
 import { 
   useFetchBanner, 
