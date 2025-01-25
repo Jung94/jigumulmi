@@ -37,7 +37,7 @@ const DndItem = ({ id, name, isMain, handleDelete}: { id: number, name: string, 
 
 export default function SubwayStationSearch({
   subwayStationList,
-  handleSubwayStationListChange
+  handleSubwayStationListChange = () => {}
 }: {
   subwayStationList: SubwayStation[]
   handleSubwayStationListChange: (subwayStationList: SubwayStation[]) => void
@@ -65,12 +65,13 @@ export default function SubwayStationSearch({
       newSubwayStationList = [...subwayStationList, station]
     }
 
-    handleSubwayStationListChange(newSubwayStationList)
     setSubwayStationName('')
+    handleSubwayStationListChange(newSubwayStationList)
   }
 
   const handleDeleteSelectedStation = (stationId: number) => {
-    handleSubwayStationListChange(subwayStationList.filter(v => v.id !== stationId))
+    const newSubwayStationList = subwayStationList.filter(v => v.id !== stationId)
+    handleSubwayStationListChange(newSubwayStationList)
   }
 
   const getItemPos = (id: any, items: any[]) => items.findIndex(item => item.id === id)
@@ -108,7 +109,8 @@ export default function SubwayStationSearch({
                 ${styles['subway-station-option']} 
                 ${subwayStationList.find(s => s.id === v.id) && styles['subway-station-option-active']}
               `} 
-                onClick={() => handleSubwayStationClick(v)}>
+              onClick={() => handleSubwayStationClick(v)}
+            >
               {v.stationName}
             </div>
           )}

@@ -149,6 +149,7 @@ export default function PlaceDetailPage() {
     if (!!params?.placeId) {
       const initialData = placeDetail?.data
       if (!initialData) return false
+      console.log(initialData)
 
       const isSameCategory = 
         initialData.categoryList.length === data.categoryList.length

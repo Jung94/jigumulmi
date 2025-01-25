@@ -123,14 +123,37 @@ class Fetch {
     return { status: response.status, data }
   }
 
-  async put<T = any>(url: string, body?: any, config: RequestInit = {}): Promise<T> {
-    const response = await this.request(url, {
+  async put<T = any>({
+    endpoint,
+    body,
+    config = {}
+  }: {
+    endpoint: string
+    body?: any
+    config?: RequestInit
+  }): Promise<{ status: number; data: T | null }> {
+    const response = await this.request(endpoint, {
       ...config,
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', ...config.headers },
       body: JSON.stringify(body),
     })
-    return response.json()
+
+    if (!response.ok) {
+      throw new Error(`Error post data: ${response.statusText}`)
+    }
+
+    if (response.status === 204) {
+      return { status: response.status, data: null }
+    }
+
+    let data: T | null = null
+    try {
+      data = await response.json()
+    } catch (error) {
+      console.warn("Empty response or non-JSON response:", error)
+    }
+    return { status: response.status, data }
   }
 
   async patch<T = any>(url: string, body?: any, config: RequestInit = {}): Promise<T> {

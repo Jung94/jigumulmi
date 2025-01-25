@@ -1,12 +1,7 @@
 'use client'
 
 import { SelectBox } from '@/src/shared/ui/admin'
-import type { MainCategory, SubCategory } from '@/src/4.entities/place-admin/model/types'
-
-type Category = {
-  categoryGroup: MainCategory
-  category: SubCategory
-}
+import type { Category, MainCategory, SubCategory } from '@/src/4.entities/place-admin/model/types'
 
 const categoryOptions = [
   {name: "음식점 - 한식", value: 1},

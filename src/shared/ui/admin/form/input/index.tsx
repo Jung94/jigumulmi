@@ -10,6 +10,7 @@ type Props = {
   value?: any
   alert?: {error: boolean, message: string}
   dataName?: string
+  defaultValue?: string
   placeholder?: string
   isChecked?: boolean
   disabled?: boolean
@@ -26,6 +27,7 @@ const Input = forwardRef<Ref, Props>(function Input({
   value,
   alert,
   dataName,
+  defaultValue,
   placeholder,
   isChecked,
   disabled,
@@ -49,6 +51,7 @@ const Input = forwardRef<Ref, Props>(function Input({
               type={type} 
               value={value} 
               data-name={dataName}
+              defaultValue={defaultValue}
               placeholder={placeholder} 
               onChange={onChange} 
               onKeyDown={onKeyDown}

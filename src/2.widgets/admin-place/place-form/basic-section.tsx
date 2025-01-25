@@ -2,10 +2,13 @@
 
 import { Dispatch, SetStateAction, ChangeEvent } from 'react'
 import styles from './place-form.module.scss'
+import { useParams, useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
 import { Form, Input, ToggleSwitch, Button } from '@/src/shared/ui/admin'
+import placeQueryKey from '@/src/4.entities/place-admin/model/queries/query-key.constant'
+import { useCreatePlace, useUpdatePlaceBasic } from '@/src/4.entities/place-admin/model/queries'
 import { KakaoPlaceSearch, CategorySelectbox, SubwayStationSearch } from '@/src/2.widgets/admin-place/place-form'
-import type { SubwayStation } from '@/src/4.entities/place-admin/model/types'
-import type { MainCategory, SubCategory } from '@/src/4.entities/place-admin/model/types'
+import type { MainCategory, SubCategory, SubwayStation, PlaceBasic, CreatePlaceBasicInput, CreatePlaceVariables } from '@/src/4.entities/place-admin/model/types'
 import type { SearchedKakaoPlace } from '@/src/2.widgets/admin-place/place-form/kakao-place-search'
 
 type Category = {
@@ -17,9 +20,17 @@ export default function BasicSection({
   basicData,
   setBasicData
 }: {
-  basicData: any
+  basicData: PlaceBasic | CreatePlaceBasicInput
   setBasicData: Dispatch<SetStateAction<any>>
 }) {
+  const router = useRouter()
+  const params = useParams()
+  const queryClient = useQueryClient()
+  const createPlace = useCreatePlace()
+  const updatePlace = useUpdatePlaceBasic()
+
+  const placeId = params?.placeId ? Number(params.placeId) : null
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, type } = e.target
     let value: any
@@ -37,10 +48,20 @@ export default function BasicSection({
       name: kakaoPlace.place_name,
       address: kakaoPlace.road_address_name,
       contact: kakaoPlace.phone,
-      latitude: kakaoPlace.y, 
-      longitude: kakaoPlace.x,
+      position: {
+        latitude: kakaoPlace.y,
+        longitude: kakaoPlace.x
+      },
       kakaoPlaceId: kakaoPlace.id,
     }))
+  }
+
+  const handlePositionChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, 
+    type: 'latitude' | 'longitude'
+  ) => {
+    const { value } = e.target
+    setBasicData((prev: any) => ({ ...prev, position: { ...prev.position, [type]: value } }))
   }
 
   const handleCategoryListChange = (categoryList: Category[]) => {
@@ -49,6 +70,73 @@ export default function BasicSection({
 
   const handleSubwayStationListChange = (subwayStationList: SubwayStation[]) => {
     setBasicData((prev: any) => ({ ...prev, subwayStationList }))
+  }
+
+  const handleCreatePlace = async () => {
+    const newPlaceBasic: CreatePlaceVariables = {
+      isApproved: basicData.isApproved,
+      name: basicData.name,
+      region: basicData.region,
+      address: basicData.address,
+      contact: basicData.contact,
+      placeUrl: basicData.placeUrl,
+      districtId: basicData.districtId,
+      position: {
+        latitude: basicData.position.latitude,
+        longitude: basicData.position.longitude
+      },
+      categoryList: basicData.categoryList,
+      kakaoPlaceId: basicData.kakaoPlaceId,
+      additionalInfo: basicData.additionalInfo,
+      registrantComment: basicData.registrantComment,
+      subwayStationIdList: basicData.subwayStationList.map(s => s.id),
+    }
+    
+    try {
+      const { placeId } = await createPlace.mutateAsync(newPlaceBasic)
+      alert('장소 생성이 완료되었습니다.')
+      router.replace(`/admin/place/${placeId}`)
+    } catch (error) {
+      alert("장소 생성에 실패하였습니다. 개발자에게 문의해 주세요!")
+      console.error("Failed to create place:", error)
+    }
+  }
+
+  const handleUpdatePlace = async () => {
+    if (!placeId) return
+
+    const newPlaceBasic: CreatePlaceVariables = {
+      isApproved: basicData.isApproved,
+      name: basicData.name,
+      region: basicData.region,
+      address: basicData.address,
+      contact: basicData.contact,
+      placeUrl: basicData.placeUrl,
+      districtId: basicData.districtId,
+      position: {
+        latitude: basicData.position.latitude,
+        longitude: basicData.position.longitude
+      },
+      categoryList: basicData.categoryList,
+      kakaoPlaceId: basicData.kakaoPlaceId,
+      additionalInfo: basicData.additionalInfo,
+      registrantComment: basicData.registrantComment,
+      subwayStationIdList: basicData.subwayStationList.map(s => s.id),
+    }
+    
+    try {
+      await updatePlace.mutateAsync({ placeId, data: newPlaceBasic })
+      await queryClient.refetchQueries(placeQueryKey.basic(placeId))
+      alert('기본 정보 수정이 완료되었습니다.')
+    } catch (error) {
+      alert("장소 수정에 실패하였습니다. 개발자에게 문의해 주세요!")
+      console.error("Failed to update place:", error)
+    }
+  }
+
+  const handleSubmitPlace = () => {
+    if (placeId) handleUpdatePlace() // 수정
+      else handleCreatePlace() // 생성
   }
 
   return (
@@ -127,8 +215,8 @@ export default function BasicSection({
             <Input 
               type='text' 
               name='latitude'
-              value={basicData.latitude} 
-              onChange={handleChange} 
+              value={basicData.position.latitude} 
+              onChange={(e) => handlePositionChange(e, 'latitude')} 
               style={{ fontSize: '0.875rem' }} 
             />
           </Form.Control>
@@ -138,8 +226,8 @@ export default function BasicSection({
             <Input 
               type='text' 
               name='longitude'
-              value={basicData.longitude} 
-              onChange={handleChange} 
+              value={basicData.position.longitude} 
+              onChange={(e) => handlePositionChange(e, 'longitude')} 
               style={{ fontSize: '0.875rem' }} 
             />
           </Form.Control>
@@ -159,7 +247,7 @@ export default function BasicSection({
       <Form.Item name='지하철역'>
         <Form.Control>
           <SubwayStationSearch 
-            subwayStationList={basicData.subwayStationList} 
+            subwayStationList={basicData.subwayStationList}
             handleSubwayStationListChange={handleSubwayStationListChange}
           />
         </Form.Control>
@@ -174,7 +262,7 @@ export default function BasicSection({
           value={basicData.registrantComment ?? ''} />
         </Form.Control>
       </Form.Item>
-      <Button>저장하기</Button>
+      <Button onClick={handleSubmitPlace}>저장하기</Button>
     </Form>
   )
 }

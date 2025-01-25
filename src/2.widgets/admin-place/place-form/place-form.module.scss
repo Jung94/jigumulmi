@@ -183,3 +183,131 @@
     }
   }
 }
+
+.image-list {
+  &-preview {
+    position: relative;
+    width: fit-content;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    cursor: default;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+
+    &-image-wrapper {
+      width: 12rem;
+      height: 10rem;
+    }
+
+    &-image {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    &-main {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      padding: 3px 6px;
+      color: #0070F3;
+      font-size: 11px;
+      border-radius: 5rem;
+      background-color: #d4e8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-x-mark {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      padding: 2px;
+      border-radius: 10rem;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        background-color: map.get($--colors, gray-300);
+      }
+    }
+  }
+}
+
+.place-image {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &-dnd-context {
+    padding: 8px;
+    width: 100%;
+    border-radius: 7px;
+    background-color: map.get($--colors, gray-100);
+    overflow: auto;
+    display: flex;
+    gap: 0.5rem;
+
+    &-empty {
+      display: none;
+    }
+  }
+
+  &-preview {
+    position: relative;
+    width: fit-content;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    cursor: default;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+  
+    &-image-wrapper {
+      width: 12rem;
+      height: 10rem;
+    }
+  
+    &-image {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  
+    &-main {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      padding: 3px 6px;
+      color: #0070F3;
+      font-size: 11px;
+      border-radius: 5rem;
+      background-color: #d4e8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    &-x-mark {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      padding: 2px;
+      border-radius: 10rem;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      &:hover {
+        background-color: map.get($--colors, gray-300);
+      }
+    }
+  }
+}

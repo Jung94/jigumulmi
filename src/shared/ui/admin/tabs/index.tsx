@@ -29,20 +29,24 @@ function TabsList({ children }: { children: ReactNode }) {
 function TabsTrigger({ 
   children, 
   value,
+  disabled,
   handleTrigger
 }: { 
   children: ReactNode
   value: string 
+  disabled?: boolean 
   handleTrigger?: () => void
 }) {
   const { activeTab, setActiveTab } = useTabsContext()
   const handleClick = () => {
     handleTrigger?.()
+    if (disabled) return
     setActiveTab?.(value)
   }
 
   return (
     <button
+      disabled={disabled}
       onClick={handleClick}
       className={`${styles['tabs-trigger']} ${activeTab === value ? styles['active'] : ""}`}
     >

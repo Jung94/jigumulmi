@@ -1,36 +1,62 @@
-// 위치 정보 타입
-interface Position {
-  latitude: number;
-  longitude: number;
+type Restaurant = '한식' | '일식' | '중식' | '양식' | '샐러드' | '샌드위치' | '아시안'
+type Cafe = '음료' | '간식'
+type ZeroWasteShop = '제로웨이스트샵'
+type RecyclingCenter = '재활용센터'
+export type MainCategory = '음식점' | '카페' | '제로웨이스트샵' | '재활용센터'
+export type SubCategory = Restaurant | Cafe | ZeroWasteShop | RecyclingCenter
+export type Category = {
+  categoryGroup: MainCategory;
+  category: SubCategory;
 }
 
-// 지하철역 정보 타입
-interface SubwayStation {
+export type SubwayStation = {
   id: number;
   isMain: boolean | null;
   stationName: string;
   subwayStationLineList: { id: number, lineNumber: string }[] | null;
 }
 
-type Restaurant = '한식' | '일식' | '중식' | '양식' | '샐러드' | '샌드위치' | '아시안'
-type Cafe = '음료' | '간식'
-type ZeroWasteShop = '제로웨이스트샵'
-type RecyclingCenter = '재활용센터'
-type MainCategory = '음식점' | '카페' | '제로웨이스트샵' | '재활용센터'
-type SubCategory = Restaurant | Cafe | ZeroWasteShop | RecyclingCenter
-// type Category = {
-//   categoryGroup: MainCategory;
-//   category: SubCategory;
-// }
-
-// 카테고리 타입
-interface Category {
-  categoryGroup: string;
-  category: string;
+type Position = {
+  latitude: number;
+  longitude: number;
 }
 
-// 개별 장소 타입
-interface Place {
+export type PlaceBasic = {
+  id: number;
+  name: string;
+  address: string;
+  contact: string;
+  region: string;
+  placeUrl: string;
+  createdAt: string;
+  districtId: number;
+  modifiedAt: string;
+  position: Position;
+  isApproved: boolean;
+  kakaoPlaceId: string;
+  additionalInfo: string;
+  categoryList: Category[];
+  registrantComment: string;
+  subwayStationList: SubwayStation[];
+}
+
+export type PlaceMenu = {
+  name: string;
+  price: string;
+  isMain: boolean;
+  imageS3Key: string;
+  description: string;
+}
+
+export type PlaceMenuInput = {
+  name: string;
+  price: string;
+  imageS3Key: string;
+  description: string;
+}
+
+// 리스트 row
+export type PlaceRow = {
   id: number;
   name: string;
   imageList: any[] | null; // 이미지 리스트 구조를 알면 구체화 가능
@@ -49,23 +75,71 @@ interface PageInfo {
   totalPage: number;
 }
 
-// Response
-interface FetchPlaceListResponse {
-  page: PageInfo;
-  data: Place[];
+export type PlaceImage = { url: string; isMain: boolean }
+export type PlaceImageList = PlaceImage[]
+
+//Request
+export type CreatePlaceVariables = {
+  isApproved: boolean;
+  name: string;
+  region: string;
+  address: string;
+  contact: string;
+  placeUrl: string;
+  districtId: number;
+  position: Position;
+  kakaoPlaceId: string;
+  additionalInfo: string;
+  categoryList: Category[];
+  registrantComment: string;
+  subwayStationIdList: number[];
 }
 
-type FetchRegionListResponse = string[]
+export type CreatePlaceBasicInput = {
+  isApproved: boolean;
+  name: string;
+  region: string;
+  address: string;
+  contact: string;
+  placeUrl: string;
+  districtId: number;
+  position: Position;
+  kakaoPlaceId: string;
+  additionalInfo: string;
+  categoryList: Category[];
+  registrantComment: string;
+  subwayStationList: SubwayStation[];
+}
 
-type FetchDistrictListResponse = { id: number; title: string; }[]
+export type UpdatePlaceBasicVariables = {
+  placeId: number;
+  data: CreatePlaceVariables;
+}
 
+export type UpdatePlaceMenuVariables = {
+  placeId: number;
+  data: PlaceMenu[];
+}
 
-export type {
-  Place,
-  FetchPlaceListResponse,
-  FetchRegionListResponse,
-  FetchDistrictListResponse,
-  SubwayStation,
-  MainCategory,
-  SubCategory,
+export type UpdatePlaceImageListVariables = {
+  placeId: number;
+  data: PlaceImage[];
+}
+
+// Response
+export type FetchPlaceBasicResponse = PlaceBasic
+
+export type FetchPlaceImageResponse = PlaceImage[]
+
+export type FetchPlaceListResponse {
+  page: PageInfo;
+  data: PlaceRow[];
+}
+
+export type FetchRegionListResponse = string[]
+
+export type FetchDistrictListResponse = { id: number; title: string; }[]
+
+export type CreateBannerResponse = {
+  placeId: number;
 }
