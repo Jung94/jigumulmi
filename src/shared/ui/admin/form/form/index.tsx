@@ -18,13 +18,13 @@ Form.Description = FormDescription
 Form.Message = FormMessage
 Form.Divider = FormDivider
 
-function FormItem({ row, name, children }: { row?: boolean; name: string; children: React.ReactNode; }) {
+function FormItem({ row, name, children }: { row?: boolean; name?: string; children: React.ReactNode; }) {
   return (
     <div className={`
       ${styles['form-item']}
       ${row ? styles['form-item-row'] : ''}
     `}>
-      <div className={styles['form-item-name']}>{name}</div>
+      {name && <div className={styles['form-item-name']}>{name}</div>}
       {children}
     </div>
   )

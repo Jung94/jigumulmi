@@ -1,3 +1,4 @@
+import UploadImage from './upload-image'
 import ToggleSwitch from './toggle-switch'
 import { Tr, Td, Th, Table } from './table'
 import { Button, NewTabButton, PreviousPageButton } from './button'
@@ -17,4 +18,5 @@ export {
   SelectBox,
   SearchSubway,
   ToggleSwitch,
+  UploadImage,
 }

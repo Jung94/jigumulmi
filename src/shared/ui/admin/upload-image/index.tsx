@@ -33,7 +33,7 @@ export default function UploadingImage({
           <path d="M16 10C14.8954 10 14 9.10457 14 8C14 6.89543 14.8954 6 16 6C17.1046 6 18 6.89543 18 8C18 9.10457 17.1046 10 16 10Z" stroke="#404040" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
           <path d="M16 19H19M22 19H19M19 19V16M19 19V22" stroke="#404040" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
         </svg>
-        사진등록
+        사진 {!!url ? '변경' : '등록'}
       </button>
       <input ref={fileInputRef} type='file' name={name} accept='image/*' onChange={onChange} />
       <div className={styles['uploading-image-preview']}>

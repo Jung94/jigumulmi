@@ -3,9 +3,8 @@
 import { ChangeEvent, MouseEvent, useState, useEffect } from 'react'
 import styles from './registration-form.module.scss'
 import { useRouter } from 'next/navigation'
-import UploadingImage from './uploading-image'
 import { useQueryClient } from '@tanstack/react-query'
-import { Button, Form, Input, ToggleSwitch } from '@/src/shared/ui/admin'
+import { Button, Form, Input, ToggleSwitch, UploadImage } from '@/src/shared/ui/admin'
 import { initialStateForBanner } from './banner-form.constant'
 import { 
   useFetchBanner, 
@@ -149,7 +148,7 @@ export default function ModificationFrom({ bannerId }: { bannerId: number }) {
         <div className={styles['registration-form-upload-wrapper']}>
           <Form.Item name='메인 이미지'>
             <Form.Control>
-              <UploadingImage 
+              <UploadImage 
                 name='outerImage' 
                 url={formData.outerImageS3Key 
                   ? `${process.env.NEXT_PUBLIC_CDN}${formData.outerImageS3Key}`
@@ -160,7 +159,7 @@ export default function ModificationFrom({ bannerId }: { bannerId: number }) {
             </Form.Control>
           </Form.Item>
           <Form.Item name='내부 이미지'>
-            <UploadingImage 
+            <UploadImage 
               name='innerImage' 
               url={formData.innerImageS3Key 
                 ? `${process.env.NEXT_PUBLIC_CDN}${formData.innerImageS3Key}`

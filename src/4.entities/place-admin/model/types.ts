@@ -48,10 +48,18 @@ export type PlaceMenu = {
   description: string;
 }
 
+export type MenuImage = {
+  file?: File;
+  urlFromBlob?: string; // blob 임시 url
+  urlFromNaver?: string; // 네이버 메뉴 이미지 주소
+}
+
 export type PlaceMenuInput = {
   name: string;
   price: string;
-  imageS3Key: string;
+  isMain: boolean;
+  imageS3Key?: string;
+  tempImage?: MenuImage; // 임시 이미지
   description: string;
 }
 
@@ -128,6 +136,8 @@ export type UpdatePlaceImageListVariables = {
 
 // Response
 export type FetchPlaceBasicResponse = PlaceBasic
+
+export type FetchPlaceMenuResponse = PlaceMenu[]
 
 export type FetchPlaceImageResponse = PlaceImage[]
 

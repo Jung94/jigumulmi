@@ -7,7 +7,7 @@ import { PreviousPageButton } from '@/src/shared/ui/admin'
 import Header from '@/src/shared/ui/admin/layout/section/header'
 import { BasicSection, MenuSection, ImageSection } from '@/src/2.widgets/admin-place/place-form'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/src/shared/ui/admin/tabs'
-import { useFetchPlaceBasic, useFetchPlaceImage } from '@/src/4.entities/place-admin/model/queries'
+import { useFetchPlaceBasic, useFetchPlaceMenu, useFetchPlaceImage } from '@/src/4.entities/place-admin/model/queries'
 import type { PlaceBasic, PlaceMenuInput, PlaceImage } from '@/src/4.entities/place-admin/model/types'
 
 export default function PlaceDetailPage({ placeId }: { placeId: number }) {
@@ -24,6 +24,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   }
 
   const { data: placeBasicData } = useFetchPlaceBasic(placeId)
+  const { data: placeMenuData } = useFetchPlaceMenu(placeId)
   const { data: placeImageData } = useFetchPlaceImage(placeId)
 
   useEffect(()=>{
@@ -41,12 +42,17 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   }, [placeBasicData])
 
   useEffect(() => {
+    if (!placeMenuData) return
+    setMenuData(placeMenuData)
+  }, [placeMenuData])
+
+  useEffect(() => {
     if (!placeImageData) return
     setImageData(placeImageData)
   }, [placeImageData])
 
   if (!basicData || !placeImageData) return
-  console.log(basicData, imageData)
+  console.log(basicData, menuData, imageData)
 
   return (
     <>

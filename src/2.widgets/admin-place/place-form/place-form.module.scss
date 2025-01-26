@@ -15,12 +15,61 @@
     word-break: break-all;
     white-space: pre-line;
     overflow-wrap: break-word;
-    border: 1px solid map.get($--colors, "gray_3");
+    border: 1px solid map.get($--colors, "gray-300");
     border-radius: 6px;
     transition: all 0.15s ease;
 
     &:read-only {
-      background-color: map.get($--colors, "gray_1");
+      background-color: map.get($--colors, "gray-100");
+    }
+  }
+
+  &-menu {
+    min-height: 6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+
+    &-empty {
+      height: 6rem;
+      color: map.get($--colors, 'gray-900');
+      border-radius: 6px;
+      background-color: map.get($--colors, "gray-100");
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-card {
+      max-width: 10rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      transition: opacity 0.12s ease;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &-image {
+        position: relative;
+        min-width: 5rem;
+        min-height: 5rem;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      &-name {
+        font-size: 15px;
+        color: map.get($--colors, 'gray-1000');
+      }
+
+      &-price {
+        font-size: 15px;
+        color: map.get($--colors, 'gray-1000');
+        font-weight: 500;
+      }
     }
   }
 }

@@ -82,8 +82,7 @@
     &-black {
       color: map.get($--colors, 'background-100');
       background-color: map.get($--colors, 'gray-1000');
-      // border: 1px solid rgba(0, 0, 0, 0);
-      // background-clip: padding-box;
+      border: 1px solid map.get($--colors, 'gray-1000');
 
       &:hover {
         background-color: #383838;
