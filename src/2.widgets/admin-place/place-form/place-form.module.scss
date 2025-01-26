@@ -57,7 +57,16 @@
         min-width: 5rem;
         min-height: 5rem;
         border-radius: 6px;
+        background-color: map.get($--colors, 'gray-100');
         overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        span {
+          color: map.get($--colors, 'gray-900');
+          font-size: 13px;
+        }
       }
 
       &-name {
@@ -66,7 +75,6 @@
       }
 
       &-price {
-        font-size: 15px;
         color: map.get($--colors, 'gray-1000');
         font-weight: 500;
       }

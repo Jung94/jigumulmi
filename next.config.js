@@ -15,6 +15,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'ldb-phinf.pstatic.net',
+      },
+      {
+        protocol: 'https',
         hostname: 'contents.jigumulmi.com',
       },
       {

@@ -49,14 +49,14 @@ export type PlaceMenu = {
 }
 
 export type MenuImage = {
-  file?: File;
-  urlFromBlob?: string; // blob 임시 url
-  urlFromNaver?: string; // 네이버 메뉴 이미지 주소
+  file: File;
+  urlFromBlob: string; // blob 임시 url
 }
 
 export type PlaceMenuInput = {
   name: string;
   price: string;
+  isNew?: boolean;
   isMain: boolean;
   imageS3Key?: string;
   tempImage?: MenuImage; // 임시 이미지

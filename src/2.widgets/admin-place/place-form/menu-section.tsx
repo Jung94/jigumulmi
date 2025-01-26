@@ -2,10 +2,11 @@
 
 import { Dispatch, SetStateAction, ChangeEvent, useState } from 'react'
 import Image from 'next/image'
+import { regex } from '@/src/shared/utils'
 import styles from './place-form.module.scss'
 import { useParams, useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
-import { Form, Input, Button, ToggleSwitch, UploadImage } from '@/src/shared/ui/admin'
+import { Form, Input, Button, ToggleSwitch, UploadImage, Preview } from '@/src/shared/ui/admin'
 import placeQueryKey from '@/src/4.entities/place-admin/model/queries/query-key.constant'
 import { useUpdatePlaceBasic } from '@/src/4.entities/place-admin/model/queries'
 import type {
@@ -13,14 +14,6 @@ import type {
   PlaceMenu, 
   PlaceMenuInput, 
 } from '@/src/4.entities/place-admin/model/types'
-
-type Menu = {
-  name: string
-  price: string
-  isMain: boolean
-  description: string
-  tempImage?: MenuImage
-}
 
 export default function MenuSection({
   menuData,
@@ -37,9 +30,11 @@ export default function MenuSection({
   const placeId = params?.placeId ? Number(params.placeId) : null
   
   const [isNaverUrl, setIsNaverUrl] = useState(false)
-  const [menu, setMenu] = useState<Menu>({
+  const [naverUrl, setNaverUrl] = useState('')
+  const [menu, setMenu] = useState<PlaceMenuInput>({
     name: '',
     price: '',
+    isNew: true,
     isMain: false,
     description: '',
     tempImage: undefined,
@@ -54,16 +49,17 @@ export default function MenuSection({
       value = e.target.checked
     } else value = e.target.value
     
-    setMenu((prev: Menu) => ({ ...prev, [name]: value }))
+    setMenu((prev: PlaceMenuInput) => ({ ...prev, [name]: value }))
   }
 
   const handleIsUploadInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!isNaverUrl && menu.tempImage?.urlFromBlob) {
       if (!window.confirm('업로드한 사진이 존재합니다. 삭제하고 넘어가시겠습니까?')) return
-    } else if (isNaverUrl && menu.tempImage?.urlFromNaver && menu.tempImage?.file) {
+    } else if (isNaverUrl && menu.tempImage?.file) {
       if (!window.confirm('생성된 사진 파일이 존재합니다. 삭제하고 넘어가시겠습니까?')) return
     }
-    setMenu((prev: Menu) => ({ ...prev, tempImage: undefined }))
+    setMenu((prev: PlaceMenuInput) => ({ ...prev, tempImage: undefined }))
+    setNaverUrl('')
 
     const { checked } = e.target
     setIsNaverUrl(checked)
@@ -81,36 +77,43 @@ export default function MenuSection({
         return
       }
       
-      setMenu((prev: Menu) => ({ ...prev, tempImage: { urlFromBlob: URL.createObjectURL(file), file }}))
+      setMenu((prev: PlaceMenuInput) => ({ ...prev, tempImage: { file, urlFromBlob: URL.createObjectURL(file) }}))
     }
   }
 
   const handleNaverUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
-    setMenu((prev: Menu) => ({ ...prev, tempImage: { urlFromNaver: value } }))
+    setNaverUrl(value)
   }
 
   const fetchImage = async (imageUrl: string) => {
     try {
-      const response = await fetch(imageUrl)
+      const proxyUrl = `/api/proxyImage?url=${encodeURIComponent(imageUrl)}`
+      const response = await fetch(proxyUrl)
+
       if (!response.ok) {
         throw new Error('이미지 다운로드 실패')
       }
+      
       const blob = await response.blob() // Blob 데이터를 가져옵니다.
-      return blob;
+      return blob
     } catch (error) {
       console.error(error)
+      return null
     }
   }
 
   const handleCreateImageFileFromNaverUrl = async () => {
-    const imageUrl = menu.tempImage?.urlFromNaver
-    if (!imageUrl) return
-    const blob = await fetchImage(imageUrl)
+    if (!naverUrl || 
+      !(!!naverUrl.match(regex.urlRegex)?.length)
+    ) return alert('올바른 url 형식이 아닙니다.')
+
+    const blob = await fetchImage(naverUrl)
+    
     if (blob) {
-      console.log('blob')
       const file = new File([blob], 'image.jpg', { type: blob.type })
-      setMenu((prev: Menu) => ({ ...prev, tempImage: { file } }))
+      setMenu((prev: PlaceMenuInput) => ({ ...prev, tempImage: { file, urlFromBlob: URL.createObjectURL(file) } }))
+      setNaverUrl('')
     }
   }
 
@@ -122,13 +125,19 @@ export default function MenuSection({
           return (
             <div key={menu.name} className={styles['place-form-menu-card']}>
               <div className={styles['place-form-menu-card-image']}>
-                <Image fill src={url} alt={url} style={{ objectFit: 'cover' }} />
+                {url
+                  ? <Image fill src={url} alt={url} style={{ objectFit: 'cover' }} />
+                  : <span>사진 없음</span>
+                }
               </div>
               <div className={styles['place-form-menu-card-name']}>
                 {menu.name}
               </div>
               <div className={styles['place-form-menu-card-price']}>
-                {menu.price.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
+                {menu.price
+                  ? menu.price.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원'
+                  : '가격 변동'
+                }
               </div>
             </div>
           )
@@ -143,6 +152,7 @@ export default function MenuSection({
     setMenu({
       name: '',
       price: '',
+      isNew: true,
       isMain: false,
       description: '',
       tempImage: undefined,
@@ -151,10 +161,29 @@ export default function MenuSection({
 
   const handleUpdateMenu = async () => {
     // 생성된 메뉴가 있는지 & 그 중 이미지 존재 하는지
+    const createdMenuList = menuData.filter(m => m.isNew)
+
+    let menuList = []
+    for (let i = 0; i < createdMenuList.length; i++) {
+      const menu = createdMenuList[i]
+      
+      if (menu.tempImage) {
+        // 
+      } else {
+        menuList.push({
+          name: menu.name,
+          price: menu.price,
+          isMain: menu.isMain,
+          description: menu.description,
+          fullFilename: null
+        })
+      }
+    }
+    console.log(createdMenuList)
     try {
       // const { placeId } = await createPlace.mutateAsync(newPlaceBasic)
-      alert('메뉴 정보가 저장되었습니다.')
-      router.replace(`/admin/place/${placeId}`)
+      // alert('메뉴 정보가 저장되었습니다.')
+      // router.replace(`/admin/place/${placeId}`)
     } catch (error) {
       alert("메뉴 정보 저장을 실패하였습니다. 개발자에게 문의해 주세요!")
       console.error("Failed to update menu:", error)
@@ -220,22 +249,29 @@ export default function MenuSection({
         <Form.Control>
           {isNaverUrl
             ? (
-              <div style={{ width: '100%', display: 'flex', gap: '0.5rem'}}>
-                <Input 
-                  type='text' 
-                  name='urlFromNaver'
-                  value={menu.tempImage?.urlFromNaver ?? ''} 
-                  onChange={handleNaverUrlChange} 
-                  style={{ fontSize: '0.875rem' }} 
-                />
-                <Button 
-                  disabled={!menu.tempImage?.urlFromNaver} 
-                  onClick={handleCreateImageFileFromNaverUrl}
-                >파일 생성하기</Button>
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
+                <div style={{ width: '100%', display: 'flex', gap: '0.5rem'}}>
+                  <Button 
+                    disabled={!naverUrl} 
+                    onClick={handleCreateImageFileFromNaverUrl}
+                  >파일 생성하기</Button>
+                  <Input 
+                    type='text' 
+                    name='naverUrl'
+                    value={naverUrl} 
+                    onChange={handleNaverUrlChange} 
+                    style={{ fontSize: '0.875rem' }} 
+                  />
+                </div>
+                {menu.tempImage?.urlFromBlob &&
+                  <Preview size='large' url={menu.tempImage?.urlFromBlob} />
+                }
               </div>
+              
             )
             : (
               <UploadImage 
+                size='large'
                 name='tempImage' 
                 url={menu.tempImage?.urlFromBlob ?? null} 
                 onChange={handleImageUploadChange}
