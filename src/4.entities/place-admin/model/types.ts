@@ -44,8 +44,8 @@ export type PlaceMenu = {
   name: string;
   price: string;
   isMain: boolean;
-  imageS3Key: string;
   description: string;
+  imageS3Key: string | null;
 }
 
 export type MenuImage = {
@@ -54,6 +54,7 @@ export type MenuImage = {
 }
 
 export type PlaceMenuInput = {
+  id: string;
   name: string;
   price: string;
   isNew?: boolean;
@@ -124,9 +125,17 @@ export type UpdatePlaceBasicVariables = {
   data: CreatePlaceVariables;
 }
 
+export type UpdatePlaceMenu = {
+  name: string;
+  price: string;
+  isMain: boolean;
+  description: string;
+  fullFilename: string | null;
+}
+
 export type UpdatePlaceMenuVariables = {
   placeId: number;
-  data: PlaceMenu[];
+  data: UpdatePlaceMenu[];
 }
 
 export type UpdatePlaceImageListVariables = {
@@ -141,7 +150,7 @@ export type FetchPlaceMenuResponse = PlaceMenu[]
 
 export type FetchPlaceImageResponse = PlaceImage[]
 
-export type FetchPlaceListResponse {
+export type FetchPlaceListResponse = {
   page: PageInfo;
   data: PlaceRow[];
 }

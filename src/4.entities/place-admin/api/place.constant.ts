@@ -1,5 +1,7 @@
 export const placeAPI = {
   base: '/place',
+  putPresignedUrl: '/place/menu/s3-put-presigned-url',
+  deletePresignedUrl: '/place/menu/s3-delete-presigned-url',
 }
 
 export const placeAmdinAPI = {

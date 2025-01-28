@@ -4,9 +4,12 @@ import useFetchPlaceList from './useFetchPlaceList'
 import useFetchRegionList from './useFetchRegionList'
 import useFetchPlaceBasic from './useFetchPlaceBasic'
 import useFetchPlaceMenu from './useFetchPlaceMenu'
+import usePutPresignedUrl from './usePutPresignedUrl'
+import useDeletePresignedUrl from './useDeletePresignedUrl'
 import useFetchPlaceImage from './useFetchPlaceImage'
 import useFetchDistrictList from './useFetchDistrictList'
 import useUpdatePlaceBasic from './useUpdatePlaceBasic'
+import useUpdatePlaceMenu from './useUpdatePlaceMenu'
 import useUpdatePlaceImageList from './useUpdatePlaceImageList'
 
 export {
@@ -16,8 +19,11 @@ export {
   useFetchRegionList,
   useFetchPlaceBasic,
   useFetchPlaceMenu,
+  usePutPresignedUrl,
+  useDeletePresignedUrl,
   useFetchPlaceImage,
   useFetchDistrictList,
   useUpdatePlaceBasic,
+  useUpdatePlaceMenu,
   useUpdatePlaceImageList,
 }

@@ -1,2 +1,2 @@
 export * as regex from './regex'
-// export * from './validation'
+export * from './object/deepEqual'

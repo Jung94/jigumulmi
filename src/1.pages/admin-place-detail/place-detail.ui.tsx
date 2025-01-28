@@ -43,7 +43,10 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
 
   useEffect(() => {
     if (!placeMenuData) return
-    setMenuData(placeMenuData)
+    const addedIdMenuList = placeMenuData.map(m => {
+      return { ...m, id: crypto.randomUUID() } as PlaceMenuInput
+    })
+    setMenuData(addedIdMenuList)
   }, [placeMenuData])
 
   useEffect(() => {
@@ -52,7 +55,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   }, [placeImageData])
 
   if (!basicData || !placeImageData) return
-  console.log(basicData, menuData, imageData)
+  console.log('menuData:', menuData)
 
   return (
     <>
