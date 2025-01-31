@@ -3,6 +3,7 @@
 import { useId, useRef, useEffect } from 'react';
 import styles from './select-box.module.scss';
 import HiddenOption from './hidden-option';
+import MultiSelectbox from './hidden-option-multi';
 
 type Props = {
   name: string
@@ -59,6 +60,7 @@ const SelectBox = ({
   )
 }
 
+SelectBox.Multi = MultiSelectbox
 SelectBox.HiddenOption = HiddenOption
 
 export default SelectBox

@@ -25,6 +25,11 @@
     border-radius: 9px;
     background-color: map.get($--colors, 'gray-200');
     cursor: pointer !important;
+
+    &-large {
+      min-width: 8rem;
+      height: 8rem;
+    }
   }
 
   &-preview {
@@ -48,6 +53,15 @@
       border-radius: 9px;
       overflow: hidden;
       border: 1px solid map.get($--greys, "200");
+
+      &-small {}
+
+      &-medium {}
+
+      &-large {
+        width: 8rem;
+        height: 8rem;
+      }
 
       &-content {
         object-fit: cover;

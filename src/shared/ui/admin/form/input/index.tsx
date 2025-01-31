@@ -10,6 +10,7 @@ type Props = {
   value?: any
   alert?: {error: boolean, message: string}
   dataName?: string
+  defaultValue?: string
   placeholder?: string
   isChecked?: boolean
   disabled?: boolean
@@ -18,7 +19,6 @@ type Props = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>)=>void
   onKeyDown?: (e: KeyboardEvent)=>void
   handleButton?: ()=>ReactNode
-  styleLabel?: any
   style?: any
 }
 const Input = forwardRef<Ref, Props>(function Input({
@@ -27,6 +27,7 @@ const Input = forwardRef<Ref, Props>(function Input({
   value,
   alert,
   dataName,
+  defaultValue,
   placeholder,
   isChecked,
   disabled,
@@ -35,18 +36,12 @@ const Input = forwardRef<Ref, Props>(function Input({
   onChange,
   onKeyDown,
   handleButton,
-  styleLabel,
   style,
 }, ref) {
   return (
     <div className={styles.container}>
       <div className={styles.label_button_wrap}>
         <label className={styles.label}>
-          {/* {name &&
-            <div className={styles.label_name} style={styleLabel}>
-              {name}
-            </div>
-          } */}
           <div className={styles.input_wrap}>
             <input 
               ref={ref}
@@ -56,9 +51,9 @@ const Input = forwardRef<Ref, Props>(function Input({
               type={type} 
               value={value} 
               data-name={dataName}
+              defaultValue={defaultValue}
               placeholder={placeholder} 
-              // onChange={(e)=>onChange && onChange(dataName ? e : e.target.value)} 
-              onChange={(e)=>onChange && onChange(e)} 
+              onChange={onChange} 
               onKeyDown={onKeyDown}
               onFocus={onFocus}
               onBlur={onBlur}

@@ -13,21 +13,31 @@ export default function Form({ children, onSubmit }: {
 }
 
 Form.Item = FormItem
+Form.Title = FormTitle
+Form.SubTitle = FormSubTitle
 Form.Control = FormControl
 Form.Description = FormDescription
 Form.Message = FormMessage
 Form.Divider = FormDivider
 
-function FormItem({ row, name, children }: { row?: boolean; name: string; children: React.ReactNode; }) {
+function FormItem({ row, name, children }: { row?: boolean; name?: string; children: React.ReactNode; }) {
   return (
     <div className={`
       ${styles['form-item']}
       ${row ? styles['form-item-row'] : ''}
     `}>
-      <div className={styles['form-item-name']}>{name}</div>
+      {name && <div className={styles['form-item-name']}>{name}</div>}
       {children}
     </div>
   )
+}
+
+function FormTitle({ children }: { children: ReactNode; }) {
+  return <div className={styles['form-title']}>{children}</div>
+}
+
+function FormSubTitle({ children, style }: { children: ReactNode; style?: any; }) {
+  return <div className={styles['form-sub-title']} style={style}>{children}</div>
 }
 
 function FormControl({ children }: { children: ReactNode; }) {

@@ -4,10 +4,10 @@ import { ROWS_PER_PAGE } from './list.constant'
 import { useSearchParams } from 'next/navigation'
 import { Tr, Td, Checkbox, BooleanCircle } from '@/src/shared/ui/table'
 import { getRowOrder } from '@/src/shared/ui/table/table.util'
-import type { Place } from '@/src/4.entities/place-admin/model/types'
+import type { PlaceRow } from '@/src/4.entities/place-admin/model/types'
 
 type Props = {
-  rows: Place[] | undefined;
+  rows: PlaceRow[] | undefined;
   selectedIdList: number[]
   handleCheckbox: (placeId: number) => void
 }
@@ -26,7 +26,7 @@ export default function PlaceTableRows({
 
   return (
     <>
-      {rows.map((row: Place, index: number) => {
+      {rows.map((row: PlaceRow, index: number) => {
         return (
           <Tr key={row.id} onClick={() => handleRowClick(row.id)}>
             <Td>

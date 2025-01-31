@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useId, useState } from 'react';
-import styles from './select-box.module.scss';
-import ArrowDown from '@/public/icons/ArrowDown';
+import { useEffect, useId, useState } from 'react'
+import styles from './select-box.module.scss'
+import ArrowDown from '@/public/icons/ArrowDown'
 
 type Props = {
   label?: string

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, KeyboardEvent, MouseEvent, useRef, useEffect } from 'react'
+import { Dispatch, SetStateAction, useRef, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import styles from './place-list.module.scss'
 import { useQueryParams } from '@/src/shared/hooks'
