@@ -221,19 +221,19 @@ export default function TemporaryBusinessHourForm(props: {
           </Form.Control>
         }
       </Form.Item>
-      {tempBusinessHour.id &&
-      <div style={{ marginTop: '2rem', display: 'flex', gap: '0.5rem' }}>
-        <Button color='red' onClick={handleDelete} style={{ width: '15rem' }}>
-          삭제하기
-        </Button>
-        <Button disabled={!checkIsPossibleSubmit()} onClick={handleUpdate}  style={{ width: '100%' }}>
-          수정하기
-        </Button>
-      </div>
+      {tempBusinessHour.id 
+        ? <div style={{ marginTop: '2rem', display: 'flex', gap: '0.5rem' }}>
+            <Button color='red' onClick={handleDelete} style={{ width: '15rem' }}>
+              삭제하기
+            </Button>
+            <Button disabled={!checkIsPossibleSubmit()} onClick={handleUpdate}  style={{ width: '100%' }}>
+              수정하기
+            </Button>
+          </div>
+        : <Button disabled={!checkIsPossibleSubmit()} onClick={handleCreate} style={{ marginTop: '2rem' }}>
+            저장하기
+          </Button>
       }
-      <Button disabled={!checkIsPossibleSubmit()} onClick={handleCreate} style={{ marginTop: '2rem' }}>
-        저장하기
-      </Button>
     </>
   )
 }
