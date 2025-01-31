@@ -72,15 +72,15 @@ export type Time = {
   minute?: number;
 }
 
-export type Day = {
-  openTime?: Time;
-  closeTime?: Time;
-  breakStart?: Time;
-  breakEnd?: Time;
+export type BusinessHour = {
+  openTime?: Time | null;
+  closeTime?: Time | null;
+  breakStart?: Time | null;
+  breakEnd?: Time | null;
   isDayOff?: boolean;
 }
 
-export type hasBreakTime = {
+export type HasBreakTime = {
   monday: boolean,
   tuesday: boolean,
   wednesday: boolean,
@@ -95,20 +95,24 @@ export type DayOfTheWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'fr
 export type TimeCategory = 'openTime' | 'closeTime' | 'breakStart' | 'breakEnd'
 
 export type FixedBusinessHour = {
-  monday: Day | null;
-  tuesday: Day | null;
-  wednesday: Day | null;
-  thursday: Day | null;
-  friday: Day | null;
-  saturday: Day | null;
-  sunday: Day | null;
+  monday: BusinessHour | null;
+  tuesday: BusinessHour | null;
+  wednesday: BusinessHour | null;
+  thursday: BusinessHour | null;
+  friday: BusinessHour | null;
+  saturday: BusinessHour | null;
+  sunday: BusinessHour | null;
 };
 
-export type temporaryBusinessHour = any;
+export type TemporaryBusinessHour = {
+  id?: number;
+  date: Date;
+  businessHour?: BusinessHour;
+};
 
 export type PlaceBusinessHour = {
   fixedBusinessHour: FixedBusinessHour;
-  temporaryBusinessHour: temporaryBusinessHour[];
+  temporaryBusinessHour: TemporaryBusinessHour[];
 }
 
 // 리스트 row
@@ -185,6 +189,40 @@ export type UpdatePlaceMenuVariables = {
 export type UpdatePlaceImageListVariables = {
   placeId: number;
   data: PlaceImage[];
+}
+
+export type CreateTemporaryBusinessHour = {
+  placeId: number;
+  body: {
+    date: string;
+    businessHour: {
+      openTime: Time | null;
+      closeTime: Time | null;
+      breakStart: Time | null;
+      breakEnd: Time | null;
+      isDayOff: boolean;
+    };
+  };
+}
+
+export type UpdateTemporaryBusinessHour = {
+  placeId: number;
+  temporaryBusinessHourId: number;
+  body: {
+    date: string;
+    businessHour: {
+      openTime: Time | null;
+      closeTime: Time | null;
+      breakStart: Time | null;
+      breakEnd: Time | null;
+      isDayOff: boolean;
+    };
+  };
+}
+
+export type DeleteTemporaryBusinessHour = {
+  placeId: number;
+  temporaryBusinessHourId: number;
 }
 
 // Response

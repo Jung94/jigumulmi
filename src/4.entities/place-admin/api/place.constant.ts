@@ -12,4 +12,7 @@ export const placeAmdinAPI = {
   basic: (placeId: number) => `/admin/place/${placeId}/basic`,
   image: (placeId: number) => `/admin/place/${placeId}/image`,
   businessHour: (placeId: number) => `/admin/place/${placeId}/business-hour`,
+  updateFixedBusinessHour: (placeId: number) => `/admin/place/${placeId}/business-hour/fixed`,
+  createTemporaryBusinessHour: (placeId: number) => `/admin/place/${placeId}/business-hour/temporary`,
+  updateTemporaryBusinessHour: (placeId: number, temporaryBusinessHourId: number) => `/admin/place/${placeId}/business-hour/temporary/${temporaryBusinessHourId}`,
 }

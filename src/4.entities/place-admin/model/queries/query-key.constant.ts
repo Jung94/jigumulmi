@@ -8,6 +8,7 @@ const placeQueryKey = {
   basic: (placeId: number) => [placeAmdinAPI.basic(placeId)],
   image: (placeId: number) => [placeAmdinAPI.image(placeId)],
   businessHour: (placeId: number, queryParams: Record<string, any>) => [placeAmdinAPI.businessHour(placeId), queryParams],
+  temporaryBusinessHour: (placeId: number, body: Record<string, any>) => [placeAmdinAPI.temporaryBusinessHour(placeId), body],
   list: (queryParams: Record<string, any>) => [placeAmdinAPI.base, queryParams],
   district: (queryParams: Record<string, any>) => [placeAmdinAPI.district, queryParams],
 }

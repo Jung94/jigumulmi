@@ -12,6 +12,10 @@ import useUpdatePlaceBasic from './useUpdatePlaceBasic'
 import useUpdatePlaceMenu from './useUpdatePlaceMenu'
 import useUpdatePlaceImageList from './useUpdatePlaceImageList'
 import useFetchPlaceBusinessHour from './useFetchPlaceBusinessHour'
+import useUpdateFixedBusinessHour from './useUpdateFixedBusinessHour'
+import useCreateTemporaryBusinessHour from './useCreateTemporaryBusinessHour'
+import useUpdateTemporaryBusinessHour from './useUpdateTemporaryBusinessHour'
+import useDeleteTemporaryBusinessHour from './useDeleteTemporaryBusinessHour'
 
 export {
   useCreatePlace,
@@ -28,4 +32,8 @@ export {
   useUpdatePlaceMenu,
   useUpdatePlaceImageList,
   useFetchPlaceBusinessHour,
+  useUpdateFixedBusinessHour,
+  useCreateTemporaryBusinessHour,
+  useUpdateTemporaryBusinessHour,
+  useDeleteTemporaryBusinessHour,
 }

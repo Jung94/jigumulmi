@@ -40,6 +40,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   const [menuData, setMenuData] = useState<PlaceMenuInput[]>([])
   const [imageData, setImageData] = useState<PlaceImage[]>([])
   const [businessHourData, setBusinessHourData] = useState<PlaceBusinessHour>(initialBusinessHour)
+  const [month, setMonth] = useState((new Date).getMonth() + 1)
 
   const navigatePlaceList = () => {
     const prevPlaceListUrl = getCookie('ji-admin-list-url')
@@ -80,6 +81,10 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
 
   useEffect(() => {
     if (!placeBusinessHourData) return
+    placeBusinessHourData.temporaryBusinessHour = placeBusinessHourData.temporaryBusinessHour.map((temporaryBusinessHour) => ({
+      ...temporaryBusinessHour,
+        date: new Date(temporaryBusinessHour.date)
+    }))
     setBusinessHourData(placeBusinessHourData)
   }, [placeBusinessHourData])
 
@@ -112,7 +117,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
           <BasicSection basicData={basicData} setBasicData={setBasicData} />
         </TabsContent>
         <TabsContent basicStyle value='opening' style={{ height: '100%' }}>
-          <BusinessHourSection businessHourData={businessHourData} setBusinessHourData={setBusinessHourData} />
+          <BusinessHourSection setMonth={setMonth} businessHourData={businessHourData} setBusinessHourData={setBusinessHourData} />
         </TabsContent>
         <TabsContent basicStyle value='menu' style={{ height: '100%' }}>
           <MenuSection menuData={menuData} setMenuData={setMenuData} />

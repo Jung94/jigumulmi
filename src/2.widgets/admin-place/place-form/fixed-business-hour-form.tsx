@@ -1,11 +1,16 @@
-import { ChangeEvent, useState } from 'react'
+'use client'
+
 import styles from './place-form.module.scss'
-import { Dispatch, SetStateAction } from 'react'
+import { useParams } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
+import { Dispatch, SetStateAction, ChangeEvent, useState } from 'react'
 import { Form, Button, SelectBox, ToggleSwitch } from '@/src/shared/ui/admin'
+import { useUpdateFixedBusinessHour } from '@/src/4.entities/place-admin/model/queries'
+import placeQueryKey from '@/src/4.entities/place-admin/model/queries/query-key.constant'
 import type { 
   TimeCategory,
   DayOfTheWeek, 
-  hasBreakTime,
+  HasBreakTime,
   PlaceBusinessHour 
 } from '@/src/4.entities/place-admin/model/types'
 
@@ -13,10 +18,13 @@ export default function FixedBusinessHourForm(props: {
   businessHourData: PlaceBusinessHour
   setBusinessHourData: Dispatch<SetStateAction<PlaceBusinessHour>>
 }) {
+  const params = useParams()
+  const queryClient = useQueryClient()
   const { businessHourData, setBusinessHourData } = props
-  console.log(businessHourData)
+  const updateFixedBusinessHour = useUpdateFixedBusinessHour()
+  const placeId = params?.placeId ? Number(params.placeId) : null
   
-  const [hasBreakTime, setHasBreakTime] = useState<hasBreakTime>({
+  const [hasBreakTime, setHasBreakTime] = useState<HasBreakTime>({
     monday: !!(businessHourData.fixedBusinessHour.monday?.breakStart || businessHourData.fixedBusinessHour.monday?.breakEnd),
     tuesday: !!(businessHourData.fixedBusinessHour.tuesday?.breakStart || businessHourData.fixedBusinessHour.tuesday?.breakEnd),
     wednesday: !!(businessHourData.fixedBusinessHour.wednesday?.breakStart || businessHourData.fixedBusinessHour.wednesday?.breakEnd),
@@ -58,10 +66,23 @@ export default function FixedBusinessHourForm(props: {
     }))
   }
 
-  const handleUpdate = async () => {}
+  const handleUpdate = async () => {
+    if (!placeId) return
+    try {
+      await updateFixedBusinessHour.mutateAsync({ 
+        placeId, 
+        body: businessHourData.fixedBusinessHour
+      })
+      await queryClient.refetchQueries(placeQueryKey.businessHour(placeId, { month: undefined }))
+      alert('고정 영업 시간 수정이 완료되었습니다.')
+    } catch (error) {
+      alert("고정 영업 시간 수정에 실패하였습니다. 개발자에게 문의해 주세요!")
+      console.error("Failed to update fixedBusinessHour:", error)
+    }
+  }
 
   return (
-    <Form>
+    <>
       <Form.Title>고정 영업 시간</Form.Title>
       <Form.SubTitle>월</Form.SubTitle>
       <Form.Item>
@@ -75,7 +96,7 @@ export default function FixedBusinessHourForm(props: {
           </Form.Control>
         </Form.Item>
         <Form.Control>
-          <TimeToTime day='monday' timeCategory='business' {...props} />
+          <BusinessHourForm day='monday' timeCategory='business' {...props} />
         </Form.Control>
       </Form.Item>
       <Form.Item>
@@ -90,7 +111,7 @@ export default function FixedBusinessHourForm(props: {
         </Form.Item>
         {hasBreakTime.monday &&
           <Form.Control>
-            <TimeToTime day='monday' timeCategory='break' {...props} />
+            <BusinessHourForm day='monday' timeCategory='break' {...props} />
           </Form.Control>
         }
       </Form.Item>
@@ -109,7 +130,7 @@ export default function FixedBusinessHourForm(props: {
           </Form.Control>
         </Form.Item>
         <Form.Control>
-          <TimeToTime day='tuesday' timeCategory='business' {...props} />
+          <BusinessHourForm day='tuesday' timeCategory='business' {...props} />
         </Form.Control>
       </Form.Item>
       <Form.Item>
@@ -124,7 +145,7 @@ export default function FixedBusinessHourForm(props: {
         </Form.Item>
         {hasBreakTime.tuesday &&
           <Form.Control>
-            <TimeToTime day='tuesday' timeCategory='break' {...props} />
+            <BusinessHourForm day='tuesday' timeCategory='break' {...props} />
           </Form.Control>
         }
       </Form.Item>
@@ -143,7 +164,7 @@ export default function FixedBusinessHourForm(props: {
           </Form.Control>
         </Form.Item>
         <Form.Control>
-          <TimeToTime day='wednesday' timeCategory='business' {...props} />
+          <BusinessHourForm day='wednesday' timeCategory='business' {...props} />
         </Form.Control>
       </Form.Item>
       <Form.Item>
@@ -158,7 +179,7 @@ export default function FixedBusinessHourForm(props: {
         </Form.Item>
         {hasBreakTime.wednesday &&
           <Form.Control>
-            <TimeToTime day='wednesday' timeCategory='break' {...props} />
+            <BusinessHourForm day='wednesday' timeCategory='break' {...props} />
           </Form.Control>
         }
       </Form.Item>
@@ -177,7 +198,7 @@ export default function FixedBusinessHourForm(props: {
           </Form.Control>
         </Form.Item>
         <Form.Control>
-          <TimeToTime day='thursday' timeCategory='business' {...props} />
+          <BusinessHourForm day='thursday' timeCategory='business' {...props} />
         </Form.Control>
       </Form.Item>
       <Form.Item>
@@ -192,7 +213,7 @@ export default function FixedBusinessHourForm(props: {
         </Form.Item>
         {hasBreakTime.thursday &&
           <Form.Control>
-            <TimeToTime day='thursday' timeCategory='break' {...props} />
+            <BusinessHourForm day='thursday' timeCategory='break' {...props} />
           </Form.Control>
         }
       </Form.Item>
@@ -211,7 +232,7 @@ export default function FixedBusinessHourForm(props: {
           </Form.Control>
         </Form.Item>
         <Form.Control>
-          <TimeToTime day='friday' timeCategory='business' {...props} />
+          <BusinessHourForm day='friday' timeCategory='business' {...props} />
         </Form.Control>
       </Form.Item>
       <Form.Item>
@@ -226,7 +247,7 @@ export default function FixedBusinessHourForm(props: {
         </Form.Item>
         {hasBreakTime.friday &&
           <Form.Control>
-            <TimeToTime day='friday' timeCategory='break' {...props} />
+            <BusinessHourForm day='friday' timeCategory='break' {...props} />
           </Form.Control>
         }
       </Form.Item>
@@ -245,7 +266,7 @@ export default function FixedBusinessHourForm(props: {
           </Form.Control>
         </Form.Item>
         <Form.Control>
-          <TimeToTime day='saturday' timeCategory='business' {...props} />
+          <BusinessHourForm day='saturday' timeCategory='business' {...props} />
         </Form.Control>
       </Form.Item>
       <Form.Item>
@@ -260,7 +281,7 @@ export default function FixedBusinessHourForm(props: {
         </Form.Item>
         {hasBreakTime.saturday &&
           <Form.Control>
-            <TimeToTime day='saturday' timeCategory='break' {...props} />
+            <BusinessHourForm day='saturday' timeCategory='break' {...props} />
           </Form.Control>
         }
       </Form.Item>
@@ -279,7 +300,7 @@ export default function FixedBusinessHourForm(props: {
           </Form.Control>
         </Form.Item>
         <Form.Control>
-          <TimeToTime day='sunday' timeCategory='business' {...props} />
+          <BusinessHourForm day='sunday' timeCategory='business' {...props} />
         </Form.Control>
       </Form.Item>
       <Form.Item>
@@ -294,7 +315,7 @@ export default function FixedBusinessHourForm(props: {
         </Form.Item>
         {hasBreakTime.sunday &&
           <Form.Control>
-            <TimeToTime day='sunday' timeCategory='break' {...props} />
+            <BusinessHourForm day='sunday' timeCategory='break' {...props} />
           </Form.Control>
         }
       </Form.Item>
@@ -302,11 +323,11 @@ export default function FixedBusinessHourForm(props: {
       <Button onClick={handleUpdate} style={{ marginTop: '2rem' }}>
         저장하기
       </Button>
-    </Form>
+    </>
   )
 }
 
-function TimeToTime ({
+function BusinessHourForm ({
   day,
   timeCategory,
   businessHourData,
@@ -416,7 +437,7 @@ function TimeToTime ({
           }
           placeholder='분'
           options={createMinuteOptionList()}
-          selectedValue={businessHourData.fixedBusinessHour.monday?.[timeCategory === 'business' ? 'closeTime' : 'breakEnd']?.minute ?? ''}
+          selectedValue={businessHourData.fixedBusinessHour[day]?.[timeCategory === 'business' ? 'closeTime' : 'breakEnd']?.minute ?? ''}
           onClick={e => handleTimeChange(e, day, timeCategory === 'business' ? 'closeTime' : 'breakEnd', 'minute')}
           styleShowBox={{ width: '7rem', height: '32px' }} 
         ></SelectBox.HiddenOption>
