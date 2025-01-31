@@ -3,9 +3,8 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import styles from './registration-form.module.scss'
 import { useRouter } from 'next/navigation'
-import UploadingImage from './uploading-image'
 import { initialState } from './banner-form.constant'
-import { Button, Form, Input, ToggleSwitch } from '@/src/shared/ui/admin'
+import { Button, Form, Input, ToggleSwitch, UploadImage } from '@/src/shared/ui/admin'
 import useCreateBanner from '@/src/4.entities/banner-admin/model/queries/useCreateBanner'
 import { bannerAmdinAPI } from '@/src/4.entities/banner-admin/api/banner.constant'
 import type { CreateBannerInput } from '@/src/4.entities/banner-admin/model/types'
@@ -92,7 +91,7 @@ export default function RegistrationFrom() {
         <div className={styles['registration-form-upload-wrapper']}>
           <Form.Item name='메인 이미지'>
             <Form.Control>
-              <UploadingImage 
+              <UploadImage 
                 name='outerImage' 
                 url={formData.outerImage?.url} 
                 onChange={handleChange}
@@ -101,7 +100,7 @@ export default function RegistrationFrom() {
             </Form.Control>
           </Form.Item>
           <Form.Item name='내부 이미지'>
-            <UploadingImage 
+            <UploadImage 
               name='innerImage' 
               url={formData.innerImage?.url} 
               onChange={handleChange} 
