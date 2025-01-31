@@ -89,7 +89,6 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   }, [placeBusinessHourData])
 
   if (!basicData || !placeImageData || !businessHourData) return
-  console.log('businessHourData:', businessHourData)
 
   return (
     <>
