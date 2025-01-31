@@ -68,8 +68,8 @@ export default function TemporaryBusinessHourForm(props: {
       ...prev,
       businessHour: {
         ...prev.businessHour,
-        openTime: undefined,
-        closeTime: undefined,
+        openTime: null,
+        closeTime: null,
         isDayOff: checked
       }
     }))
@@ -82,8 +82,8 @@ export default function TemporaryBusinessHourForm(props: {
       ...prev,
       businessHour: {
         ...prev.businessHour,
-        breakStart: undefined,
-        breakEnd: undefined,
+        breakStart: null,
+        breakEnd: null,
       }
     }))
   }

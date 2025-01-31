@@ -10,7 +10,6 @@ export default function ToggleSwitch({
   name: string
   checked?: boolean
   disabled?: boolean
-  // onChange?: (value: boolean) => void
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }) {
   return (
@@ -22,7 +21,6 @@ export default function ToggleSwitch({
         type='checkbox' 
         checked={checked}
         disabled={disabled}
-        // onChange={({ target: { checked }}) => onChange && onChange(checked)}
         onChange={(e) => onChange && onChange(e)}
       />
     </label>
