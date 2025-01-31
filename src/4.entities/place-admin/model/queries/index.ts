@@ -11,6 +11,7 @@ import useFetchDistrictList from './useFetchDistrictList'
 import useUpdatePlaceBasic from './useUpdatePlaceBasic'
 import useUpdatePlaceMenu from './useUpdatePlaceMenu'
 import useUpdatePlaceImageList from './useUpdatePlaceImageList'
+import useFetchPlaceBusinessHour from './useFetchPlaceBusinessHour'
 
 export {
   useCreatePlace,
@@ -26,4 +27,5 @@ export {
   useUpdatePlaceBasic,
   useUpdatePlaceMenu,
   useUpdatePlaceImageList,
+  useFetchPlaceBusinessHour,
 }

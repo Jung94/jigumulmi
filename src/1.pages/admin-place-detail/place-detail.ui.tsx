@@ -5,18 +5,41 @@ import { useRouter } from 'next/navigation'
 import { getCookie, deleteCookie } from 'cookies-next'
 import { PreviousPageButton } from '@/src/shared/ui/admin'
 import Header from '@/src/shared/ui/admin/layout/section/header'
-import { BasicSection, MenuSection, ImageSection } from '@/src/2.widgets/admin-place/place-form'
+import { BasicSection, MenuSection, ImageSection, BusinessHourSection } from '@/src/2.widgets/admin-place/place-form'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/src/shared/ui/admin/tabs'
-import { useFetchPlaceBasic, useFetchPlaceMenu, useFetchPlaceImage } from '@/src/4.entities/place-admin/model/queries'
-import type { PlaceBasic, PlaceMenuInput, PlaceImage } from '@/src/4.entities/place-admin/model/types'
+import { 
+  useFetchPlaceMenu, 
+  useFetchPlaceBasic, 
+  useFetchPlaceImage,
+  useFetchPlaceBusinessHour,
+} from '@/src/4.entities/place-admin/model/queries'
+import type { 
+  PlaceBasic, 
+  PlaceMenuInput, 
+  PlaceImage,
+  PlaceBusinessHour 
+} from '@/src/4.entities/place-admin/model/types'
+
+const initialBusinessHour = {
+  fixedBusinessHour: {
+    monday: null,
+    tuesday: null,
+    wednesday: null,
+    thursday: null,
+    friday: null,
+    saturday: null,
+    sunday: null,
+  },
+  temporaryBusinessHour: []
+}
 
 export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   const router = useRouter()
 
   const [basicData, setBasicData] = useState<PlaceBasic>()
-  const [openingData, setOpeningData] = useState()
   const [menuData, setMenuData] = useState<PlaceMenuInput[]>([])
   const [imageData, setImageData] = useState<PlaceImage[]>([])
+  const [businessHourData, setBusinessHourData] = useState<PlaceBusinessHour>(initialBusinessHour)
 
   const navigatePlaceList = () => {
     const prevPlaceListUrl = getCookie('ji-admin-list-url')
@@ -26,6 +49,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   const { data: placeBasicData } = useFetchPlaceBasic(placeId)
   const { data: placeMenuData } = useFetchPlaceMenu(placeId)
   const { data: placeImageData } = useFetchPlaceImage(placeId)
+  const { data: placeBusinessHourData } = useFetchPlaceBusinessHour(placeId, { month: undefined })
 
   useEffect(()=>{
     return () => deleteCookie('ji-admin-list-url')
@@ -54,8 +78,13 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
     setImageData(placeImageData)
   }, [placeImageData])
 
-  if (!basicData || !placeImageData) return
-  console.log('menuData:', menuData)
+  useEffect(() => {
+    if (!placeBusinessHourData) return
+    setBusinessHourData(placeBusinessHourData)
+  }, [placeBusinessHourData])
+
+  if (!basicData || !placeImageData || !businessHourData) return
+  console.log('businessHourData:', businessHourData)
 
   return (
     <>
@@ -83,7 +112,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
           <BasicSection basicData={basicData} setBasicData={setBasicData} />
         </TabsContent>
         <TabsContent basicStyle value='opening' style={{ height: '100%' }}>
-          {/* <BasicSection basicData={basicData} setBasicData={setBasicData} /> */}
+          <BusinessHourSection businessHourData={businessHourData} setBusinessHourData={setBusinessHourData} />
         </TabsContent>
         <TabsContent basicStyle value='menu' style={{ height: '100%' }}>
           <MenuSection menuData={menuData} setMenuData={setMenuData} />

@@ -13,6 +13,8 @@ export default function Form({ children, onSubmit }: {
 }
 
 Form.Item = FormItem
+Form.Title = FormTitle
+Form.SubTitle = FormSubTitle
 Form.Control = FormControl
 Form.Description = FormDescription
 Form.Message = FormMessage
@@ -28,6 +30,14 @@ function FormItem({ row, name, children }: { row?: boolean; name?: string; child
       {children}
     </div>
   )
+}
+
+function FormTitle({ children }: { children: ReactNode; }) {
+  return <div className={styles['form-title']}>{children}</div>
+}
+
+function FormSubTitle({ children, style }: { children: ReactNode; style?: any; }) {
+  return <div className={styles['form-sub-title']} style={style}>{children}</div>
 }
 
 function FormControl({ children }: { children: ReactNode; }) {

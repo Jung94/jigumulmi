@@ -394,3 +394,9 @@
     }
   }
 }
+
+.place-hour {
+  &-row {
+    display: flex;
+  }
+}

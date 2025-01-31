@@ -4,9 +4,10 @@ const placeQueryKey = {
   /**
    * @description 장소 리스트 조회
    */
-  basic: (placeId: number) => [placeAmdinAPI.basic(placeId)],
   menu: (placeId: number) => [placeAmdinAPI.menu(placeId)],
+  basic: (placeId: number) => [placeAmdinAPI.basic(placeId)],
   image: (placeId: number) => [placeAmdinAPI.image(placeId)],
+  businessHour: (placeId: number, queryParams: Record<string, any>) => [placeAmdinAPI.businessHour(placeId), queryParams],
   list: (queryParams: Record<string, any>) => [placeAmdinAPI.base, queryParams],
   district: (queryParams: Record<string, any>) => [placeAmdinAPI.district, queryParams],
 }

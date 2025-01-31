@@ -6,7 +6,7 @@ export default async function updatePlaceImage(
   { placeId, data }: UpdatePlaceImageListVariables
 ) {
   return await apiClient.put({
-    endpoint: `${placeAmdinAPI.imageList(placeId)}`,
+    endpoint: `${placeAmdinAPI.image(placeId)}`,
     body: data
   })
 }

@@ -64,6 +64,53 @@ export type PlaceMenuInput = {
   description: string;
 }
 
+export type PlaceImage = { url: string; isMain: boolean }
+export type PlaceImageList = PlaceImage[]
+
+export type Time = {
+  hour?: number;
+  minute?: number;
+}
+
+export type Day = {
+  openTime?: Time;
+  closeTime?: Time;
+  breakStart?: Time;
+  breakEnd?: Time;
+  isDayOff?: boolean;
+}
+
+export type hasBreakTime = {
+  monday: boolean,
+  tuesday: boolean,
+  wednesday: boolean,
+  thursday: boolean,
+  friday: boolean,
+  saturday: boolean,
+  sunday: boolean,
+}
+
+export type DayOfTheWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
+
+export type TimeCategory = 'openTime' | 'closeTime' | 'breakStart' | 'breakEnd'
+
+export type FixedBusinessHour = {
+  monday: Day | null;
+  tuesday: Day | null;
+  wednesday: Day | null;
+  thursday: Day | null;
+  friday: Day | null;
+  saturday: Day | null;
+  sunday: Day | null;
+};
+
+export type temporaryBusinessHour = any;
+
+export type PlaceBusinessHour = {
+  fixedBusinessHour: FixedBusinessHour;
+  temporaryBusinessHour: temporaryBusinessHour[];
+}
+
 // 리스트 row
 export type PlaceRow = {
   id: number;
@@ -83,9 +130,6 @@ interface PageInfo {
   currentPage: number;
   totalPage: number;
 }
-
-export type PlaceImage = { url: string; isMain: boolean }
-export type PlaceImageList = PlaceImage[]
 
 //Request
 export type CreatePlaceVariables = {
@@ -149,6 +193,8 @@ export type FetchPlaceBasicResponse = PlaceBasic
 export type FetchPlaceMenuResponse = PlaceMenu[]
 
 export type FetchPlaceImageResponse = PlaceImage[]
+
+export type FetchPlaceBusinessHourResponse = PlaceBusinessHour
 
 export type FetchPlaceListResponse = {
   page: PageInfo;
