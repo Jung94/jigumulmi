@@ -64,12 +64,15 @@ export default function TemporaryBusinessHourForm(props: {
 
   const handleDayOffChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target
+    checked && setHasBreakTime(!checked)
     setTempBusinessHour((prev) => ({
       ...prev,
       businessHour: {
         ...prev.businessHour,
         openTime: null,
         closeTime: null,
+        breakStart: null,
+        breakEnd: null,
         isDayOff: checked
       }
     }))
@@ -88,20 +91,24 @@ export default function TemporaryBusinessHourForm(props: {
     }))
   }
 
-  const checkIsPossibleSubmit = (): boolean => {
+  const isSaveButtonEnabled = (): boolean => {
     let isPossible = true
     if (!tempBusinessHour.date) isPossible = false
     if (!tempBusinessHour.businessHour?.isDayOff &&
-      (typeof tempBusinessHour.businessHour?.openTime?.hour === 'undefined' ||
-      typeof tempBusinessHour.businessHour?.openTime?.minute === 'undefined' ||
-      typeof tempBusinessHour.businessHour?.closeTime?.hour === 'undefined' ||
-      typeof tempBusinessHour.businessHour?.closeTime?.minute === 'undefined')
+      (
+        !/[0-9]/.test(String(tempBusinessHour.businessHour?.openTime?.hour)) ||
+        !/[0-9]/.test(String(tempBusinessHour.businessHour?.openTime?.minute)) ||
+        !/[0-9]/.test(String(tempBusinessHour.businessHour?.closeTime?.hour)) ||
+        !/[0-9]/.test(String(tempBusinessHour.businessHour?.closeTime?.minute))
+      )
     ) isPossible = false
     if (hasBreakTime && 
-      (typeof tempBusinessHour.businessHour?.breakStart?.hour === 'undefined' ||
-      typeof tempBusinessHour.businessHour?.breakStart?.minute === 'undefined' ||
-      typeof tempBusinessHour.businessHour?.breakEnd?.hour === 'undefined' ||
-      typeof tempBusinessHour.businessHour?.breakEnd?.minute === 'undefined')
+      (
+        !/[0-9]/.test(String(tempBusinessHour.businessHour?.breakStart?.hour)) ||
+        !/[0-9]/.test(String(tempBusinessHour.businessHour?.breakStart?.minute)) ||
+        !/[0-9]/.test(String(tempBusinessHour.businessHour?.breakEnd?.hour)) ||
+        !/[0-9]/.test(String(tempBusinessHour.businessHour?.breakEnd?.minute))
+      )
     ) isPossible = false
     return isPossible
   }
@@ -226,11 +233,11 @@ export default function TemporaryBusinessHourForm(props: {
             <Button color='red' onClick={handleDelete} style={{ width: '15rem' }}>
               삭제하기
             </Button>
-            <Button disabled={!checkIsPossibleSubmit()} onClick={handleUpdate}  style={{ width: '100%' }}>
+            <Button disabled={!isSaveButtonEnabled()} onClick={handleUpdate}  style={{ width: '100%' }}>
               수정하기
             </Button>
           </div>
-        : <Button disabled={!checkIsPossibleSubmit()} onClick={handleCreate} style={{ marginTop: '2rem' }}>
+        : <Button disabled={!isSaveButtonEnabled()} onClick={handleCreate} style={{ marginTop: '2rem' }}>
             저장하기
           </Button>
       }
