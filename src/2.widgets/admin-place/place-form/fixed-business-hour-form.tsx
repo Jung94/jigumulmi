@@ -11,6 +11,7 @@ import type {
   TimeCategory,
   DayOfTheWeek, 
   HasBreakTime,
+  FixedBusinessHour,
   PlaceBusinessHour 
 } from '@/src/4.entities/place-admin/model/types'
 
@@ -36,14 +37,17 @@ export default function FixedBusinessHourForm(props: {
 
   const handleDayOffChange = (e: ChangeEvent<HTMLInputElement>, day: DayOfTheWeek) => {
     const { checked } = e.target
+    checked && setHasBreakTime((prev) => ({ ...prev, [day]: !checked }))
     setBusinessHourData((prev) => ({
       ...prev,
       fixedBusinessHour: {
         ...prev.fixedBusinessHour,
         [day]: {
           ...prev.fixedBusinessHour[day],
-          openTime: undefined,
-          closeTime: undefined,
+          openTime: null,
+          closeTime: null,
+          breakStart: null,
+          breakEnd: null,
           isDayOff: checked
         }
       }
@@ -59,11 +63,37 @@ export default function FixedBusinessHourForm(props: {
         ...prev.fixedBusinessHour,
         [day]: {
           ...prev.fixedBusinessHour[day],
-          breakStart: undefined,
-          breakEnd: undefined,
+          breakStart: null,
+          breakEnd: null,
         }
       }
     }))
+  }
+
+  const isSaveButtonEnabled = (): boolean => {
+    const fixedBusinessHour = businessHourData.fixedBusinessHour
+    
+    for (const [key, value] of Object.entries(fixedBusinessHour)) {
+      const typedKey = key as keyof typeof fixedBusinessHour
+      if (!value) return false
+      if (!value.isDayOff &&
+        (
+          !/[0-9]/.test(String(value.openTime?.hour)) ||
+          !/[0-9]/.test(String(value.openTime?.minute)) ||
+          !/[0-9]/.test(String(value.closeTime?.hour)) ||
+          !/[0-9]/.test(String(value.closeTime?.minute))
+        )
+      ) return false
+      if (hasBreakTime[typedKey] &&
+        (
+          !/[0-9]/.test(String(value.breakStart?.hour)) ||
+          !/[0-9]/.test(String(value.breakStart?.minute)) ||
+          !/[0-9]/.test(String(value.breakEnd?.hour)) ||
+          !/[0-9]/.test(String(value.breakEnd?.minute))
+        )
+      ) return false
+    }
+    return true
   }
 
   const handleUpdate = async () => {
@@ -105,6 +135,7 @@ export default function FixedBusinessHourForm(props: {
             <ToggleSwitch
               name='break-time-monday'
               checked={hasBreakTime.monday}
+              disabled={businessHourData.fixedBusinessHour.monday?.isDayOff}
               onChange={e => handleHasBreakTimeChange(e, 'monday')}
             />
           </Form.Control>
@@ -139,6 +170,7 @@ export default function FixedBusinessHourForm(props: {
             <ToggleSwitch
               name='break-time-tuesday'
               checked={hasBreakTime.tuesday}
+              disabled={businessHourData.fixedBusinessHour.tuesday?.isDayOff}
               onChange={e => handleHasBreakTimeChange(e, 'tuesday')}
             />
           </Form.Control>
@@ -173,6 +205,7 @@ export default function FixedBusinessHourForm(props: {
             <ToggleSwitch
               name='break-time-wednesday'
               checked={hasBreakTime.wednesday}
+              disabled={businessHourData.fixedBusinessHour.wednesday?.isDayOff}
               onChange={e => handleHasBreakTimeChange(e, 'wednesday')}
             />
           </Form.Control>
@@ -207,6 +240,7 @@ export default function FixedBusinessHourForm(props: {
             <ToggleSwitch
               name='break-time-thursday'
               checked={hasBreakTime.thursday}
+              disabled={businessHourData.fixedBusinessHour.thursday?.isDayOff}
               onChange={e => handleHasBreakTimeChange(e, 'thursday')}
             />
           </Form.Control>
@@ -241,6 +275,7 @@ export default function FixedBusinessHourForm(props: {
             <ToggleSwitch
               name='break-time-friday'
               checked={hasBreakTime.friday}
+              disabled={businessHourData.fixedBusinessHour.friday?.isDayOff}
               onChange={e => handleHasBreakTimeChange(e, 'friday')}
             />
           </Form.Control>
@@ -275,6 +310,7 @@ export default function FixedBusinessHourForm(props: {
             <ToggleSwitch
               name='break-time-saturday'
               checked={hasBreakTime.saturday}
+              disabled={businessHourData.fixedBusinessHour.saturday?.isDayOff}
               onChange={e => handleHasBreakTimeChange(e, 'saturday')}
             />
           </Form.Control>
@@ -309,6 +345,7 @@ export default function FixedBusinessHourForm(props: {
             <ToggleSwitch
               name='break-time-sunday'
               checked={hasBreakTime.sunday}
+              disabled={businessHourData.fixedBusinessHour.sunday?.isDayOff}
               onChange={e => handleHasBreakTimeChange(e, 'sunday')}
             />
           </Form.Control>
@@ -320,7 +357,7 @@ export default function FixedBusinessHourForm(props: {
         }
       </Form.Item>
 
-      <Button onClick={handleUpdate} style={{ marginTop: '2rem' }}>
+      <Button disabled={!isSaveButtonEnabled()} onClick={handleUpdate} style={{ marginTop: '2rem' }}>
         저장하기
       </Button>
     </>
