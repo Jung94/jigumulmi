@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/shared/assets/icons/LoadingSpinnertsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/shared/assets/icons/LoadingSpinnertsx", "src/4.entities/place-admin/model/queries"],
   "exclude": ["node_modules"]
 }

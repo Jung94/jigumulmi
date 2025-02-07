@@ -159,7 +159,7 @@ export default function Search() {
     if (!window.kakao || !kakaoMapFunc || !stationName) return 
     
     !placeId && getLocationOfKeyword(stationName)
-  }, [stationName, window.kakao, kakaoMapFunc])
+  }, [stationName, kakaoMapFunc])
 
   useEffect(()=>{ // 지하철역 검색 시
     if (!!stationId && !!marker) dispatch(update_marker(null))

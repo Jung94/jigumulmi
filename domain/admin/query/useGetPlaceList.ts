@@ -20,14 +20,12 @@ type Queries = {
 export default function useGetPlaceList ({sort, page, placeName, isFromAdmin}: PlaceQueryParams) {
   let queries: Queries = { sort: sort === 1 ? 'ASC' : 'DESC', page, isFromAdmin: isFromAdmin === 0 ? false : true }
   if (placeName) queries['placeName'] = placeName
-
+  
   const response = useQuery(
     [APIadmin.place, sort, page, placeName, isFromAdmin],
     () => getAPI(
       APIadmin.place, queries
-    ), {
-      // enabled: !(subwayStationId && placeId)
-    })
+    ))
   return response
 }
 

@@ -1,0 +1,402 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.place-form {
+  &-row {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &-textarea {
+    padding: 10px;
+    width: 100%;
+    height: 10rem;
+    font-size: 0.85rem;
+    word-break: break-all;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+    border: 1px solid map.get($--colors, "gray-300");
+    border-radius: 6px;
+    transition: all 0.15s ease;
+
+    &:read-only {
+      background-color: map.get($--colors, "gray-100");
+    }
+  }
+
+  &-menu {
+    &-dnd-context {
+      padding: 0.75rem;
+      width: 100%;
+      border-radius: 7px;
+      background-color: map.get($--colors, gray-100);
+      overflow: auto;
+      display: flex;
+      gap: 0.5rem;
+  
+      &-empty {
+        display: none;
+      }
+    }
+
+    &-empty {
+      height: 8rem;
+      color: map.get($--colors, 'gray-900');
+      border-radius: 6px;
+      background-color: map.get($--colors, "gray-100");
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-card {
+      padding: 4px;
+      max-width: calc(7rem + 8px);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      transition: all 0.12s ease;
+      cursor: pointer;
+
+      &:hover {
+        box-shadow: 0 0 0 3px map.get($--colors, 'gray-500');
+      }
+
+      &-active {
+        box-shadow: 0 0 0 3px map.get($--colors, 'blue-700');
+
+        &:hover {
+          box-shadow: 0 0 0 3px map.get($--colors, 'blue-700');
+        }
+      }
+
+      &-image {
+        position: relative;
+        min-width: 7rem;
+        min-height: 7rem;
+        border-radius: 6px;
+        background-color: map.get($--colors, 'gray-400');
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        span {
+          color: map.get($--colors, 'gray-900');
+          font-size: 13px;
+        }
+      }
+
+      &-name {
+        padding-top: 2px;
+        font-size: 15px;
+        color: map.get($--colors, 'gray-1000');
+        line-height: 16px;
+        // 텍스트 말줄임 - https://codingeverybody.kr/css-text-ellipsis/
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &-price {
+        color: map.get($--colors, 'gray-1000');
+        font-weight: 500;
+        line-height: 16px;
+      }
+    }
+  }
+}
+
+.kakao-place-search {
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 1;
+
+  &-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  &-option {
+    &-box {
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 13px;
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 0;
+      right: 0;
+      width: 100%;
+      max-height: 13rem;
+      overflow: auto;
+      padding: 0.375rem;
+      border-radius: 5px;
+      background-color: map.get($--colors, "gray-300");
+    }
+
+    &-item {
+      padding: 0.25rem;
+      border-radius: 3px;
+      cursor: default;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+
+      &:hover {
+        background-color: map.get($--colors, "background-100");
+      }
+
+      &-name {
+        color: #232323;
+      }
+    }
+  }
+}
+
+.subway-station {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+
+  &-option-list {
+    padding: 6px;
+    position: absolute;
+    top: 3rem;
+    left: 0;
+    width: 11rem;
+    max-height: 10rem;
+    border-radius: 3px;
+    border: 1px solid map.get($--colors, gray-400);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: white;
+    overflow: auto;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-option {
+    padding: 5px;
+    width: 100%;
+    border-radius: 4px;
+    cursor: default;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+
+    &:hover {
+      background-color: map.get($--colors, gray-200);
+    }
+
+    &-active {
+      background-color: map.get($--colors, blue-400);
+
+      &:hover {
+        background-color: map.get($--colors, blue-400);
+      }
+    }
+  }
+
+  &-dnd-context {
+    padding: 8px;
+    width: 100%;
+    border-radius: 7px;
+    background-color: map.get($--colors, gray-100);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &-empty {
+      display: none;
+    }
+  }
+
+  &-tag {
+    padding: 8px;
+    padding-left: 12px;
+    width: 100%;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    cursor: default;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3px;
+
+    &-name {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    &-main {
+      padding: 3px 6px;
+      color: #0070F3;
+      font-size: 11px;
+      border-radius: 5rem;
+      background-color: #d4e8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-x-mark {
+      padding: 2px;
+      border-radius: 10rem;
+      background-color: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        background-color: map.get($--colors, gray-300);
+      }
+    }
+  }
+}
+
+.image-list {
+  &-preview {
+    position: relative;
+    width: fit-content;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    cursor: default;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+
+    &-image-wrapper {
+      width: 12rem;
+      height: 10rem;
+    }
+
+    &-image {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    &-main {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      padding: 3px 6px;
+      color: #0070F3;
+      font-size: 11px;
+      border-radius: 5rem;
+      background-color: #d4e8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-x-mark {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      padding: 2px;
+      border-radius: 10rem;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        background-color: map.get($--colors, gray-300);
+      }
+    }
+  }
+}
+
+.place-image {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &-dnd-context {
+    padding: 8px;
+    width: 100%;
+    border-radius: 7px;
+    background-color: map.get($--colors, gray-100);
+    overflow: auto;
+    display: flex;
+    gap: 0.5rem;
+
+    &-empty {
+      display: none;
+    }
+  }
+
+  &-preview {
+    position: relative;
+    width: fit-content;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    cursor: default;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+  
+    &-image-wrapper {
+      width: 12rem;
+      height: 10rem;
+    }
+  
+    &-image {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  
+    &-main {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      padding: 3px 6px;
+      color: #0070F3;
+      font-size: 11px;
+      border-radius: 5rem;
+      background-color: #d4e8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    &-x-mark {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      padding: 2px;
+      border-radius: 10rem;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      &:hover {
+        background-color: map.get($--colors, gray-300);
+      }
+    }
+  }
+}
+
+.place-hour {
+  &-row {
+    display: flex;
+  }
+}

@@ -1,0 +1,83 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.uploading-image {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  input {
+    display: none;
+    height: 0;
+  }
+  
+  &-upload {
+    width: 4.25rem;
+    min-width: 4.25rem;
+    height: 4.25rem;
+    color: map.get($--colors, 'gray-1000');
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border-radius: 9px;
+    background-color: map.get($--colors, 'gray-200');
+    cursor: pointer !important;
+
+    &-large {
+      min-width: 8rem;
+      height: 8rem;
+    }
+  }
+
+  &-preview {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    overflow-x: auto;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+
+    &-image {
+      position: relative;
+      width: 4.25rem;
+      min-width: 4.25rem;
+      height: 4.25rem;
+      border-radius: 9px;
+      overflow: hidden;
+      border: 1px solid map.get($--greys, "200");
+
+      &-small {}
+
+      &-medium {}
+
+      &-large {
+        width: 8rem;
+        height: 8rem;
+      }
+
+      &-content {
+        object-fit: cover;
+      }
+
+      &-deletion {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        padding: 1px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 20rem;
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+    }
+  }
+}

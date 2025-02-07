@@ -8,7 +8,7 @@ export const APIaccount = {
    * @description 닉네임 수정
    * @method put
    */
-  getUserDetail: "/member/detail",
+  getUserDetail: "/member",
   /**
    * @description 닉네임 수정
    * @method put

@@ -8,7 +8,7 @@ export const APIplace = {
    * @description 장소 세부 정보 조회
    * @method get
    */
-  getPlaceDetail: (placeId: number) => `/place/detail/${placeId}`,
+  getPlaceDetail: (placeId: number) => `/place/${placeId}`,
   /**
    * @description 지하철역 조회
    * @method get

@@ -1,0 +1,42 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.tr {
+  cursor: pointer;
+
+  &:hover {
+    background-color: map.get($--colors, "gray_1");
+  }
+}
+.tr_active {
+  background-color: map.get($--colors, "blue-200");
+  
+  &:hover {
+    background-color: map.get($--colors, "blue-200");
+  }
+}
+.tr_disabled {
+  cursor: default;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.tr_is_selected {
+  background-color: map.get($--colors, "gray_1");
+}
+
+.td {
+  padding: 0.75rem 0.25rem;
+  font-size: 13px;
+  word-break: break-all;
+  width: 100%;
+}
+
+.th {
+  padding: 1.25rem;
+  font-size: 13px;
+  font-weight: 500;
+  word-break: break-all;
+}
