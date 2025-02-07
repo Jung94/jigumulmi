@@ -1,0 +1,15 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.layout {
+  display: flex;
+  justify-content: center;
+
+  .content {
+    padding: 0 $--padding--mobile;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid map.get($--colors, 'gray-100');
+    background-color: map.get($--colors, 'gray-100');
+  }
+}
