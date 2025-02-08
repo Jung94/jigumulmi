@@ -1,11 +1,14 @@
 'use client'
 
-import { Suspense } from 'react'
+// import { Suspense } from 'react'
 import styles from './main.module.scss'
 import { useRouter } from 'next/navigation'
+import { useFetchBannerList } from '@/src/4.entities/banner/model/queries'
 
 export default function MainPage() {
   const router = useRouter()
+  const { data: bannerList } = useFetchBannerList()
+
   const navigateBannerDetail = (bannerId: number) => router.push(`/banner/${bannerId}`)
   const handleClickBannerCard = (bannerId: number) => navigateBannerDetail(bannerId)
 
@@ -17,6 +20,8 @@ export default function MainPage() {
     )
   }
 
+  if (!bannerList) return
+
   return (
     <div className={styles['main']}>
       <div className={styles['main-title']}>
@@ -26,7 +31,7 @@ export default function MainPage() {
         카드를 선택하면 장소를 추천해드립니다.
       </div>
       <div className={styles['main-banner-list']}>
-        <button className={styles['main-banner-list-card']}>
+        <button className={styles['main-banner-list-card']} onClick={() => handleClickBannerCard(bannerList[0].id)}>
           <div className={styles['main-banner-list-card-icon']} style={{ backgroundColor: '#feeaf1' }}>
             {drawArrowIcon()}
           </div>
@@ -35,7 +40,7 @@ export default function MainPage() {
             <span>찾고있을 때</span>
           </div>
         </button>
-        <button className={styles['main-banner-list-card']}>
+        <button className={styles['main-banner-list-card']} onClick={() => handleClickBannerCard(bannerList[1].id)}>
           <div className={styles['main-banner-list-card-icon']} style={{ backgroundColor: '#eeebfe' }}>
             {drawArrowIcon()}
           </div>
@@ -44,7 +49,7 @@ export default function MainPage() {
             <span>놓치고 싶지 않을 때</span>
           </div>
         </button>
-        <button className={styles['main-banner-list-card']}>
+        <button className={styles['main-banner-list-card']} onClick={() => handleClickBannerCard(bannerList[2].id)}>
           <div className={styles['main-banner-list-card-icon']} style={{ backgroundColor: '#e2f4fb' }}>
             {drawArrowIcon()}
           </div>
@@ -53,7 +58,7 @@ export default function MainPage() {
             <span>피해야 할 때</span>
           </div>
         </button>
-        <button className={styles['main-banner-list-card']}>
+        <button className={styles['main-banner-list-card']} onClick={() => handleClickBannerCard(bannerList[3].id)}>
           <div className={styles['main-banner-list-card-icon']} style={{ backgroundColor: '#ffe9db' }}>
             {drawArrowIcon()}
           </div>
