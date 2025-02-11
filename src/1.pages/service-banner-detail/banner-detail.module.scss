@@ -1,0 +1,22 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.banner {
+  &-header-title {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    padding-left: 0.75rem;
+    color: map.get($--colors, 'gray-1000');
+    display: flex;
+    align-items: center;
+  }
+
+  &-map {
+    height: calc(100vh - 52px - 150px); // 52px: header, 140px: bottom sheet
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
