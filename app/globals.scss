@@ -2,6 +2,9 @@
 @import "styles/variables.scss";
 
 :root {
+  --rsbs-ml: auto;
+  --rsbs-mr: auto;
+  --rsbs-max-w: 600px;
   --rsbs-handle-bg: #d1d6db;
   [data-rsbs-header] {
     box-shadow: none;
