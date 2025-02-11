@@ -1,7 +1,7 @@
 import styles from './mobile-force.module.scss'
 
 export default function MobileForceLayout({
-  children
+  children,
 }: {
   children: React.ReactNode
 }) {
