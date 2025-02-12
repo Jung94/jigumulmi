@@ -200,6 +200,15 @@ class Fetch {
   }
 }
 
+class ApiError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
+
 export const apiClient = new Fetch({
   baseURL,
   interceptors: {
@@ -209,16 +218,18 @@ export const apiClient = new Fetch({
     response: async (response) => {
       if (!response.ok) {
         const isAdminPage = window.location.pathname.split('/')[1] === 'admin'
-        console.log(response.status)
+        // console.log(response.status)
 
         if (isAdminPage && (response.status === 401 || response.status === 403)) {
           setCookie("ji-login-prev-path", window.location.pathname)
           alert('로그인이 필요합니다.')
           window.location.href = '/login'
+        } else if (response.status === 401) {
+          throw new ApiError("Login required", 401)
+        } else {
+          const errorData = await response.json()
+          throw new ApiError(`${response.status} - ${errorData.message || "Unknown error"}`, response.status)
         }
-        const error = await response.json()  // 응답 본문 파싱
-        throw new Error(`${response.status} - ${error.message || 'Unknown error'}`)
-
       }
       return response;
     },
