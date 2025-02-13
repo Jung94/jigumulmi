@@ -41,10 +41,6 @@ export default function Button({
       else onClick && onClick(e)
   }
 
-  const setLoading = () => {
-    return <LoadingSpinner width={20} height={20} />
-  }
-
   const Content = () => (
     <span className={styles['button-content']}>
       {children}
@@ -62,7 +58,7 @@ export default function Button({
     
     return (
       <>
-        {loading && setLoading()}
+        {loading && <LoadingSpinner width={20} height={20} />}
         {iconPos === 'left' && Icon()}
         {Content()}
         {iconPos === 'right' && Icon()}
