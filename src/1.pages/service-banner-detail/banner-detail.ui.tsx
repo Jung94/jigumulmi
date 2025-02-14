@@ -29,7 +29,7 @@ export default function BannerDetailPage({
 
   return (
     <div className={styles['banner']}>
-      <HeaderMobileLayout showBackIcon>
+      <HeaderMobileLayout showBackIcon hasHomeIcon>
         <div className={styles['banner-header-title']}>
           {banner.title}
         </div>
