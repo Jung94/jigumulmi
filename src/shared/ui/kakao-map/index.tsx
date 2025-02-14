@@ -2,7 +2,7 @@
 
 import styles from './kakaoMap.module.scss'
 import React, { useState, useEffect, useRef, useCallback, memo } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import { useWindowSize } from '@/lib/hooks'
 import { set_kakao_map_func, set_kakao_places_func, update_marker, update_is_shown_detail } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
@@ -12,6 +12,7 @@ let selectedMarker: any = null;
 let markers: any[] = [];
 
 const KakaoMap = ({ placeList }: { placeList: PlaceListItem[] }) => {
+  const params = useParams()
   const router = useRouter()
   const dispatch = useAppDispatch()
   const windowSize = useWindowSize()
@@ -124,8 +125,9 @@ const KakaoMap = ({ placeList }: { placeList: PlaceListItem[] }) => {
     // selectedMarker = marker;
 
     if (!e) return
+    const bannerId = Number(params?.bannerId)
     // 배너와 연관된 장소 클릭 시
-    router.push(`/place/${e.id}`)
+    router.push(`/banner/${bannerId}/place/${e.id}`)
 
     // /search 페이지 때 사용했던 로직
     // dispatch(update_marker({

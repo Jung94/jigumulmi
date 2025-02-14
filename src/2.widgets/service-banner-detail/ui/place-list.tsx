@@ -2,16 +2,18 @@ import Image from 'next/image'
 import { useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from './place-list.module.scss'
-import { SpinnerLoading } from '@/src/shared/ui/loading/index'
+import { LoadingSpinner } from '@/src/shared/assets/icons'
 import { InfiniteData, InfiniteQueryObserverResult } from '@tanstack/react-query'
 import type { FetchPlaceListResponse } from '@/src/4.entities/banner/model/types'
 
 export default function PlaceList({ 
+  bannerId,
   data,
   hasNextPage,
   fetchNextPage,
   isFetchingNextPage,
 }: { 
+  bannerId: number
   data: InfiniteData<FetchPlaceListResponse> 
   hasNextPage?: boolean
   fetchNextPage: () => Promise<InfiniteQueryObserverResult<FetchPlaceListResponse, unknown>>
@@ -20,7 +22,7 @@ export default function PlaceList({
   const router = useRouter()
   const observerRef = useRef<HTMLDivElement | null>(null)
 
-  const navigatePlaceDetail = (placeId: number) => router.push(`/place/${placeId}`)
+  const navigatePlaceDetail = (placeId: number) => router.push(`/banner/${bannerId}/place/${placeId}`)
   const handleClickPlaceCard = (placeId: number) => navigatePlaceDetail(placeId)
 
   useEffect(() => {
@@ -90,7 +92,7 @@ export default function PlaceList({
       )}
       {isFetchingNextPage 
         ? (
-          <SpinnerLoading 
+          <LoadingSpinner 
             width={24} 
             height={24} 
             style={{ margin: '2rem auto', width: '100%' }} 

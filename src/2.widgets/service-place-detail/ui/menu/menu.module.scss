@@ -1,0 +1,69 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.menu {
+  padding: $--padding--mobile 0;
+}
+
+.menu-card {
+  font-size: 13px;
+  color: map.get($--colors, "gray-1000");
+  padding: 0 $--padding--mobile calc($--padding--mobile + 2px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  &-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &-main {
+      font-size: 12px;
+      padding: 3px 6px;
+      margin-bottom: 1px;
+      width: fit-content;
+      border-radius: 10rem;
+      color: map.get($--colors, "background-100");
+      background-color: map.get($--colors, "gray-1000");
+    }
+
+    &-name {
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    &-desc {
+      font-size: 14px;
+      color: map.get($--colors, "gray-900");
+    }
+
+    &-price {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  &-right {
+    &-image {
+      width: 8rem;
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+
+      &::after {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+      }
+    }
+  }
+
+  // &-content {
+  //   word-break: break-all;
+  //   white-space: pre-line;
+  //   overflow-wrap: break-word;
+  // }
+}

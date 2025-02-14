@@ -53,6 +53,7 @@ export default function BannerDetailPage({
       >
         <BannerInnerImage innerImageS3Key={banner.innerImageS3Key} />
         <PlaceList 
+          bannerId={bannerId}
           data={data} 
           hasNextPage={hasNextPage}
           fetchNextPage={fetchNextPage}

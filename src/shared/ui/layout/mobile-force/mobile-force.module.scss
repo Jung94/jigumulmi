@@ -10,6 +10,9 @@
     min-height: 100vh;
     max-width: 600px;
     border: 1px solid map.get($--colors, 'gray-100');
-    background-color: map.get($--colors, 'gray-100');
+
+    @media (max-width: 600px) {
+      border: none;
+    }
   }
 }

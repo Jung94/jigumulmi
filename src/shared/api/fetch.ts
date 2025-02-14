@@ -99,11 +99,13 @@ class Fetch {
     body?: any
     config?: RequestInit
   }): Promise<{ status: number; data: T | null }> {
+    const isFormData = body instanceof FormData
+
     const response = await this.request(endpoint, {
       ...config,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...config.headers },
-      body: JSON.stringify(body),
+      headers: isFormData ? config.headers : { 'Content-Type': 'application/json', ...config.headers },
+      body: isFormData ? body : JSON.stringify(body),
     })
 
     if (!response.ok) {

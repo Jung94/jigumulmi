@@ -2,16 +2,21 @@
 
 import { useRouter } from 'next/navigation'
 import styles from './header-mobile.module.scss'
+import { Home } from '@/src/shared/assets/icons'
 
 export default function HeaderMobileLayout({
   children,
+  hasHomeIcon,
   showBackIcon,
+  onGoBack,
 }: {
   children?: React.ReactNode
+  hasHomeIcon?: boolean
   showBackIcon?: boolean
+  onGoBack?: () => void
 }) {
   const router = useRouter()
-  const handleGoBackNavigation = () => router.back()
+  const handleGoBackNavigation = () => onGoBack ? onGoBack() : router.back()
 
   return (
     <header className={styles['header-mobile-layout']}>
@@ -27,6 +32,14 @@ export default function HeaderMobileLayout({
         </button>
       }
       {children}
+      {hasHomeIcon &&
+        <button 
+          className={styles['header-mobile-layout-icon']}
+          onClick={() => router.push('/')}
+        >
+          <Home width={24} height={24} />
+        </button>
+      }
     </header>
   )
 }

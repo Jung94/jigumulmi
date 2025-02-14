@@ -1,0 +1,15 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.star {
+  padding: calc($--padding--mobile + 10px) $--padding--mobile 0;
+
+  &-header-title {
+    font-size: 18px;
+    font-weight: 500;
+    padding-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
