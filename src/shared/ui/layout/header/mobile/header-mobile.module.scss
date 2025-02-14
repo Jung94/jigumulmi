@@ -19,6 +19,7 @@
   }
 
   &-icon {
+    color: map.get($--colors, 'gray-1000');
     display: flex;
     justify-content: center;
     align-items: center;
