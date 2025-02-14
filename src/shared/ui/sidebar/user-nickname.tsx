@@ -79,7 +79,7 @@ export default function UserNickname({ userNickname }: { userNickname?: string; 
             }
             {status === 'loading' &&
               <div className={styles.wrapper_status}>
-                <Spinner size='20px' color='#232323' />
+                <Spinner width={20} height={20} color='#232323' />
               </div>
             }
             {status === 'success' &&

@@ -1,0 +1,190 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.place-basic {
+
+  &-section {
+    padding: $--padding--mobile;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    &-info {
+      display: flex;
+
+      &-name {
+        min-width: 80px;
+        color: map.get($--colors, 'gray-900');
+      }
+
+      &-content {
+        color: map.get($--colors, 'gray-1000');
+      }
+    }
+  }
+
+  &-subway {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+
+    &-line {
+      height: 18px;
+      padding: 0 5px;
+      min-width: 18px;
+      font-size: 11px;
+      border-radius: 2.5px;
+      color: map.get($--colors, 'background-100');
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-name {
+      margin-left: 2px;
+    }
+  }
+
+  &-opening-hour {
+    cursor: pointer;
+
+    &-main {
+      display: flex;
+      gap: 6px;
+
+      &-divider {
+        width: 1px;
+        height: 11px;
+        margin: auto 0;
+        background-color: map.get($--colors, 'gray-400');
+      }
+
+      &-next {
+        color: map.get($--colors, 'gray-900');
+      }
+    }
+
+    &-hidden {
+      margin-top: 6px;
+
+      &-day {
+        padding: 3px 5px;
+        width: fit-content;
+        display: flex;
+        gap: 6px;
+
+        &-active {
+          font-weight: 500;
+          border-radius: 4px;
+          background-color: map.get($--colors, 'gray-200');
+        }
+
+        &-content {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+      }
+    }
+  }
+
+  &-menu {
+    padding: calc($--padding--mobile + 10px) $--padding--mobile;
+    background-color: map.get($--colors, 'gray-100');
+
+    &-header {
+      padding-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &-title {
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      &-more {
+        padding: 3px 0 3px 4px;
+        font-size: 13px;
+        color: map.get($--colors, 'gray-800');
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        span {
+          line-height: 17px;
+        }
+      }
+    }
+
+    &-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+
+      &-item {
+
+        &-image {
+          position: relative;
+          border-radius: 4px;
+          overflow: hidden;
+
+          &::after {
+            content: "";
+            display: block;
+            padding-bottom: 100%;
+          }
+        }
+
+        &-name {
+          margin-top: 7px;
+        }
+
+        &-price {
+          margin-top: 3px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  &-review {
+    padding: calc($--padding--mobile + 10px) 0;
+    background-color: map.get($--colors, 'background-100');
+
+    &-header {
+      padding: 0 $--padding--mobile;
+      padding-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &-title {
+        font-size: 18px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      &-more {
+        padding: 3px 0 3px 4px;
+        font-size: 13px;
+        color: map.get($--colors, 'gray-800');
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        span {
+          line-height: 17px;
+        }
+      }
+    }
+
+    &-statistics {
+      padding: 8px;
+      border-radius: 4px;
+    }
+  }
+}

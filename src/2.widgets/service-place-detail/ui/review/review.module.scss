@@ -1,0 +1,186 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.review {
+  padding: $--padding--mobile 0;
+}
+
+.review-card {
+  font-size: 13px;
+  padding: calc($--padding--mobile + 2px) $--padding--mobile;
+  color: map.get($--colors, "gray-1000");
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &-divider {
+    padding: 4px $--padding--mobile;
+    width: 100%;
+    height: 1px;
+    background-color: map.get($--colors, 'gray-100');
+  }
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &-left {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 8px;
+
+      &-profile-image {
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 2rem;
+        border: 1px solid map.get($--colors, 'gray-200');
+        background-color: map.get($--colors, 'gray-100');
+      }
+      &-nickname {
+        font-weight: 500;
+      }
+    }
+
+    &-reviewed-at {
+      color: map.get($--colors, 'gray-800');
+      display: flex;
+      align-items: center;
+    }
+
+    &-modified {
+      padding-top: 1px;
+      padding-right: 5px;
+      font-size: 11px;
+    }
+  }
+
+  &-image-preview {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+
+    &-image {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+
+      &::after {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+      }
+    }
+  }
+
+  &-rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+
+    &-star {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+
+      &-icon {
+        color: #0060AE;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      &-number {
+        padding-top: 1px;
+        font-weight: 600;
+      }
+    }
+    
+    &-buttons {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 5px;
+
+      button {
+        padding: 2px 4px;
+        border-radius: 3px;
+        background-color: map.get($--colors, 'gray-200');
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+  &-content {
+    word-break: break-all;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+  }
+  textarea {
+    padding: 6px;
+    width: 100%;
+    height: 5rem;
+    border-radius: 5px;
+    background-color: map.get($--colors, "blush");
+  }
+
+  &_footer {
+    display: flex;
+    // justify-content: space-between;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    button {
+      color: map.get($--greys, "900");
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+    }
+
+    &_heart {
+      padding: 4px 4px 0 0;
+      justify-content: flex-start;
+      gap: 5px;
+
+      span {
+        line-height: 18px;
+        vertical-align: middle;
+      }
+    }
+    &_comment_button {
+      padding: 4px 0 0 8px;
+      justify-content: flex-end;
+      gap: 2px;
+
+      span {
+        color: map.get($--greys, "800");
+        font-size: 12px;
+        line-height: 15px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  &_re_review_loading {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &_re_review_wrapper {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
