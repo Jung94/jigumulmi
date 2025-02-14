@@ -39,6 +39,24 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.padding-x-mobile {
+  padding: 0 $--padding--mobile;
+}
+
+.padding-y-mobile {
+  padding: $--padding--mobile 0;
+}
+
+.padding-xy-mobile {
+  padding: $--padding--mobile;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: map.get($--colors, 'gray-100');
+}
+
 *::-webkit-scrollbar {
   width: 7px; // 세로 스크롤
   height: 7px; // 가로 스크롤 
