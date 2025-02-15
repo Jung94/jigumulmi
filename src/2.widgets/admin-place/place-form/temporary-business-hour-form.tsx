@@ -29,7 +29,6 @@ function formatDate(date: Date) {
 export default function TemporaryBusinessHourForm(props: {
   businessHourData: PlaceBusinessHour
   setBusinessHourData: Dispatch<SetStateAction<PlaceBusinessHour>>
-  setMonth: Dispatch<SetStateAction<number>>
 }) {
   const params = useParams()
   const queryClient = useQueryClient()
@@ -38,7 +37,7 @@ export default function TemporaryBusinessHourForm(props: {
   const updateTemporaryBusinessHour = useUpdateTemporaryBusinessHour()
   const deleteTemporaryBusinessHour = useDeleteTemporaryBusinessHour()
   
-  const { businessHourData, setBusinessHourData, setMonth } = props
+  const { businessHourData } = props
   const [hasBreakTime, setHasBreakTime] = useState<boolean>(false)
   const [tempBusinessHour, setTempBusinessHour] = useState<TemporaryBusinessHour>({
     date: new Date()

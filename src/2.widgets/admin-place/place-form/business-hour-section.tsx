@@ -9,7 +9,6 @@ import type { PlaceBusinessHour } from '@/src/4.entities/place-admin/model/types
 export default function BusinessHourSection(props: {
   businessHourData: PlaceBusinessHour
   setBusinessHourData: Dispatch<SetStateAction<PlaceBusinessHour>>
-  setMonth: Dispatch<SetStateAction<number>>
 }) {
   return (
     <Form>
