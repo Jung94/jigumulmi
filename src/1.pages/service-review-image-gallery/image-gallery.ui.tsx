@@ -54,7 +54,7 @@ export default function ReviewImageGallery({
 
   return (
     <div className={styles['image-gallery']}>
-      <HeaderMobileLayout showBackIcon hasHomeIcon>
+      <HeaderMobileLayout showBackIcon showHomeIcon>
         <div className={styles['image-gallery-header-title']}>
           리뷰 사진 모아보기
         </div>

@@ -6,25 +6,25 @@ import { Home } from '@/src/shared/assets/icons'
 
 export default function HeaderMobileLayout({
   children,
-  hasHomeIcon,
+  showHomeIcon,
   showBackIcon,
   onGoBack,
 }: {
   children?: React.ReactNode
-  hasHomeIcon?: boolean
+  showHomeIcon?: boolean
   showBackIcon?: boolean
   onGoBack?: () => void
 }) {
   const router = useRouter()
-  const handleGoBackNavigation = () => onGoBack ? onGoBack() : router.back()
+  const handleGoBackNavigation = () => router.back()
 
   return (
     <header className={styles['header-mobile-layout']}>
-      {showBackIcon &&
+      {(showBackIcon || onGoBack) &&
         <button 
           type='button'
           className={styles['header-mobile-layout-back-icon']}
-          onClick={handleGoBackNavigation}
+          onClick={() => onGoBack ? onGoBack() : handleGoBackNavigation()}
         >
           <svg width="28px" height="28px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M15 6L9 12L15 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
@@ -32,7 +32,7 @@ export default function HeaderMobileLayout({
         </button>
       }
       {children}
-      {hasHomeIcon &&
+      {showHomeIcon &&
         <button 
           className={styles['header-mobile-layout-icon']}
           onClick={() => router.push('/')}
