@@ -3,12 +3,10 @@ import styles from './menu.module.scss'
 import { useImagePreview } from '@/src/shared/hooks'
 import type { Menu } from '@/src/4.entities/place/model/types'
 
-export default function MenuCard({ menu, isLast, placeId }: { 
+export default function MenuCard({ menu, isLast }: { 
   menu: Menu 
   isLast: boolean
-  placeId: number
 }) {
-  console.log(menu)
   const previewList = [{
     id: menu.name,
     s3Key: menu.imageS3Key,
