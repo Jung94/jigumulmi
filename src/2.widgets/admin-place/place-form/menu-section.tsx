@@ -25,7 +25,6 @@ import type {
 } from '@/src/4.entities/place-admin/model/types'
 
 const DndMenuItem = ({ menu, isSelected, handleSelect }: { menu: PlaceMenuInput; isSelected: boolean; handleSelect: (menu: PlaceMenuInput) => void; }) => {
-  console.log(`${process.env.NEXT_PUBLIC_CDN}${menu.imageS3Key}`)
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: menu.id })
   const style = { transition, transform: CSS.Transform.toString(transform)}
   const url: string | null = menu.tempImage 
@@ -137,18 +136,17 @@ export default function MenuSection({
 
   const handlePutPresignedUrl = async (tempImage: MenuImage) => {
     const file = tempImage.file
-    const fileExtension = file.type.split('image/')[1]
 
     if (!placeId) return
     try {
       const presignedResponse = await putPresignedUrl.mutateAsync({ placeId })
 
       if (presignedResponse.status === 201) {
-        const { url, filename } = presignedResponse.data // url: aws s3 url, filename: uuid(s3 업로드 시 필요)
+        const { url, imageFilename } = presignedResponse.data // url: aws s3 url, filename: uuid(s3 업로드 시 필요)
         const uploadResponse = await uploadImageToS3(url, file)
         
         if (uploadResponse.status === 200) {
-          return `${filename}.${fileExtension}` // uuid.확장자
+          return imageFilename // uuid
         }
       }
     } catch (error) {
@@ -179,7 +177,7 @@ export default function MenuSection({
     // 새롭게 저장할 메뉴들
     for (let i = 0; i < menuData.length; i++) {
       const menu = menuData[i]
-      let fullFilename = null
+      let imageFilename = null
 
       if (!menu.isNew) { // 기존 메뉴
         // 기존 메뉴 이미지는 s3에서 삭제하고 새롭게 변경할 이미지는 s3에 저장한다.
@@ -192,29 +190,29 @@ export default function MenuSection({
           }
           
           try { // s3에 이미지 저장
-            const newFullFilename = await handlePutPresignedUrl(menu.tempImage)
-            if (newFullFilename) fullFilename = newFullFilename
+            const newFilename = await handlePutPresignedUrl(menu.tempImage)
+            if (newFilename) imageFilename = newFilename
               else return hasError = true
           } catch (error) {
             console.error(error)
             return hasError = true
           }
         } else {
-          if (menu.imageS3Key) 
-            fullFilename = menu.imageS3Key.split('/')[1] // 기존 사진 포함 ? uuid.확장자 : null
+          if (menu.imageFilename) imageFilename = imageFilename
+            // imageFilename = menu.imageS3Key.split('/')[1] // 기존 사진 포함 ? uuid.확장자 : null
         }
       } else if (menu.tempImage) { // 새롭게 추가된 메뉴 + 사진 포함
         // 새로운 메뉴 이미지를 s3에 저장한다.
         try {
-          const newFullFilename = await handlePutPresignedUrl(menu.tempImage)
-          if (newFullFilename) fullFilename = newFullFilename
+          const newFilename = await handlePutPresignedUrl(menu.tempImage)
+          if (newFilename) imageFilename = newFilename
             else return hasError = true
         } catch (error) {
           console.error(error)
           return hasError = true
         }
       } else { // 새롭게 추가된 메뉴 + 사진 포함 X
-        fullFilename = null
+        imageFilename = null
       }
 
       newMenuList.push({
@@ -222,7 +220,7 @@ export default function MenuSection({
         price: menu.price,
         isMain: menu.isMain,
         description: menu.description,
-        fullFilename
+        imageFilename
       })
     }
 
