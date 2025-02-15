@@ -37,9 +37,9 @@ export type Menu = {
   name: string;
   price: string;
   isMain: boolean;
-  imageS3Key: string;
   description: string;
-  fullFilename: string;
+  imageS3Key: string | null;
+  imageFilename: string | null;
 }
 
 export type ReviewStatistics = {

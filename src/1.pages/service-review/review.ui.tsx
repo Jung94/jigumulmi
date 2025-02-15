@@ -70,7 +70,7 @@ export default function ReviewPage({
 
   return (
     <div className={styles['review']}>
-      <HeaderMobileLayout showBackIcon hasHomeIcon>
+      <HeaderMobileLayout showHomeIcon onGoBack={handlePlacePageNavigation}>
         <div className={styles['review-header-title']}>
           리뷰 작성
         </div>

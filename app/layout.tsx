@@ -17,8 +17,8 @@ const pretendard = localFont({
 })
 
 export const metadata: Metadata = {
-  title: '지구멀미 - 비건 베이커리를 찾는 가장 쉬운 방법',
-  description: '지하철역 주변 가까운 비건 카페, 비건 베이커리 찾기',
+  title: '지구멀미 - 지구 속도에 발맞추는 가장 맛있는 한걸음',
+  description: '내게 필요한 비건 식당 찾기',
   keywords: [
     "지구멀미",
     "지구",
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
     "베지테리언"
   ],
   openGraph: {
-    title: "지구멀미 - 비건 베이커리를 찾는 가장 쉬운 방법",
-    description: "지하철역 주변 가까운 비건 카페, 비건 베이커리 찾기",
+    title: "지구멀미 - 지구 속도에 발맞추는 가장 맛있는 한걸음",
+    description: "내게 필요한 비건 식당 찾기",
     url: "https://www.jigumulmi.com/",
     siteName: "https://www.jigumulmi.com/",
     images: ["https://contents.jigumulmi.com/marketing/jigumulmi_opengraph.png"],

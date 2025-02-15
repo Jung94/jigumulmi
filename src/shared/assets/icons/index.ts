@@ -3,6 +3,7 @@ import User from './User'
 import Home from './home'
 import Check from './Check'
 import XMark from './XMark'
+import ImageEmpty from './image-empty'
 import ProfileImage from './ProfileImage'
 import LoadingSpinner from './LoadingSpinner'
 import { ArrowDown, ArrowRight } from './arrow'
@@ -16,5 +17,6 @@ export {
   LoadingSpinner,
   ArrowDown,
   ArrowRight,
+  ImageEmpty,
   ProfileImage,
 }

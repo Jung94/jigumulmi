@@ -3,10 +3,9 @@ import { useState } from 'react'
 import styles from './basic.module.scss'
 import { setCookie } from 'cookies-next'
 import { Button } from '@/src/shared/ui/admin'
-import { Star } from '@/src/shared/assets/icons'
 import { useAuthCheck } from '@/src/shared/hooks'
-import { ArrowDown, ArrowRight } from '@/src/shared/assets/icons'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { ArrowDown, ArrowRight, ImageEmpty, Star } from '@/src/shared/assets/icons'
 import { 
   ReviewCard,
   ReviewImageList,
@@ -50,7 +49,7 @@ export default function PlaceBasic({
     reviewStatistics ? reviewStatistics.totalCount > 0 : false, 
     { size: 2 }
   )
-  // console.log(reviewStatistics, reviewImageList, reviewList)
+  console.log(menuList)
 
   const [isOpeningHour, setIsOpeningHour] = useState(false)
 
@@ -85,7 +84,7 @@ export default function PlaceBasic({
   }
 
   // 영업 시간 utils
-  const convertNumToDay = (value: 0 | 1 | 2 | 3 | 4 | 5 | 6): DayOfTheWeek => {
+  const convertNumToday = (value: 0 | 1 | 2 | 3 | 4 | 5 | 6): DayOfTheWeek => {
     switch(value) {
       case 0: return 'sunday'
       case 1: return 'monday'
@@ -131,18 +130,19 @@ export default function PlaceBasic({
 
   const drawWeeklyBusinessHour = (openingData: WeeklyBusinessHour) => {
     const todayNum = new Date().getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6
-    const today = convertNumToDay(todayNum)
+    const today = convertNumToday(todayNum)
     const days: DayOfTheWeek[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-    const orderedDays = reorderDays(today, days)
+    // const orderedDays = reorderDays(today, days)
+    const orderedDays = days
     
     return orderedDays.map((day, index) => {
       const isDayOff = !openingData[day] || openingData[day].isDayOff
-
+      // index === 0
       if (!openingData[day]) return
       return (
         <div key={day} className={`
           ${styles['place-basic-opening-hour-hidden-day']}
-          ${index === 0
+          ${day === today
             ? styles['place-basic-opening-hour-hidden-day-active']
             : ''
           }
@@ -283,12 +283,17 @@ export default function PlaceBasic({
             {menuList.pages[0].data.map(menu => (
               <div key={menu.name} className={styles['place-basic-menu-list-item']}>
                 <div className={styles['place-basic-menu-list-item-image']}>
-                  <Image 
-                    fill
-                    alt='preview-image'
-                    src={process.env.NEXT_PUBLIC_CDN + menu.imageS3Key}
-                    style={{ objectFit: 'cover' }}
-                  />
+                  {menu.imageS3Key
+                    ? <Image 
+                        fill
+                        alt='menu-image-preview'
+                        src={process.env.NEXT_PUBLIC_CDN + menu.imageS3Key}
+                        style={{ objectFit: 'cover' }}
+                      />
+                    : <div className={styles['place-basic-menu-list-item-image-empty']}>
+                        <ImageEmpty width={24} height={24} />
+                      </div>
+                  }
                 </div>
                 <div className={styles['place-basic-menu-list-item-name']}>
                   {menu.name}

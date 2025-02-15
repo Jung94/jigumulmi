@@ -32,7 +32,7 @@ export default function PlaceDetailPage({
 
   return (
     <div className={styles['place']}>
-      <HeaderMobileLayout hasHomeIcon showBackIcon onGoBack={handleBannerPageNavigation}>
+      <HeaderMobileLayout showHomeIcon onGoBack={handleBannerPageNavigation}>
         <div className={styles['place-header-text']}>
           {placeBasic.name}
         </div>

@@ -51,11 +51,7 @@ export default function Menu({
                 : null
             }
           >
-            <MenuCard 
-              menu={menu} 
-              placeId={placeId} 
-              isLast={index === page.data.length - 1} 
-            />
+            <MenuCard menu={menu} isLast={index === page.data.length - 1} />
           </div>
         ))
       )}
