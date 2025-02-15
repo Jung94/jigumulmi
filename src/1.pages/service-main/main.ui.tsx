@@ -28,7 +28,7 @@ export default function MainPage() {
         지구멀미
       </div>
       <div className={styles['main-sub-title']}>
-        카드를 선택하면 장소를 추천해드립니다.
+        어떤 비건식당을 추천해드릴까요?
       </div>
       <div className={styles['main-banner-list']}>
         <button className={styles['main-banner-list-card']} onClick={() => handleClickBannerCard(bannerList[0].id)}>
