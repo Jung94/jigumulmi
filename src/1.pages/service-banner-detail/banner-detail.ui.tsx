@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import styles from './banner-detail.module.scss'
 import KakaoMap from '@/src/shared/ui/kakao-map'
 import 'react-spring-bottom-sheet/dist/style.css'
@@ -14,6 +15,7 @@ export default function BannerDetailPage({
 }: { 
   bannerId: number 
 }) {
+  const router = useRouter()
   const { data: banner } = useFetchBanner(bannerId)
   const { 
     data,
@@ -22,6 +24,8 @@ export default function BannerDetailPage({
     isFetchingNextPage
   } = useFetchPlaceList(bannerId)
 
+  const handleHomePageNavigation = () => router.push(`/`)
+
   if (!banner || !data) return
 
   const placeList = 
@@ -29,7 +33,7 @@ export default function BannerDetailPage({
 
   return (
     <div className={styles['banner']}>
-      <HeaderMobileLayout showBackIcon hasHomeIcon>
+      <HeaderMobileLayout onGoBack={handleHomePageNavigation}>
         <div className={styles['banner-header-title']}>
           {banner.title}
         </div>
