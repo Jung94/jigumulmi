@@ -50,7 +50,7 @@ export default function PlaceBasic({
     reviewStatistics ? reviewStatistics.totalCount > 0 : false, 
     { size: 2 }
   )
-  // console.log(reviewStatistics, reviewImageList, reviewList)
+  console.log(reviewStatistics)
 
   const [isOpeningHour, setIsOpeningHour] = useState(false)
 
@@ -85,7 +85,7 @@ export default function PlaceBasic({
   }
 
   // 영업 시간 utils
-  const convertNumToDay = (value: 0 | 1 | 2 | 3 | 4 | 5 | 6): DayOfTheWeek => {
+  const convertNumToday = (value: 0 | 1 | 2 | 3 | 4 | 5 | 6): DayOfTheWeek => {
     switch(value) {
       case 0: return 'sunday'
       case 1: return 'monday'
@@ -131,7 +131,7 @@ export default function PlaceBasic({
 
   const drawWeeklyBusinessHour = (openingData: WeeklyBusinessHour) => {
     const todayNum = new Date().getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6
-    const today = convertNumToDay(todayNum)
+    const today = convertNumToday(todayNum)
     const days: DayOfTheWeek[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
     const orderedDays = reorderDays(today, days)
     
