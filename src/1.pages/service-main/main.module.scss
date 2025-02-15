@@ -19,11 +19,21 @@
   }
 
   &-sub-title {
-    color: map.get($--colors, 'gray-900');
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     display: flex;
-    justify-content: center
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+
+    &-01 {
+      color: map.get($--colors, 'gray-800');
+    }
+
+    &-02 {
+      color: map.get($--colors, 'gray-950');
+    }
   }
 
   &-banner-list {
