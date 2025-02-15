@@ -3,10 +3,9 @@ import { useState } from 'react'
 import styles from './basic.module.scss'
 import { setCookie } from 'cookies-next'
 import { Button } from '@/src/shared/ui/admin'
-import { Star } from '@/src/shared/assets/icons'
 import { useAuthCheck } from '@/src/shared/hooks'
-import { ArrowDown, ArrowRight, ImageEmpty } from '@/src/shared/assets/icons'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { ArrowDown, ArrowRight, ImageEmpty, Star } from '@/src/shared/assets/icons'
 import { 
   ReviewCard,
   ReviewImageList,
