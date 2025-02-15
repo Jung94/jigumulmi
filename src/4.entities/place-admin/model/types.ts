@@ -46,7 +46,7 @@ export type PlaceMenu = {
   isMain: boolean;
   description: string;
   imageS3Key: string | null;
-  imageFilename: string;
+  imageFilename: string | null;
 }
 
 export type MenuImage = {
