@@ -25,6 +25,7 @@ import type {
 } from '@/src/4.entities/place-admin/model/types'
 
 const DndMenuItem = ({ menu, isSelected, handleSelect }: { menu: PlaceMenuInput; isSelected: boolean; handleSelect: (menu: PlaceMenuInput) => void; }) => {
+  console.log(`${process.env.NEXT_PUBLIC_CDN}${menu.imageS3Key}`)
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: menu.id })
   const style = { transition, transform: CSS.Transform.toString(transform)}
   const url: string | null = menu.tempImage 
@@ -79,6 +80,7 @@ export default function MenuSection({
   menuData: PlaceMenuInput[]
   setMenuData: Dispatch<SetStateAction<PlaceMenuInput[]>>
 }) {
+  console.log(menuData)
   const params = useParams()
   const queryClient = useQueryClient()
   const updatePlaceMenu = useUpdatePlaceMenu()
@@ -137,8 +139,9 @@ export default function MenuSection({
     const file = tempImage.file
     const fileExtension = file.type.split('image/')[1]
 
+    if (!placeId) return
     try {
-      const presignedResponse = await putPresignedUrl.mutateAsync({ fileExtension })
+      const presignedResponse = await putPresignedUrl.mutateAsync({ placeId })
 
       if (presignedResponse.status === 201) {
         const { url, filename } = presignedResponse.data // url: aws s3 url, filename: uuid(s3 업로드 시 필요)
