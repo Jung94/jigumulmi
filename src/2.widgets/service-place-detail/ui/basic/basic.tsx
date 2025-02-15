@@ -5,7 +5,7 @@ import { setCookie } from 'cookies-next'
 import { Button } from '@/src/shared/ui/admin'
 import { Star } from '@/src/shared/assets/icons'
 import { useAuthCheck } from '@/src/shared/hooks'
-import { ArrowDown, ArrowRight } from '@/src/shared/assets/icons'
+import { ArrowDown, ArrowRight, ImageEmpty } from '@/src/shared/assets/icons'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { 
   ReviewCard,
@@ -50,7 +50,7 @@ export default function PlaceBasic({
     reviewStatistics ? reviewStatistics.totalCount > 0 : false, 
     { size: 2 }
   )
-  console.log(reviewStatistics)
+  console.log(menuList)
 
   const [isOpeningHour, setIsOpeningHour] = useState(false)
 
@@ -284,12 +284,17 @@ export default function PlaceBasic({
             {menuList.pages[0].data.map(menu => (
               <div key={menu.name} className={styles['place-basic-menu-list-item']}>
                 <div className={styles['place-basic-menu-list-item-image']}>
-                  <Image 
-                    fill
-                    alt='preview-image'
-                    src={process.env.NEXT_PUBLIC_CDN + menu.imageS3Key}
-                    style={{ objectFit: 'cover' }}
-                  />
+                  {menu.imageS3Key
+                    ? <Image 
+                        fill
+                        alt='menu-image-preview'
+                        src={process.env.NEXT_PUBLIC_CDN + menu.imageS3Key}
+                        style={{ objectFit: 'cover' }}
+                      />
+                    : <div className={styles['place-basic-menu-list-item-image-empty']}>
+                        <ImageEmpty width={24} height={24} />
+                      </div>
+                  }
                 </div>
                 <div className={styles['place-basic-menu-list-item-name']}>
                   {menu.name}

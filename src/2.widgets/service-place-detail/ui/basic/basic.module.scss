@@ -129,11 +129,21 @@
           position: relative;
           border-radius: 4px;
           overflow: hidden;
+          background-color: map.get($--colors, 'gray-300');
 
           &::after {
             content: "";
             display: block;
             padding-bottom: 100%;
+          }
+
+          &-empty {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: map.get($--colors, 'gray-800');
+            font-size: 13px;
           }
         }
 
