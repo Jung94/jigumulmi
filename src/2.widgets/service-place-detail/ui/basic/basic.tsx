@@ -133,16 +133,17 @@ export default function PlaceBasic({
     const todayNum = new Date().getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6
     const today = convertNumToday(todayNum)
     const days: DayOfTheWeek[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-    const orderedDays = reorderDays(today, days)
+    // const orderedDays = reorderDays(today, days)
+    const orderedDays = days
     
     return orderedDays.map((day, index) => {
       const isDayOff = !openingData[day] || openingData[day].isDayOff
-
+      // index === 0
       if (!openingData[day]) return
       return (
         <div key={day} className={`
           ${styles['place-basic-opening-hour-hidden-day']}
-          ${index === 0
+          ${day === today
             ? styles['place-basic-opening-hour-hidden-day-active']
             : ''
           }
