@@ -79,7 +79,6 @@ export default function MenuSection({
   menuData: PlaceMenuInput[]
   setMenuData: Dispatch<SetStateAction<PlaceMenuInput[]>>
 }) {
-  console.log(menuData)
   const params = useParams()
   const queryClient = useQueryClient()
   const updatePlaceMenu = useUpdatePlaceMenu()
@@ -199,7 +198,6 @@ export default function MenuSection({
           }
         } else {
           if (menu.imageFilename) imageFilename = imageFilename
-            // imageFilename = menu.imageS3Key.split('/')[1] // 기존 사진 포함 ? uuid.확장자 : null
         }
       } else if (menu.tempImage) { // 새롭게 추가된 메뉴 + 사진 포함
         // 새로운 메뉴 이미지를 s3에 저장한다.
