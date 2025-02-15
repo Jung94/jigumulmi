@@ -26,7 +26,7 @@ import type {
 
 const DndMenuItem = ({ menu, isSelected, handleSelect }: { menu: PlaceMenuInput; isSelected: boolean; handleSelect: (menu: PlaceMenuInput) => void; }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: menu.id })
-  const style = { transition, transform: CSS.Transform.toString(transform)}
+  const style = { transition, transform: CSS.Transform.toString(transform) }
   const url: string | null = menu.tempImage 
     ? (menu.tempImage?.urlFromBlob ?? '')
     : (menu.imageS3Key ? `${process.env.NEXT_PUBLIC_CDN}${menu.imageS3Key}` : null)
@@ -141,11 +141,11 @@ export default function MenuSection({
       const presignedResponse = await putPresignedUrl.mutateAsync({ placeId })
 
       if (presignedResponse.status === 201) {
-        const { url, imageFilename } = presignedResponse.data // url: aws s3 url, filename: uuid(s3 업로드 시 필요)
+        const { url, filename } = presignedResponse.data // url: aws s3 url, filename: uuid(s3 업로드 시 필요)
         const uploadResponse = await uploadImageToS3(url, file)
         
         if (uploadResponse.status === 200) {
-          return imageFilename // uuid
+          return filename // uuid
         }
       }
     } catch (error) {
@@ -197,7 +197,7 @@ export default function MenuSection({
             return hasError = true
           }
         } else {
-          if (menu.imageFilename) imageFilename = imageFilename
+          if (menu.imageFilename) imageFilename = menu.imageFilename
         }
       } else if (menu.tempImage) { // 새롭게 추가된 메뉴 + 사진 포함
         // 새로운 메뉴 이미지를 s3에 저장한다.
