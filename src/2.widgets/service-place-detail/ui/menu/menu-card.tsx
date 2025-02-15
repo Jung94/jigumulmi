@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import styles from './menu.module.scss'
 import { useImagePreview } from '@/src/shared/hooks'
+import { ImageEmpty } from '@/src/shared/assets/icons'
 import type { Menu } from '@/src/4.entities/place/model/types'
 
 export default function MenuCard({ menu, isLast }: { 
@@ -43,12 +44,17 @@ export default function MenuCard({ menu, isLast }: {
             className={styles['menu-card-right-image']}
             onClick={() => handlePreviewImageClick(0)}
           >
-            <Image 
-              fill
-              src={process.env.NEXT_PUBLIC_CDN + menu.imageS3Key}
-              alt='menu-image-preview'
-              style={{ objectFit: 'cover' }}
-            />
+            {menu.imageS3Key
+              ? <Image 
+                  fill
+                  alt='menu-image-preview'
+                  src={process.env.NEXT_PUBLIC_CDN + menu.imageS3Key}
+                  style={{ objectFit: 'cover' }}
+                />
+              : <div className={styles['menu-card-right-image-empty']}>
+                  <ImageEmpty width={24} height={24} />
+                </div>
+            }
           </div>
         </div>
       </div>

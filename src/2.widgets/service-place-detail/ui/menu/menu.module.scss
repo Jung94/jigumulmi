@@ -2,13 +2,13 @@
 @import "styles/variables.scss";
 
 .menu {
-  padding: $--padding--mobile 0;
+  padding: 0 0 $--padding--mobile;
 }
 
 .menu-card {
   font-size: 13px;
   color: map.get($--colors, "gray-1000");
-  padding: 0 $--padding--mobile calc($--padding--mobile + 2px);
+  padding: calc($--padding--mobile + 2px) $--padding--mobile;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -51,12 +51,22 @@
       position: relative;
       border-radius: 4px;
       overflow: hidden;
+      background-color: map.get($--colors, 'gray-200');
       cursor: pointer;
 
       &::after {
         content: "";
         display: block;
         padding-bottom: 100%;
+      }
+
+      &-empty {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: map.get($--colors, 'gray-800');
+        font-size: 13px;
       }
     }
   }
