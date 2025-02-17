@@ -33,10 +33,10 @@ export type PlaceBasic = {
   modifiedAt: string;
   position: Position;
   isApproved: boolean;
-  kakaoPlaceId: string;
   additionalInfo: string;
   categoryList: Category[];
   registrantComment: string;
+  kakaoPlaceId: string | null;
   subwayStationList: SubwayStation[];
 }
 
@@ -147,10 +147,10 @@ export type CreatePlaceVariables = {
   placeUrl: string;
   districtId: number;
   position: Position;
-  kakaoPlaceId: string;
   additionalInfo: string;
   categoryList: Category[];
   registrantComment: string;
+  kakaoPlaceId: string | null;
   subwayStationIdList: number[];
 }
 
@@ -163,10 +163,10 @@ export type CreatePlaceBasicInput = {
   placeUrl: string;
   districtId: number;
   position: Position;
-  kakaoPlaceId: string;
   additionalInfo: string;
   categoryList: Category[];
   registrantComment: string;
+  kakaoPlaceId: string | null;
   subwayStationList: SubwayStation[];
 }
 
