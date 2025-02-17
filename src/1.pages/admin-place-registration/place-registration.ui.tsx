@@ -25,7 +25,7 @@ export default function PlaceRegistrationPage() {
       longitude: 0 // 경도
     },
     categoryList: [], 
-    kakaoPlaceId: '',
+    kakaoPlaceId: null,
     additionalInfo: '', // 추가 정보
     registrantComment: '',
     subwayStationList: [], // 지하철역 ID
