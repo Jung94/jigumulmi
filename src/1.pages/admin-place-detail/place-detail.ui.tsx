@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/src/shared/ui/admin'
 import { getCookie, deleteCookie } from 'cookies-next'
 import { PreviousPageButton } from '@/src/shared/ui/admin'
 import Header from '@/src/shared/ui/admin/layout/section/header'
 import { BasicSection, MenuSection, ImageSection, BusinessHourSection } from '@/src/2.widgets/admin-place/place-form'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/src/shared/ui/admin/tabs'
 import { 
+  useDeletePlace,
   useFetchPlaceMenu, 
   useFetchPlaceBasic, 
   useFetchPlaceImage,
@@ -35,6 +37,7 @@ const initialBusinessHour = {
 
 export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   const router = useRouter()
+  const deletePlace = useDeletePlace()
 
   const [basicData, setBasicData] = useState<PlaceBasic>()
   const [menuData, setMenuData] = useState<PlaceMenuInput[]>([])
@@ -50,6 +53,17 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   const { data: placeMenuData } = useFetchPlaceMenu(placeId)
   const { data: placeImageData } = useFetchPlaceImage(placeId)
   const { data: placeBusinessHourData } = useFetchPlaceBusinessHour(placeId, { month: undefined })
+
+  const handlePlaceDeletion = async () => {
+    try {
+      await deletePlace.mutateAsync(placeId)
+      alert('삭제가 완료되었습니다.')
+      const prevPlaceListUrl = getCookie('ji-admin-list-url')
+      router.push(prevPlaceListUrl ?? '/admin/place')
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   useEffect(()=>{
     return () => deleteCookie('ji-admin-list-url')
@@ -95,6 +109,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
         <PreviousPageButton onClick={navigatePlaceList}>
           장소 목록
         </PreviousPageButton>
+        <Button variant='outline' onClick={handlePlaceDeletion}>삭제</Button>
       </Header>
       <Tabs defaultValue='basic' style={{ height: '100%', overflow: 'hidden' }}>
         <TabsList>
