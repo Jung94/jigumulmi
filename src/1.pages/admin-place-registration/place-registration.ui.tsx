@@ -19,7 +19,7 @@ export default function PlaceRegistrationPage() {
     address: '',
     contact: '',
     placeUrl: '',
-    districtId: 0,
+    district: null,
     position: {
       latitude: 0, // 위도
       longitude: 0 // 경도

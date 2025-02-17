@@ -29,7 +29,6 @@ export type PlaceBasic = {
   region: string;
   placeUrl: string;
   createdAt: string;
-  districtId: number;
   modifiedAt: string;
   position: Position;
   isApproved: boolean;
@@ -38,6 +37,7 @@ export type PlaceBasic = {
   registrantComment: string;
   kakaoPlaceId: string | null;
   subwayStationList: SubwayStation[];
+  district: { id: number; title: string } | null;
 }
 
 export type PlaceMenu = {
@@ -145,7 +145,7 @@ export type CreatePlaceVariables = {
   address: string;
   contact: string;
   placeUrl: string;
-  districtId: number;
+  districtId: number | null;
   position: Position;
   additionalInfo: string;
   categoryList: Category[];
@@ -161,13 +161,13 @@ export type CreatePlaceBasicInput = {
   address: string;
   contact: string;
   placeUrl: string;
-  districtId: number;
   position: Position;
   additionalInfo: string;
   categoryList: Category[];
   registrantComment: string;
   kakaoPlaceId: string | null;
   subwayStationList: SubwayStation[];
+  district: { id: number; title: string } | null;
 }
 
 export type UpdatePlaceBasicVariables = {
