@@ -49,7 +49,6 @@ export default function PlaceBasic({
     reviewStatistics ? reviewStatistics.totalCount > 0 : false, 
     { size: 2 }
   )
-  console.log(menuList)
 
   const [isOpeningHour, setIsOpeningHour] = useState(false)
 
