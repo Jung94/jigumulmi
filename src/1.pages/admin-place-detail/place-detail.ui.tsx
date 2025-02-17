@@ -55,6 +55,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   const { data: placeBusinessHourData } = useFetchPlaceBusinessHour(placeId, { month: undefined })
 
   const handlePlaceDeletion = async () => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return
     try {
       await deletePlace.mutateAsync(placeId)
       alert('삭제가 완료되었습니다.')
