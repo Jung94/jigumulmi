@@ -20,7 +20,7 @@ const FilterBox = ({
   const router = useRouter()
 
   const handleClick = () => {
-    router.push('/admin/place/creation')
+    router.push('/admin/place/registration')
   }
 
   return (
