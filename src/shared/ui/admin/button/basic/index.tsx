@@ -1,11 +1,9 @@
 'use client'
 
-import { ReactNode, MouseEvent } from 'react'
-import { useRouter } from 'next/navigation'
 import styles from './basic.module.scss'
-import Image from 'next/image'
-import SpinnerBlack from '@/public/icons/loading-spinner.svg'
-import SpinnerWhite from '@/public/icons/loading-spinner-white.svg'
+import { useRouter } from 'next/navigation'
+import { ReactNode, MouseEvent } from 'react'
+import { LoadingSpinner } from '@/src/shared/assets/icons'
 
 type Props = {
   style?: any
@@ -43,10 +41,6 @@ export default function Button({
       else onClick && onClick(e)
   }
 
-  const setLoading = () => {
-    return <Image src={variant === 'filled' ? SpinnerWhite : SpinnerBlack} width={25} height={25} alt='loading-spinner' />
-  }
-
   const Content = () => (
     <span className={styles['button-content']}>
       {children}
@@ -64,7 +58,7 @@ export default function Button({
     
     return (
       <>
-        {loading && setLoading()}
+        {loading && <LoadingSpinner width={20} height={20} />}
         {iconPos === 'left' && Icon()}
         {Content()}
         {iconPos === 'right' && Icon()}

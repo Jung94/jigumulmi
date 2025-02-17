@@ -1,11 +1,11 @@
 import { apiClient } from '@/src/shared/api/fetch'
-import { placeAPI } from './place.constant'
+import { placeAmdinAPI } from './place.constant'
 
 export default async function deletePresignedUrl(
   body: { s3Key: string }
 ) {
   return await apiClient.post({
-    endpoint: `${placeAPI.deletePresignedUrl}`,
+    endpoint: `${placeAmdinAPI.deletePresignedUrl}`,
     body
   })
 }

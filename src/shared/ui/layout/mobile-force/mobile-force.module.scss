@@ -1,0 +1,18 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.layout {
+  display: flex;
+  justify-content: center;
+
+  .content {
+    width: 100%;
+    min-height: 100vh;
+    max-width: 600px;
+    border: 1px solid map.get($--colors, 'gray-100');
+
+    @media (max-width: 600px) {
+      border: none;
+    }
+  }
+}

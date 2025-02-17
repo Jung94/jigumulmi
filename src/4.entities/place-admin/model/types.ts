@@ -46,6 +46,7 @@ export type PlaceMenu = {
   isMain: boolean;
   description: string;
   imageS3Key: string | null;
+  imageFilename: string | null;
 }
 
 export type MenuImage = {
@@ -59,6 +60,7 @@ export type PlaceMenuInput = {
   price: string;
   isNew?: boolean;
   isMain: boolean;
+  imageFilename?: string;
   imageS3Key?: string;
   tempImage?: MenuImage; // 임시 이미지
   description: string;
@@ -178,7 +180,7 @@ export type UpdatePlaceMenu = {
   price: string;
   isMain: boolean;
   description: string;
-  fullFilename: string | null;
+  imageFilename: string | null;
 }
 
 export type UpdatePlaceMenuVariables = {
