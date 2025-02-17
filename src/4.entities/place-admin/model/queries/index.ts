@@ -1,4 +1,5 @@
 import useCreatePlace from './useCreatePlace'
+import useDeletePlace from './useDeletePlace'
 import prefetchPlaceList from './prefetchPlaceList'
 import useFetchPlaceList from './useFetchPlaceList'
 import useFetchRegionList from './useFetchRegionList'
@@ -19,6 +20,7 @@ import useDeleteTemporaryBusinessHour from './useDeleteTemporaryBusinessHour'
 
 export {
   useCreatePlace,
+  useDeletePlace,
   prefetchPlaceList,
   useFetchPlaceList,
   useFetchRegionList,

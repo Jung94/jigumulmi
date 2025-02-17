@@ -4,6 +4,7 @@ export const placeAmdinAPI = {
   district: '/admin/place/district', // 시군구 조회
   putPresignedUrl: '/admin/place/menu/s3-put-presigned-url',
   deletePresignedUrl: '/admin/place/menu/s3-delete-presigned-url',
+  deletePlace: (placeId: number) => `/admin/place/${placeId}`,
   menu: (placeId: number) => `/admin/place/${placeId}/menu`,
   basic: (placeId: number) => `/admin/place/${placeId}/basic`,
   image: (placeId: number) => `/admin/place/${placeId}/image`,
