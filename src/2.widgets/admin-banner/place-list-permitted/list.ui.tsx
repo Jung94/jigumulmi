@@ -33,7 +33,7 @@ export default function PlaceTable({
     setSelectedIdList((prev) => {
       const hasId = prev.includes(placeId)
       if (hasId) return prev.filter(id => id !== placeId)
-        else return [...prev, placeId].sort((a, b) => a - b) // 오름차순
+        else return [...prev, placeId]
     })
   }
 
