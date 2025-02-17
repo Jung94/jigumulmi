@@ -136,7 +136,7 @@ export default function PlaceDetailPage() {
 
   useEffect(()=>{
     return () => {
-      if (pathname !== '/admin/place/creation') deleteCookie('ji-admin-list-url')
+      if (pathname !== '/admin/place/registration') deleteCookie('ji-admin-list-url')
     }
   }, [])
 

@@ -31,7 +31,7 @@ const FilterBox = ({
     const currentUrl = `${pathname}?${params.toString()}`
     
     setCookie("ji-admin-list-url", currentUrl)
-    router.push('/admin/place/creation')
+    router.push('/admin/place/registration')
   }
 
   const searchRef = useRef<any>(null)
