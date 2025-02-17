@@ -22,7 +22,7 @@ export default function PlaceList({
   const router = useRouter()
   const observerRef = useRef<HTMLDivElement | null>(null)
 
-  const navigatePlaceDetail = (placeId: number) => router.push(`/banner/${bannerId}/place/${placeId}`)
+  const navigatePlaceDetail = (placeId: number) => router.push(`/banner/${bannerId}/place/${placeId}`, { scroll: false })
   const handleClickPlaceCard = (placeId: number) => navigatePlaceDetail(placeId)
 
   useEffect(() => {
