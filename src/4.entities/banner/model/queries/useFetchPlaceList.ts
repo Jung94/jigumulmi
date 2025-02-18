@@ -13,7 +13,7 @@ export default function useFetchPlaceList(
       lastPage.page.currentPage < lastPage.page.totalPage 
         ? lastPage.page.currentPage + 1 
         : undefined,
-    // staleTime: 1000 * 60 * 10, // 10분 동안 캐시 유지
-    // cacheTime: 1000 * 60 * 15, // 10분 동안 캐시 유지
+    staleTime: 1000 * 60 * 10, // 10분 동안 캐시 유지
+    cacheTime: 1000 * 60 * 15, // 10분 동안 캐시 유지
   })
 }
