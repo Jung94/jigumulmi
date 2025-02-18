@@ -9,12 +9,23 @@ import placeQueryKey from '@/src/4.entities/place-admin/model/queries/query-key.
 import { KakaoPlaceSearch, CategorySelectbox, SubwayStationSearch } from '@/src/2.widgets/admin-place/place-form'
 import { 
   useCreatePlace, 
+  useCheckIsApproved,
   useUpdatePlaceBasic,
   useFetchRegionList, 
   useFetchDistrictList,
 } from '@/src/4.entities/place-admin/model/queries'
-import type { MainCategory, SubCategory, SubwayStation, PlaceBasic, CreatePlaceBasicInput, CreatePlaceVariables } from '@/src/4.entities/place-admin/model/types'
 import type { SearchedKakaoPlace } from '@/src/2.widgets/admin-place/place-form/kakao-place-search'
+import type { 
+  MainCategory, 
+  SubCategory, 
+  SubwayStation, 
+  PlaceBasic, 
+  CreatePlaceBasicInput, 
+  CreatePlaceVariables,
+  PlaceBusinessHour,
+  FetchPlaceMenuResponse,
+  PlaceImage
+} from '@/src/4.entities/place-admin/model/types'
 
 type Category = {
   categoryGroup: MainCategory
@@ -23,16 +34,23 @@ type Category = {
 
 export default function BasicSection({
   basicData,
-  setBasicData
+  setBasicData,
+  placeMenuData,
+  placeImageData,
+  placeBusinessHourData
 }: {
   basicData: PlaceBasic | CreatePlaceBasicInput
   setBasicData: Dispatch<SetStateAction<any>>
+  placeMenuData?: FetchPlaceMenuResponse
+  placeImageData?: PlaceImage[]
+  placeBusinessHourData?: PlaceBusinessHour
 }) {
   const router = useRouter()
   const params = useParams()
   const queryClient = useQueryClient()
   const createPlace = useCreatePlace()
   const updatePlace = useUpdatePlaceBasic()
+  const checkIsApproved = useCheckIsApproved()
   const placeId = params?.placeId ? Number(params.placeId) : null
 
   const { data: regionList } = useFetchRegionList()
@@ -119,8 +137,44 @@ export default function BasicSection({
     }
   }
 
+  const isCheckedFixedBusinessHour = () => {
+    if (!placeBusinessHourData) return
+    const fixedBusinessHour = placeBusinessHourData.fixedBusinessHour
+    
+    for (const key in fixedBusinessHour) {
+      const typedKey = key as keyof typeof fixedBusinessHour
+      if (!fixedBusinessHour[typedKey]) return false
+    }
+    return true
+  }
+
   const handleUpdatePlace = async () => {
     if (!placeId) return
+    if (basicData.isApproved) {
+      if (
+        basicData?.name &&
+        basicData?.region &&
+        basicData?.address &&
+        basicData?.district &&
+        !!basicData?.categoryList.length &&
+        !!basicData?.subwayStationList.length &&
+        basicData?.position.latitude &&
+        basicData?.position.longitude &&
+        !!placeMenuData?.length &&
+        !!placeImageData?.length &&
+        isCheckedFixedBusinessHour()
+      ) {
+        console.log(true)
+      } else return alert('장소 승인이 불가합니다. 필수 항목들을 입력해 주세요. \n\n<필수 항목>\n이름, 주소, 광역시도, 시군구, 위도, 경도, 고정 영업시간, 카테고리(1개 이상), 지하철역(1개 이상), 메뉴(1개 이상), 사진(1개 이상)')
+    }
+    
+    if (!placeId) return
+    // try {
+    //   const isApproved = await checkIsApproved.mutateAsync(placeId)
+    //   console.log(isApproved)
+    // } catch (error) {
+    //   console.error(error)
+    // }
 
     const newPlaceBasic: CreatePlaceVariables = {
       isApproved: basicData.isApproved,
@@ -158,15 +212,17 @@ export default function BasicSection({
 
   return (
     <Form>
-      <Form.Item row name='승인 여부'>
-        <Form.Control>
-          <ToggleSwitch
-            name='isApproved'
-            checked={basicData.isApproved}
-            onChange={handleChange}
-          />
-        </Form.Control>
-      </Form.Item>
+      {placeId &&
+        <Form.Item row name='승인 여부'>
+          <Form.Control>
+            <ToggleSwitch
+              name='isApproved'
+              checked={basicData.isApproved}
+              onChange={handleChange}
+            />
+          </Form.Control>
+        </Form.Item>
+      }
       <Form.Item name='장소 검색'>
         <Form.Control>
           <KakaoPlaceSearch handleSelect={handleKakaoPlaceSearchSelect} />

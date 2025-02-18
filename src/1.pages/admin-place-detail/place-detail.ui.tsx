@@ -102,7 +102,9 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
     setBusinessHourData(placeBusinessHourData)
   }, [placeBusinessHourData])
 
-  if (!basicData || !placeImageData || !businessHourData) return
+  if (!basicData || !placeImageData || !businessHourData ||
+    !placeMenuData || !placeImageData || !placeBusinessHourData
+  ) return
 
   return (
     <>
@@ -128,7 +130,13 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent basicStyle value='basic' style={{ height: '100%' }}>
-          <BasicSection basicData={basicData} setBasicData={setBasicData} />
+          <BasicSection 
+            basicData={basicData} 
+            setBasicData={setBasicData} 
+            placeMenuData={placeMenuData}
+            placeImageData={placeImageData}
+            placeBusinessHourData={placeBusinessHourData}
+          />
         </TabsContent>
         <TabsContent basicStyle value='opening' style={{ height: '100%' }}>
           <BusinessHourSection businessHourData={businessHourData} setBusinessHourData={setBusinessHourData} />
