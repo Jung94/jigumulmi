@@ -1,6 +1,6 @@
 'use client'
 
-// import { Suspense } from 'react'
+import { useEffect } from 'react'
 import styles from './main.module.scss'
 import { useRouter } from 'next/navigation'
 import { useFetchBannerList } from '@/src/4.entities/banner/model/queries'
@@ -19,6 +19,10 @@ export default function MainPage() {
       </svg>
     )
   }
+
+  useEffect(() => {
+    sessionStorage.removeItem("bannerBottomSheetScroll")
+  }, [])
 
   if (!bannerList) return
 

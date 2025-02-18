@@ -55,6 +55,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   const { data: placeBusinessHourData } = useFetchPlaceBusinessHour(placeId, { month: undefined })
 
   const handlePlaceDeletion = async () => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return
     try {
       await deletePlace.mutateAsync(placeId)
       alert('삭제가 완료되었습니다.')
@@ -101,7 +102,9 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
     setBusinessHourData(placeBusinessHourData)
   }, [placeBusinessHourData])
 
-  if (!basicData || !placeImageData || !businessHourData) return
+  if (!basicData || !placeImageData || !businessHourData ||
+    !placeMenuData || !placeImageData || !placeBusinessHourData
+  ) return
 
   return (
     <>
@@ -127,7 +130,13 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent basicStyle value='basic' style={{ height: '100%' }}>
-          <BasicSection basicData={basicData} setBasicData={setBasicData} />
+          <BasicSection 
+            basicData={basicData} 
+            setBasicData={setBasicData} 
+            placeMenuData={placeMenuData}
+            placeImageData={placeImageData}
+            placeBusinessHourData={placeBusinessHourData}
+          />
         </TabsContent>
         <TabsContent basicStyle value='opening' style={{ height: '100%' }}>
           <BusinessHourSection businessHourData={businessHourData} setBusinessHourData={setBusinessHourData} />

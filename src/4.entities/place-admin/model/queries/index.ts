@@ -11,6 +11,7 @@ import useFetchPlaceImage from './useFetchPlaceImage'
 import useFetchDistrictList from './useFetchDistrictList'
 import useUpdatePlaceBasic from './useUpdatePlaceBasic'
 import useUpdatePlaceMenu from './useUpdatePlaceMenu'
+import useCheckIsApproved from './useCheckIsApproved'
 import useUpdatePlaceImageList from './useUpdatePlaceImageList'
 import useFetchPlaceBusinessHour from './useFetchPlaceBusinessHour'
 import useUpdateFixedBusinessHour from './useUpdateFixedBusinessHour'
@@ -32,6 +33,7 @@ export {
   useFetchDistrictList,
   useUpdatePlaceBasic,
   useUpdatePlaceMenu,
+  useCheckIsApproved,
   useUpdatePlaceImageList,
   useFetchPlaceBusinessHour,
   useUpdateFixedBusinessHour,

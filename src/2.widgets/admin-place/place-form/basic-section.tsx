@@ -4,12 +4,28 @@ import { Dispatch, SetStateAction, ChangeEvent } from 'react'
 import styles from './place-form.module.scss'
 import { useParams, useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
-import { Form, Input, ToggleSwitch, Button } from '@/src/shared/ui/admin'
+import { Form, Input, ToggleSwitch, Button, SelectBox } from '@/src/shared/ui/admin'
 import placeQueryKey from '@/src/4.entities/place-admin/model/queries/query-key.constant'
-import { useCreatePlace, useUpdatePlaceBasic } from '@/src/4.entities/place-admin/model/queries'
 import { KakaoPlaceSearch, CategorySelectbox, SubwayStationSearch } from '@/src/2.widgets/admin-place/place-form'
-import type { MainCategory, SubCategory, SubwayStation, PlaceBasic, CreatePlaceBasicInput, CreatePlaceVariables } from '@/src/4.entities/place-admin/model/types'
+import { 
+  useCreatePlace, 
+  useCheckIsApproved,
+  useUpdatePlaceBasic,
+  useFetchRegionList, 
+  useFetchDistrictList,
+} from '@/src/4.entities/place-admin/model/queries'
 import type { SearchedKakaoPlace } from '@/src/2.widgets/admin-place/place-form/kakao-place-search'
+import type { 
+  MainCategory, 
+  SubCategory, 
+  SubwayStation, 
+  PlaceBasic, 
+  CreatePlaceBasicInput, 
+  CreatePlaceVariables,
+  PlaceBusinessHour,
+  FetchPlaceMenuResponse,
+  PlaceImage
+} from '@/src/4.entities/place-admin/model/types'
 
 type Category = {
   categoryGroup: MainCategory
@@ -18,18 +34,27 @@ type Category = {
 
 export default function BasicSection({
   basicData,
-  setBasicData
+  setBasicData,
+  placeMenuData,
+  placeImageData,
+  placeBusinessHourData
 }: {
   basicData: PlaceBasic | CreatePlaceBasicInput
   setBasicData: Dispatch<SetStateAction<any>>
+  placeMenuData?: FetchPlaceMenuResponse
+  placeImageData?: PlaceImage[]
+  placeBusinessHourData?: PlaceBusinessHour
 }) {
   const router = useRouter()
   const params = useParams()
   const queryClient = useQueryClient()
   const createPlace = useCreatePlace()
   const updatePlace = useUpdatePlaceBasic()
-
+  const checkIsApproved = useCheckIsApproved()
   const placeId = params?.placeId ? Number(params.placeId) : null
+
+  const { data: regionList } = useFetchRegionList()
+  const { data: districtList } = useFetchDistrictList({ region: basicData.region })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, type } = e.target
@@ -40,6 +65,16 @@ export default function BasicSection({
     } else value = e.target.value
     
     setBasicData((prev: any) => ({ ...prev, [name]: value }))
+  }
+
+  const handleRegionChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { value } = e.target
+    setBasicData((prev: any) => ({ ...prev, region: value, district: null }))
+  }
+
+  const handleDistrictChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { value, dataset } = e.target
+    setBasicData((prev: any) => ({ ...prev, district: { id: Number(value), title: dataset.name } }))
   }
 
   const handleKakaoPlaceSearchSelect = (kakaoPlace: SearchedKakaoPlace) => {
@@ -80,7 +115,7 @@ export default function BasicSection({
       address: basicData.address,
       contact: basicData.contact,
       placeUrl: basicData.placeUrl,
-      districtId: basicData.districtId,
+      districtId: basicData.district ? basicData.district.id : null,
       position: {
         latitude: basicData.position.latitude,
         longitude: basicData.position.longitude
@@ -102,8 +137,44 @@ export default function BasicSection({
     }
   }
 
+  const isCheckedFixedBusinessHour = () => {
+    if (!placeBusinessHourData) return
+    const fixedBusinessHour = placeBusinessHourData.fixedBusinessHour
+    
+    for (const key in fixedBusinessHour) {
+      const typedKey = key as keyof typeof fixedBusinessHour
+      if (!fixedBusinessHour[typedKey]) return false
+    }
+    return true
+  }
+
   const handleUpdatePlace = async () => {
     if (!placeId) return
+    if (basicData.isApproved) {
+      if (
+        basicData?.name &&
+        basicData?.region &&
+        basicData?.address &&
+        basicData?.district &&
+        !!basicData?.categoryList.length &&
+        !!basicData?.subwayStationList.length &&
+        basicData?.position.latitude &&
+        basicData?.position.longitude &&
+        !!placeMenuData?.length &&
+        !!placeImageData?.length &&
+        isCheckedFixedBusinessHour()
+      ) {
+        console.log(true)
+      } else return alert('장소 승인이 불가합니다. 필수 항목들을 입력해 주세요. \n\n<필수 항목>\n이름, 주소, 광역시도, 시군구, 위도, 경도, 고정 영업시간, 카테고리(1개 이상), 지하철역(1개 이상), 메뉴(1개 이상), 사진(1개 이상)')
+    }
+    
+    if (!placeId) return
+    // try {
+    //   const isApproved = await checkIsApproved.mutateAsync(placeId)
+    //   console.log(isApproved)
+    // } catch (error) {
+    //   console.error(error)
+    // }
 
     const newPlaceBasic: CreatePlaceVariables = {
       isApproved: basicData.isApproved,
@@ -112,7 +183,7 @@ export default function BasicSection({
       address: basicData.address,
       contact: basicData.contact,
       placeUrl: basicData.placeUrl,
-      districtId: basicData.districtId,
+      districtId: basicData.district ? basicData.district.id : null,
       position: {
         latitude: basicData.position.latitude,
         longitude: basicData.position.longitude
@@ -141,15 +212,17 @@ export default function BasicSection({
 
   return (
     <Form>
-      <Form.Item row name='승인 여부'>
-        <Form.Control>
-          <ToggleSwitch
-            name='isApproved'
-            checked={basicData.isApproved}
-            onChange={handleChange}
-          />
-        </Form.Control>
-      </Form.Item>
+      {placeId &&
+        <Form.Item row name='승인 여부'>
+          <Form.Control>
+            <ToggleSwitch
+              name='isApproved'
+              checked={basicData.isApproved}
+              onChange={handleChange}
+            />
+          </Form.Control>
+        </Form.Item>
+      }
       <Form.Item name='장소 검색'>
         <Form.Control>
           <KakaoPlaceSearch handleSelect={handleKakaoPlaceSearchSelect} />
@@ -160,17 +233,6 @@ export default function BasicSection({
           <CategorySelectbox 
             categoryList={basicData.categoryList} 
             handleCategoryListChange={handleCategoryListChange} 
-          />
-        </Form.Control>
-      </Form.Item>
-      <Form.Item name='네이버 URL'>
-        <Form.Control>
-          <Input 
-            type='text' 
-            name='placeUrl'
-            value={basicData.placeUrl} 
-            onChange={handleChange} 
-            style={{ fontSize: '0.875rem' }} 
           />
         </Form.Control>
       </Form.Item>
@@ -203,6 +265,43 @@ export default function BasicSection({
               type='text' 
               name='contact'
               value={basicData.contact} 
+              onChange={handleChange} 
+              style={{ fontSize: '0.875rem' }} 
+            />
+          </Form.Control>
+        </Form.Item>
+      </div>
+      <div className={styles['place-form-row']}>
+        <Form.Item name='광역시도'>
+          <Form.Control>
+            <SelectBox.HiddenOption
+              placeholder='광역시도'
+              options={regionList 
+                ? [...regionList.map(r => ({ name: r, value: r }))] 
+                : []}
+              selectedValue={basicData.region}
+              onClick={handleRegionChange}
+            ></SelectBox.HiddenOption>
+          </Form.Control>
+        </Form.Item>
+        <Form.Item name='시군구'>
+          <Form.Control>
+            <SelectBox.HiddenOption
+              placeholder='시군구'
+              options={districtList 
+                ? [...districtList.map(d => ({ name: d.title, value: d.id })) ]
+                : []}
+              selectedValue={basicData.district ? basicData.district.id : null}
+              onClick={handleDistrictChange}
+            ></SelectBox.HiddenOption>
+          </Form.Control>
+        </Form.Item>
+        <Form.Item name='네이버 URL'>
+          <Form.Control>
+            <Input 
+              type='text' 
+              name='placeUrl'
+              value={basicData.placeUrl} 
               onChange={handleChange} 
               style={{ fontSize: '0.875rem' }} 
             />
