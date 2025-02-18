@@ -98,15 +98,23 @@ export default function FixedBusinessHourForm(props: {
 
   const handleUpdate = async () => {
     if (!placeId) return
+    const fixedBusinessHour = businessHourData.fixedBusinessHour
+    for (const key in fixedBusinessHour) {
+      const typedKey = key as keyof typeof fixedBusinessHour
+      if (fixedBusinessHour[typedKey] &&
+        fixedBusinessHour[typedKey]?.isDayOff === undefined) {
+        fixedBusinessHour[typedKey].isDayOff = false
+      }
+    }
     try {
       await updateFixedBusinessHour.mutateAsync({ 
         placeId, 
-        body: businessHourData.fixedBusinessHour
+        body: fixedBusinessHour
       })
       await queryClient.refetchQueries(placeQueryKey.businessHour(placeId, { month: undefined }))
-      alert('고정 영업 시간 수정이 완료되었습니다.')
+      alert('고정 영업 시간이 저장되었습니다.')
     } catch (error) {
-      alert("고정 영업 시간 수정에 실패하였습니다. 개발자에게 문의해 주세요!")
+      alert("고정 영업 시간 저장에 실패하였습니다. 개발자에게 문의해 주세요!")
       console.error("Failed to update fixedBusinessHour:", error)
     }
   }

@@ -27,8 +27,6 @@ export default function BannerDetailPage({
 
   const handleHomePageNavigation = () => router.push(`/`)
 
-  // const sessionStorageKey = `bannerBottomSheetScroll-${bannerId}`
-
   // sessionStorage에 저장된 스크롤 위치 Element에 적용
   useEffect(() => {
     const savedScroll = sessionStorage.getItem("bannerBottomSheetScroll")

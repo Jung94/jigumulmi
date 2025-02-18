@@ -109,9 +109,9 @@ export default function ImageSection({
     try {
       await updateImageListMutation.mutateAsync({ placeId, data: placeImageList })
       await queryClient.refetchQueries(placeQueryKey.image(placeId))
-      alert('수정이 완료되었습니다.')
+      alert('사진 정보가 저장되었습니다.')
     } catch (error) {
-      alert("장소 이미지 수정을 실패하였습니다. 개발자에게 문의해 주세요!")
+      alert("사진 정보가 저장에 실패하였습니다. 개발자에게 문의해 주세요!")
       console.error("Failed to update place image list:", error)
     }
   }
