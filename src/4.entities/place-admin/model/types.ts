@@ -139,7 +139,6 @@ interface PageInfo {
 
 //Request
 export type CreatePlaceVariables = {
-  isApproved: boolean;
   name: string;
   region: string;
   address: string;
@@ -219,6 +218,13 @@ export type UpdateTemporaryBusinessHour = {
       breakEnd: Time | null;
       isDayOff: boolean;
     };
+  };
+}
+
+export type UpdateIsApprovalRequest = {
+  placeId: number;
+  body: {
+    isApproved: boolean;
   };
 }
 
