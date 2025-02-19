@@ -42,9 +42,11 @@ const DndImageItem = ({ url, isMain, handleDelete}: { url: string, isMain?: bool
 }
 
 export default function ImageSection({
+  isApproved,
   placeImageList,
   setPlaceImageList
 }: {
+  isApproved: boolean
   placeImageList: PlaceImage[]
   setPlaceImageList: Dispatch<SetStateAction<PlaceImage[]>>
 }) {
@@ -106,6 +108,10 @@ export default function ImageSection({
   const handleUpdatePlaceImageList = async () => {
     const placeId = params?.placeId ? Number(params.placeId) : null
     if (!placeId) return
+    if (isApproved && !placeImageList.length) return alert(
+      "장소 미승인 처리 후 저장이 가능합니다.\n" +
+      "필수: 사진 1개 이상"
+    )
     try {
       await updateImageListMutation.mutateAsync({ placeId, data: placeImageList })
       await queryClient.refetchQueries(placeQueryKey.image(placeId))

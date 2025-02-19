@@ -103,7 +103,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
   }, [placeBusinessHourData])
 
   if (!basicData || !placeImageData || !businessHourData ||
-    !placeMenuData || !placeImageData || !placeBusinessHourData
+    !placeBasicData || !placeMenuData || !placeImageData || !placeBusinessHourData
   ) return
 
   return (
@@ -134,6 +134,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
             basicData={basicData} 
             setBasicData={setBasicData} 
             placeMenuData={placeMenuData}
+            placeBasicData={placeBasicData}
             placeImageData={placeImageData}
             placeBusinessHourData={placeBusinessHourData}
           />
@@ -142,10 +143,18 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
           <BusinessHourSection businessHourData={businessHourData} setBusinessHourData={setBusinessHourData} />
         </TabsContent>
         <TabsContent basicStyle value='menu' style={{ height: '100%' }}>
-          <MenuSection menuData={menuData} setMenuData={setMenuData} />
+          <MenuSection 
+            menuData={menuData} 
+            setMenuData={setMenuData} 
+            isApproved={basicData.isApproved}
+          />
         </TabsContent>
         <TabsContent basicStyle value='image' style={{ height: '100%' }}>
-          <ImageSection placeImageList={imageData} setPlaceImageList={setImageData} />
+          <ImageSection 
+            placeImageList={imageData} 
+            setPlaceImageList={setImageData} 
+            isApproved={basicData.isApproved}
+          />
         </TabsContent>
       </Tabs>
     </>
