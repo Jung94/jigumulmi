@@ -110,7 +110,7 @@ export default function BasicSection({
         placeId, 
         body: { isApproved: checked }
       })
-      // 주석 이유: refetch 하면 수정했던 내용들이 다시 리셋됨
+      // 주석 이유: refetch 하면 수정 중인 내용들이 다시 리셋됨
       // await queryClient.refetchQueries(placeQueryKey.basic(placeId))
       setBasicData((prev: any) => ({ ...prev, isApproved: checked }))
     } catch (error) {
