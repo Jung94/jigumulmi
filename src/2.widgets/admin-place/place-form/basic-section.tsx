@@ -36,12 +36,14 @@ export default function BasicSection({
   basicData,
   setBasicData,
   placeMenuData,
+  placeBasicData,
   placeImageData,
   placeBusinessHourData
 }: {
   basicData: PlaceBasic | CreatePlaceBasicInput
   setBasicData: Dispatch<SetStateAction<any>>
   placeMenuData?: FetchPlaceMenuResponse
+  placeBasicData?: PlaceBasic
   placeImageData?: PlaceImage[]
   placeBusinessHourData?: PlaceBusinessHour
 }) {
@@ -65,6 +67,55 @@ export default function BasicSection({
     } else value = e.target.value
     
     setBasicData((prev: any) => ({ ...prev, [name]: value }))
+  }
+
+  const isCheckedFixedBusinessHour = () => {
+    if (!placeBusinessHourData) return
+    const fixedBusinessHour = placeBusinessHourData.fixedBusinessHour
+    
+    for (const key in fixedBusinessHour) {
+      const typedKey = key as keyof typeof fixedBusinessHour
+      if (!fixedBusinessHour[typedKey]) return false
+    }
+    return true
+  }
+
+  const handleIsApprovedChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const { checked } = e.target
+
+    if (!placeId) return
+    if (checked) { // 승인하는 경우에만 검증
+      if (
+        !(
+          placeBasicData?.name &&
+          placeBasicData?.region &&
+          placeBasicData?.address &&
+          placeBasicData?.district &&
+          placeBasicData?.position.latitude &&
+          placeBasicData?.position.longitude &&
+          !!placeBasicData?.categoryList.length &&
+          !!placeBasicData?.subwayStationList.length &&
+          !!placeMenuData?.length &&
+          !!placeImageData?.length &&
+          isCheckedFixedBusinessHour()
+        )
+      ) return alert(
+        "장소 승인이 불가합니다. 필수 항목들을 입력해 주세요.\n\n" +
+        "<필수 항목>\n" +
+        "이름, 주소, 광역시도, 시군구, 위도, 경도, 고정 영업시간, 카테고리(1개 이상), 지하철역(1개 이상), 메뉴(1개 이상), 사진(1개 이상)"
+      )
+    }
+    try {
+      await checkIsApproved.mutateAsync({
+        placeId, 
+        body: { isApproved: checked }
+      })
+      // 주석 이유: refetch 하면 수정 중인 내용들이 다시 리셋됨
+      // await queryClient.refetchQueries(placeQueryKey.basic(placeId))
+      setBasicData((prev: any) => ({ ...prev, isApproved: checked }))
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleRegionChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -109,7 +160,6 @@ export default function BasicSection({
 
   const handleCreatePlace = async () => {
     const newPlaceBasic: CreatePlaceVariables = {
-      isApproved: basicData.isApproved,
       name: basicData.name,
       region: basicData.region,
       address: basicData.address,
@@ -137,47 +187,31 @@ export default function BasicSection({
     }
   }
 
-  const isCheckedFixedBusinessHour = () => {
-    if (!placeBusinessHourData) return
-    const fixedBusinessHour = placeBusinessHourData.fixedBusinessHour
-    
-    for (const key in fixedBusinessHour) {
-      const typedKey = key as keyof typeof fixedBusinessHour
-      if (!fixedBusinessHour[typedKey]) return false
-    }
-    return true
-  }
-
   const handleUpdatePlace = async () => {
     if (!placeId) return
-    if (basicData.isApproved) {
-      if (
-        basicData?.name &&
-        basicData?.region &&
-        basicData?.address &&
-        basicData?.district &&
-        !!basicData?.categoryList.length &&
-        !!basicData?.subwayStationList.length &&
-        basicData?.position.latitude &&
-        basicData?.position.longitude &&
-        !!placeMenuData?.length &&
-        !!placeImageData?.length &&
-        isCheckedFixedBusinessHour()
-      ) {
-        console.log(true)
-      } else return alert('장소 승인이 불가합니다. 필수 항목들을 입력해 주세요. \n\n<필수 항목>\n이름, 주소, 광역시도, 시군구, 위도, 경도, 고정 영업시간, 카테고리(1개 이상), 지하철역(1개 이상), 메뉴(1개 이상), 사진(1개 이상)')
-    }
     
-    if (!placeId) return
-    // try {
-    //   const isApproved = await checkIsApproved.mutateAsync(placeId)
-    //   console.log(isApproved)
-    // } catch (error) {
-    //   console.error(error)
-    // }
+    // 승인되어 있는 장소인 경우
+    if (basicData?.isApproved) {
+      // 승인에 필요한 필수 항목이 존재하는지 검증
+      if (
+        !(
+          basicData.name &&
+          basicData.region &&
+          basicData.address &&
+          basicData.district &&
+          basicData.position.latitude &&
+          basicData.position.longitude &&
+          !!basicData.categoryList.length &&
+          !!basicData.subwayStationList.length
+        )
+      ) return alert(
+        "장소 미승인 처리 후 저장이 가능합니다.\n\n" +
+        "<필수 항목>\n" +
+        "이름, 주소, 광역시도, 시군구, 위도, 경도, 고정 영업시간, 카테고리(1개 이상), 지하철역(1개 이상), 메뉴(1개 이상), 사진(1개 이상)"
+      )
+    }
 
     const newPlaceBasic: CreatePlaceVariables = {
-      isApproved: basicData.isApproved,
       name: basicData.name,
       region: basicData.region,
       address: basicData.address,
@@ -218,7 +252,7 @@ export default function BasicSection({
             <ToggleSwitch
               name='isApproved'
               checked={basicData.isApproved}
-              onChange={handleChange}
+              onChange={handleIsApprovedChange}
             />
           </Form.Control>
         </Form.Item>

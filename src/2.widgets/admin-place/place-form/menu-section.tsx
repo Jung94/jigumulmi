@@ -73,9 +73,11 @@ const initialMenu = {
 }
 
 export default function MenuSection({
+  isApproved,
   menuData,
-  setMenuData
+  setMenuData,
 }: {
+  isApproved: boolean
   menuData: PlaceMenuInput[]
   setMenuData: Dispatch<SetStateAction<PlaceMenuInput[]>>
 }) {
@@ -170,6 +172,12 @@ export default function MenuSection({
   }
 
   const handleSaveMenu = async () => {
+    if (!placeId) return
+    if (isApproved && !menuData.length) return alert(
+      "장소 미승인 처리 후 저장이 가능합니다.\n" +
+      "필수: 메뉴 1개 이상"
+    )
+
     let newMenuList: UpdatePlaceMenu[] = []
     let hasError = false
 
@@ -236,7 +244,7 @@ export default function MenuSection({
       }
     }
 
-    if (!placeId || hasError) return alert('에러 발생! 개발자 문의가 필요합니다.')
+    if (hasError) return alert('에러 발생! 개발자 문의가 필요합니다.')
     try {
       await updatePlaceMenu.mutateAsync({ placeId, data: newMenuList })
       await queryClient.refetchQueries(placeQueryKey.menu(placeId))
