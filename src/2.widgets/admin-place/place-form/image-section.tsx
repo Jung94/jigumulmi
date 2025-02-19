@@ -105,6 +105,7 @@ export default function ImageSection({
   
   const sensors = useSensors(mouseSensor, keyboardSensor)
 
+  console.log(placeImageList)
   const handleUpdatePlaceImageList = async () => {
     const placeId = params?.placeId ? Number(params.placeId) : null
     if (!placeId) return
@@ -112,8 +113,13 @@ export default function ImageSection({
       "장소 미승인 처리 후 저장이 가능합니다.\n" +
       "필수: 사진 1개 이상"
     )
+
+    const newPlaceImageList = placeImageList.map((img, index) => (index === 0 ? { ...img, isMain: true } : { ...img, isMain: false}))
     try {
-      await updateImageListMutation.mutateAsync({ placeId, data: placeImageList })
+      await updateImageListMutation.mutateAsync({ 
+        placeId, 
+        data: newPlaceImageList
+      })
       await queryClient.refetchQueries(placeQueryKey.image(placeId))
       alert('사진 정보가 저장되었습니다.')
     } catch (error) {
