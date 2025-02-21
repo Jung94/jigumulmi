@@ -112,7 +112,7 @@ export default function PlaceDetailPage({ placeId }: { placeId: number }) {
         <PreviousPageButton onClick={navigatePlaceList}>
           장소 목록
         </PreviousPageButton>
-        <Button variant='outline' onClick={handlePlaceDeletion}>삭제</Button>
+        <Button variant='outline' disabled={basicData.isApproved} onClick={handlePlaceDeletion}>삭제</Button>
       </Header>
       <Tabs defaultValue='basic' style={{ height: '100%', overflow: 'hidden' }}>
         <TabsList>
