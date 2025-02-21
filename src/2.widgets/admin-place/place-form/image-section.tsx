@@ -86,7 +86,8 @@ export default function ImageSection({
   const handleDragEndForPlaceImage = (activeId: string, overId: string) => {
     const originalPos = getItemPos(activeId, placeImageList)
     const newPos = getItemPos(overId, placeImageList)
-    const newPlaceImageList = arrayMove(placeImageList, originalPos, newPos)
+    let newPlaceImageList = arrayMove(placeImageList, originalPos, newPos)
+    newPlaceImageList = newPlaceImageList.map((img, index) => (index === 0 ? { ...img, isMain: true } : { ...img, isMain: false}))
     setPlaceImageList(newPlaceImageList)
   }
 
@@ -105,7 +106,6 @@ export default function ImageSection({
   
   const sensors = useSensors(mouseSensor, keyboardSensor)
 
-  console.log(placeImageList)
   const handleUpdatePlaceImageList = async () => {
     const placeId = params?.placeId ? Number(params.placeId) : null
     if (!placeId) return
@@ -114,11 +114,10 @@ export default function ImageSection({
       "필수: 사진 1개 이상"
     )
 
-    const newPlaceImageList = placeImageList.map((img, index) => (index === 0 ? { ...img, isMain: true } : { ...img, isMain: false}))
     try {
       await updateImageListMutation.mutateAsync({ 
         placeId, 
-        data: newPlaceImageList
+        data: placeImageList
       })
       await queryClient.refetchQueries(placeQueryKey.image(placeId))
       alert('사진 정보가 저장되었습니다.')
@@ -145,8 +144,8 @@ export default function ImageSection({
             <DndContext sensors={sensors} onDragEnd={e => handleDragEnd(e, handleDragEndForPlaceImage)} collisionDetection={closestCorners}>
               <div className={styles[`place-image-dnd-context${!!placeImageList.length ? '' : '-empty'}`]}>
                 <SortableContext items={placeImageList.map(i => ({ ...i, id: i.url }))} strategy={horizontalListSortingStrategy}>
-                  {placeImageList.map((img: PlaceImage, index: number) => 
-                    <DndImageItem key={img.url} url={img.url} isMain={index === 0} handleDelete={handleDeleteImage} />
+                  {placeImageList.map((img: PlaceImage) => 
+                    <DndImageItem key={img.url} url={img.url} isMain={img.isMain} handleDelete={handleDeleteImage} />
                   )}
                 </SortableContext>
               </div>

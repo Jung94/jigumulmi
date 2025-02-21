@@ -42,7 +42,7 @@ export default function MenuCard({ menu, isLast }: {
         <div className={styles['menu-card-right']}>
           <div 
             className={styles['menu-card-right-image']}
-            onClick={() => handlePreviewImageClick(0)}
+            onClick={() => menu.imageS3Key && handlePreviewImageClick(0)}
           >
             {menu.imageS3Key
               ? <Image 

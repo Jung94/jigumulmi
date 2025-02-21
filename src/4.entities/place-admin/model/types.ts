@@ -224,7 +224,7 @@ export type UpdateTemporaryBusinessHour = {
 export type UpdateIsApprovalRequest = {
   placeId: number;
   body: {
-    isApproved: boolean;
+    approve: boolean;
   };
 }
 

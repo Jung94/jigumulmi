@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, ChangeEvent } from 'react'
 import styles from './place-form.module.scss'
 import { useParams, useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
+import { latitudeRegex, longitudeRegex } from '@/src/shared/utils/regex'
 import { Form, Input, ToggleSwitch, Button, SelectBox } from '@/src/shared/ui/admin'
 import placeQueryKey from '@/src/4.entities/place-admin/model/queries/query-key.constant'
 import { KakaoPlaceSearch, CategorySelectbox, SubwayStationSearch } from '@/src/2.widgets/admin-place/place-form'
@@ -108,7 +109,7 @@ export default function BasicSection({
     try {
       await checkIsApproved.mutateAsync({
         placeId, 
-        body: { isApproved: checked }
+        body: { approve: checked }
       })
       // 주석 이유: refetch 하면 수정 중인 내용들이 다시 리셋됨
       // await queryClient.refetchQueries(placeQueryKey.basic(placeId))
@@ -158,7 +159,24 @@ export default function BasicSection({
     setBasicData((prev: any) => ({ ...prev, subwayStationList }))
   }
 
+  const isPosition = (latitude: number | null, longitude: number | null): boolean => {
+    if (latitude && !latitudeRegex.test(String(latitude))) {
+      alert('위도의 형식이 잘못되었습니다.')
+      return false
+    }
+    if (longitude && !longitudeRegex.test(String(longitude))) {
+      alert('경도의 형식이 잘못되었습니다.')
+      return false
+    }
+    return true
+  }
+
   const handleCreatePlace = async () => {
+    if (!isPosition(
+      basicData.position.latitude, 
+      basicData.position.longitude
+    )) return 
+
     const newPlaceBasic: CreatePlaceVariables = {
       name: basicData.name,
       region: basicData.region,
@@ -189,6 +207,10 @@ export default function BasicSection({
 
   const handleUpdatePlace = async () => {
     if (!placeId) return
+    if (!isPosition(
+      basicData.position.latitude, 
+      basicData.position.longitude
+    )) return 
     
     // 승인되어 있는 장소인 경우
     if (basicData?.isApproved) {
@@ -348,7 +370,7 @@ export default function BasicSection({
             <Input 
               type='text' 
               name='latitude'
-              value={basicData.position.latitude} 
+              value={basicData.position.latitude ?? ''} 
               onChange={(e) => handlePositionChange(e, 'latitude')} 
               style={{ fontSize: '0.875rem' }} 
             />
@@ -359,7 +381,7 @@ export default function BasicSection({
             <Input 
               type='text' 
               name='longitude'
-              value={basicData.position.longitude} 
+              value={basicData.position.longitude ?? ''} 
               onChange={(e) => handlePositionChange(e, 'longitude')} 
               style={{ fontSize: '0.875rem' }} 
             />
