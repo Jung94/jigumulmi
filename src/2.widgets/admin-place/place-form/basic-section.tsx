@@ -159,12 +159,12 @@ export default function BasicSection({
     setBasicData((prev: any) => ({ ...prev, subwayStationList }))
   }
 
-  const isPosition = (latitude: string, longitude: string): boolean => {
-    if (latitude && !latitudeRegex.test(latitude)) {
+  const isPosition = (latitude: number | null, longitude: number | null): boolean => {
+    if (latitude && !latitudeRegex.test(String(latitude))) {
       alert('위도의 형식이 잘못되었습니다.')
       return false
     }
-    if (longitude && !longitudeRegex.test(longitude)) {
+    if (longitude && !longitudeRegex.test(String(longitude))) {
       alert('경도의 형식이 잘못되었습니다.')
       return false
     }
@@ -173,8 +173,8 @@ export default function BasicSection({
 
   const handleCreatePlace = async () => {
     if (!isPosition(
-      String(basicData.position.latitude), 
-      String(basicData.position.longitude)
+      basicData.position.latitude, 
+      basicData.position.longitude
     )) return 
 
     const newPlaceBasic: CreatePlaceVariables = {
@@ -208,8 +208,8 @@ export default function BasicSection({
   const handleUpdatePlace = async () => {
     if (!placeId) return
     if (!isPosition(
-      String(basicData.position.latitude), 
-      String(basicData.position.longitude)
+      basicData.position.latitude, 
+      basicData.position.longitude
     )) return 
     
     // 승인되어 있는 장소인 경우
@@ -370,7 +370,7 @@ export default function BasicSection({
             <Input 
               type='text' 
               name='latitude'
-              value={basicData.position.latitude} 
+              value={basicData.position.latitude ?? ''} 
               onChange={(e) => handlePositionChange(e, 'latitude')} 
               style={{ fontSize: '0.875rem' }} 
             />
@@ -381,7 +381,7 @@ export default function BasicSection({
             <Input 
               type='text' 
               name='longitude'
-              value={basicData.position.longitude} 
+              value={basicData.position.longitude ?? ''} 
               onChange={(e) => handlePositionChange(e, 'longitude')} 
               style={{ fontSize: '0.875rem' }} 
             />
