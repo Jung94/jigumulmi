@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, ChangeEvent } from 'react'
 import styles from './place-form.module.scss'
 import { useParams, useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
+import { latitudeRegex, longitudeRegex } from '@/src/shared/utils/regex'
 import { Form, Input, ToggleSwitch, Button, SelectBox } from '@/src/shared/ui/admin'
 import placeQueryKey from '@/src/4.entities/place-admin/model/queries/query-key.constant'
 import { KakaoPlaceSearch, CategorySelectbox, SubwayStationSearch } from '@/src/2.widgets/admin-place/place-form'
@@ -158,7 +159,24 @@ export default function BasicSection({
     setBasicData((prev: any) => ({ ...prev, subwayStationList }))
   }
 
+  const isPosition = (latitude: string, longitude: string): boolean => {
+    if (latitude && !latitudeRegex.test(latitude)) {
+      alert('위도의 형식이 잘못되었습니다.')
+      return false
+    }
+    if (longitude && !longitudeRegex.test(longitude)) {
+      alert('경도의 형식이 잘못되었습니다.')
+      return false
+    }
+    return true
+  }
+
   const handleCreatePlace = async () => {
+    if (!isPosition(
+      String(basicData.position.latitude), 
+      String(basicData.position.longitude)
+    )) return 
+
     const newPlaceBasic: CreatePlaceVariables = {
       name: basicData.name,
       region: basicData.region,
@@ -189,6 +207,10 @@ export default function BasicSection({
 
   const handleUpdatePlace = async () => {
     if (!placeId) return
+    if (!isPosition(
+      String(basicData.position.latitude), 
+      String(basicData.position.longitude)
+    )) return 
     
     // 승인되어 있는 장소인 경우
     if (basicData?.isApproved) {
