@@ -30,7 +30,6 @@
       width: 100%;
       border-radius: 7px;
       background-color: map.get($--colors, gray-100);
-      overflow: auto;
       display: flex;
       gap: 0.5rem;
   
@@ -333,7 +332,6 @@
     width: 100%;
     border-radius: 7px;
     background-color: map.get($--colors, gray-100);
-    overflow: auto;
     display: flex;
     gap: 0.5rem;
 

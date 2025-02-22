@@ -1,15 +1,20 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './main.module.scss'
 import { useRouter } from 'next/navigation'
+import { LoadingSpinner } from '@/src/shared/assets/icons'
 import { useFetchBannerList } from '@/src/4.entities/banner/model/queries'
 
 export default function MainPage() {
   const router = useRouter()
   const { data: bannerList } = useFetchBannerList()
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false)
 
-  const navigateBannerDetail = (bannerId: number) => router.push(`/banner/${bannerId}`)
+  const navigateBannerDetail = (bannerId: number) => {
+    setIsFetchingNextPage(true)
+    router.push(`/banner/${bannerId}`)
+  }
   const handleClickBannerCard = (bannerId: number) => navigateBannerDetail(bannerId)
 
   const drawArrowIcon = () => {
@@ -73,6 +78,18 @@ export default function MainPage() {
           </div>
         </button>
       </div>
+      {isFetchingNextPage &&
+        <div className={`
+          ${styles['main-loading']}
+          ${styles['main-loading-fade-in']}
+        `}>
+          <LoadingSpinner 
+            width={40} 
+            height={40} 
+            style={{ margin: '2rem auto', width: '100%' }} 
+          />
+        </div>
+      }
     </div>
   )
 }
