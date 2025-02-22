@@ -8,6 +8,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    minimumCacheTTL: 86400, // 24시간
     remotePatterns: [
       {
         protocol: 'https',
