@@ -25,21 +25,15 @@ export type Time = {
   minute?: number;
 }
 export type BusinessHour = {
+  isDayOff: boolean;
+  dayOfWeek: DayOfTheWeek;
   openTime?: Time | null;
   closeTime?: Time | null;
   breakStart?: Time | null;
   breakEnd?: Time | null;
-  isDayOff?: boolean;
+  temporaryDate: string | null;
 }
-export type Day = BusinessHour | null;
-export type FixedBusinessHour = {
-  monday: Day;
-  tuesday: Day;
-  wednesday: Day;
-  thursday: Day;
-  friday: Day;
-  saturday: Day;
-  sunday: Day;
-}
+
+export type FixedBusinessHour = BusinessHour[]
 export type TimeCategory = 'openTime' | 'closeTime' | 'breakStart' | 'breakEnd';
-export type DayOfTheWeek = 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
+export type DayOfTheWeek = 'SUNDAY' | 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY';
