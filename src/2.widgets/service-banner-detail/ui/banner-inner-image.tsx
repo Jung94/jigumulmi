@@ -11,6 +11,7 @@ export default function BannerInnerImage({
       <Image 
         fill
         priority
+        quality={100}
         alt='banner-inner-image'
         style={{ objectFit: 'cover' }}
         src={process.env.NEXT_PUBLIC_CDN + innerImageS3Key}
