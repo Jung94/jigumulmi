@@ -83,35 +83,16 @@ export default function PlaceBasic({
   }
 
   // 영업 시간 utils
-  const convertNumToday = (value: 0 | 1 | 2 | 3 | 4 | 5 | 6): DayOfTheWeek => {
-    switch(value) {
-      case 0: return 'sunday'
-      case 1: return 'monday'
-      case 2: return 'tuesday'
-      case 3: return 'wednesday'
-      case 4: return 'thursday'
-      case 5: return 'friday'
-      case 6: return 'saturday'
-    }
-  }
-
   const convertEngToKo = (value: DayOfTheWeek) => {
     switch(value) {
-      case 'sunday': return '일'
-      case 'monday': return '월'
-      case 'tuesday': return '화'
-      case 'wednesday': return '수'
-      case 'thursday': return '목'
-      case 'friday': return '금'
-      case 'saturday': return '토'
+      case 'SUNDAY': return '일'
+      case 'MONDAY': return '월'
+      case 'TUESDAY': return '화'
+      case 'WEDNESDAY': return '수'
+      case 'THURSDAY': return '목'
+      case 'FRIDAY': return '금'
+      case 'SATURDAY': return '토'
     }
-  }
-
-  const reorderDays = (today: DayOfTheWeek, days: DayOfTheWeek[]): DayOfTheWeek[] => {
-    const todayIndex = days.indexOf(today)
-    if (todayIndex === -1) return days // today가 배열에 없으면 그대로 반환
-  
-    return [...days.slice(todayIndex), ...days.slice(0, todayIndex)]
   }
 
   const mapHourAndMinute = (num: number) => {
@@ -128,46 +109,43 @@ export default function PlaceBasic({
   }
 
   const drawWeeklyBusinessHour = (openingData: WeeklyBusinessHour) => {
-    const todayNum = new Date().getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6
-    const today = convertNumToday(todayNum)
-    const days: DayOfTheWeek[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-    // const orderedDays = reorderDays(today, days)
-    const orderedDays = days
-    
-    return orderedDays.map((day, index) => {
-      const isDayOff = !openingData[day] || openingData[day].isDayOff
-      // index === 0
-      if (!openingData[day]) return
+    return openingData.map((day, index) => {
+      const isDayOff = day.isDayOff
+      const temporaryDate = day.temporaryDate 
+        ? `${new Date(day.temporaryDate).getMonth() + 1}/${new Date(day.temporaryDate).getDate()}`
+        : null
+
       return (
-        <div key={day} className={`
+        <div key={index} className={`
           ${styles['place-basic-opening-hour-hidden-day']}
-          ${day === today
+          ${index === 0
             ? styles['place-basic-opening-hour-hidden-day-active']
             : ''
           }
         `}>
           <div className={styles['place-basic-opening-hour-hidden-day-name']}>
-            {convertEngToKo(day)}
+            {convertEngToKo(day.dayOfWeek)}
+            {temporaryDate && `(${temporaryDate})`}
           </div>
           <div className={styles['place-basic-opening-hour-hidden-day-content']}>
             {isDayOff
-              ? '정기휴무'
+              ? (temporaryDate ? '휴무' : '정기휴무')
               : <div className={styles['place-basic-opening-hour-hidden-day-content-hour']}>
                   {drawTimeToTime(
-                    openingData[day].openTime?.hour!, 
-                    openingData[day].openTime?.minute!,
-                    openingData[day].closeTime?.hour!, 
-                    openingData[day].closeTime?.minute!,
+                    day.openTime?.hour!, 
+                    day.openTime?.minute!,
+                    day.closeTime?.hour!, 
+                    day.closeTime?.minute!,
                   )}
                 </div>
             }
-            {!isDayOff && openingData[day].breakStart && openingData[day].breakEnd &&
+            {!isDayOff && day.breakStart && day.breakEnd &&
               <div className={styles['place-basic-opening-hour-hidden-day-content-hour']}>
                 {drawTimeToTime(
-                  openingData[day].breakStart?.hour!, 
-                  openingData[day].breakStart?.minute!,
-                  openingData[day].breakEnd?.hour!, 
-                  openingData[day].breakEnd?.minute!,
+                  day.breakStart?.hour!, 
+                  day.breakStart?.minute!,
+                  day.breakEnd?.hour!, 
+                  day.breakEnd?.minute!,
                 )}
                 &nbsp;브레이크타임
               </div>
