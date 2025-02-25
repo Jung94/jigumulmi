@@ -79,6 +79,7 @@ export default function PlaceList({
                   <div key={image.url} className={styles['place-list-card-content-image-list-item']}>
                     <Image 
                       fill
+                      sizes='150px'
                       alt='preview-image'
                       src={image.url}
                       style={{ objectFit: 'cover' }}
