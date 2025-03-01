@@ -38,7 +38,7 @@ export default function MainPage() {
       </div>
       <div className={styles['main-sub-title']}>
         <div className={styles['main-sub-title-01']}>지구 속도에 발맞추는 가장 맛있는 한걸음</div>
-        <div className={styles['main-sub-title-02']}>어떤 비건 식당을 찾고 계세요?</div>
+        <div className={styles['main-sub-title-02']}>어떤 비건식당을 찾고 계세요?</div>
       </div>
       <div className={styles['main-banner-list']}>
         <button className={styles['main-banner-list-card']} onClick={() => handleClickBannerCard(bannerList[0].id)}>
@@ -46,7 +46,7 @@ export default function MainPage() {
             {drawArrowIcon()}
           </div>
           <div className={styles['main-banner-list-card-text']}>
-            <span>새로운 비건 식당을</span>
+            <span>새로운 비건식당을</span>
             <span>찾고있을 때</span>
           </div>
         </button>
