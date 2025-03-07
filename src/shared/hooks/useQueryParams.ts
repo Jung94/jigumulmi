@@ -19,9 +19,7 @@ export default function useQueryParams<T extends Record<string, any>>(
 
     if (searchParams) {
       for (const [key, value] of searchParams.entries()) {
-        // if (key in query) {
-          query[key as keyof T] = value as T[keyof T]
-        // }
+        query[key as keyof T] = value as T[keyof T]
       }
     }
 
