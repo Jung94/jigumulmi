@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useRef } from 'react'
+import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQueryParams } from '@/src/shared/hooks'
 import { Search, Button } from '@/src/shared/ui/admin'
@@ -21,7 +21,7 @@ export default function PlacePage() {
   const navigatePlaceRegistration = () => router.push('/admin/place/registration')
 
   return (
-    <Suspense>
+    <>
       <Header title='장소 관리'>
         <Search 
           ref={placeNameRef}
@@ -32,6 +32,6 @@ export default function PlacePage() {
         <Button onClick={navigatePlaceRegistration}>장소 등록</Button>
       </Header>
       <PlaceTable />
-    </Suspense>
+    </>
   )
 }
