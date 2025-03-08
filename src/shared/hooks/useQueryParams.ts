@@ -12,7 +12,7 @@ export default function useQueryParams<T extends Record<string, any>>(
 } {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams() ?? new URLSearchParams()
 
   const queryParams = useMemo<T>(() => {
     const query = { ...(defaultValues || {}) } as Partial<T>
