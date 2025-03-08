@@ -12,7 +12,7 @@ export const adminMenus = [
     name: '유저 관리', 
     icon: 'UsersIcon', 
     path: 'admin/member',
-    query: 'page=1',
+    query: '',
     subMenu: []
   },
   {

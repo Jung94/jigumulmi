@@ -1,6 +1,5 @@
-import MemberListPage from '@/components/admin/pages/member'
-import type { PageSearchParams } from '@/components/admin/pages/member/types'
+import MemberPage from '@/src/1.pages/admin-member'
 
-export default function MemberList({ searchParams }: { searchParams: PageSearchParams }) {
-  return <MemberListPage searchParamsOnServer={searchParams} />
+export default function MemberListPage() {
+  return <MemberPage />
 }
