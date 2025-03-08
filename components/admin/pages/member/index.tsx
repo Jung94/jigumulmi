@@ -7,10 +7,10 @@ import HeaderSection from '@/components/admin/layout/section/header';
 import TableSection from '@/components/admin/pages/member/components/table';
 import AsideSection from '@/components/admin/layout/section/aside';
 import UserDetail from '@/components/admin/pages/member/components/user-detail';
-import { useGetMemberList } from '@/domain/admin/query';
+// import { useGetMemberList } from '@/domain/admin/query';
 import type { PageSearchParams } from './types';
 import type { Table } from '@/lib/types/table';
-import type { MembersQueryParams } from '@/domain/admin/query/useGetMemberList';
+// import type { MembersQueryParams } from '@/domain/admin/query/useGetMemberList';
 
 export default function MembersPage({ searchParamsOnServer }: { searchParamsOnServer: PageSearchParams }) {
   const router = useRouter()
@@ -29,7 +29,7 @@ export default function MembersPage({ searchParamsOnServer }: { searchParamsOnSe
   }
 
   // 모든 필터
-  const [ filters, setFilters ] = useState<MembersQueryParams>({
+  const [ filters, setFilters ] = useState({
     page: queryParams.page,
     sort: queryParams.sort,
   })
@@ -41,7 +41,8 @@ export default function MembersPage({ searchParamsOnServer }: { searchParamsOnSe
     totalCount: 0,
   });
   
-  const { data: memberList } = useGetMemberList(filters);
+  // const { data: memberList } = useGetMemberList(filters);
+  const memberList = null
 
   const handlePage = (page: number) => {
     const params = new URLSearchParams(searchParams!)
