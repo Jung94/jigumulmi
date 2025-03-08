@@ -1,15 +1,11 @@
 import './globals.scss'
-import Script from "next/script"
+import Script from 'next/script'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-// import { Inter } from 'next/font/google'
 import Providers from '@/lib/utils/Provider'
 import getQueryClient from '@/lib/utils/getQueryClient'
 import { Hydrate, dehydrate } from '@tanstack/react-query'
-import { getPlaceList } from '@/app/actions'
-// import { FacebookPixel } from "@/components/marketing"
 
-// const inter = Inter({ subsets: ['latin'] })
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
   display: 'swap',
@@ -50,7 +46,6 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
   const queryClient = getQueryClient()
-  // await queryClient.prefetchQuery(["places"], () => getPlaceList())
   const dehydratedState = dehydrate(queryClient)
 
   return (
@@ -104,7 +99,6 @@ export default async function RootLayout({children}: {children: React.ReactNode}
         <noscript>
           <img height="1" width="1" style={{display: "none"}} src={"https://www.facebook.com/tr?id=1321800105443062&ev=PageView&noscript=1"} />
         </noscript>
-        {/* <FacebookPixel /> */}
       </head>
       <body className={pretendard.className}>
         <Providers>

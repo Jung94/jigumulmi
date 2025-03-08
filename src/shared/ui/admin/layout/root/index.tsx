@@ -1,6 +1,5 @@
 import styles from './root.module.scss'
-import Header from '@/components/admin/header'
-import Sidebar from '@/components/admin/sidebar'
+import { Header, Sidebar } from '@/src/shared/ui/admin'
 
 const Layout = ({
   children, 
