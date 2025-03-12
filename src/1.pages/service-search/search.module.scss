@@ -1,0 +1,101 @@
+@use "sass:map";
+@import "styles/variables.scss";
+
+.container {
+  display: grid;
+  overflow: hidden;
+
+  @media (min-width: 1101px) {
+    height: calc(100vh - $--header-height-pc - 2px); // 2px : header's border-bottom
+    grid-template-columns: 1fr 380px;
+
+    .map {
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .bakeries_wrap {
+      display: flex;
+      justify-content: flex-end;
+      background-color: white;
+      overflow-y: hidden;
+
+      .cards {
+        width: 380px;
+        padding: 1rem;
+        border-left: 1px solid map.get($--greys, "300");
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        overflow-y: auto;
+        
+        &_empty {
+          padding: 1rem;
+          color: map.get($--greys, "800");
+          border-radius: 5px;
+          border: 1px solid map.get($--greys, "300");
+          background-color: map.get($--greys, "100");
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 5px;
+        }
+      }
+    
+      .floating_button {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      }
+      .registration_bakery {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 20rem;
+        border: 1.5px solid map.get($--greys, "900");
+        background-color: map.get($--colors, "brick-red");
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+      }
+      .leave_opinion {
+        bottom: 4.5rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 20rem;
+        border: 1.5px solid map.get($--greys, "900");
+        background-color: map.get($--colors, "brick-red");
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+      }
+    }
+  }
+
+  @media (max-width: 1100px) {
+    position: fixed;
+    top: $--header-height-mobile;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    .bakeries_wrap {
+      display: none;
+    }
+  }
+}
+
+.hasDetail {
+  @media (min-width: 1101px) {
+    grid-template-columns: 2fr 760px;
+  }
+  
+  @media (max-width: 1100px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// 지하철 호선 색상
+// https://namu.wiki/w/%EC%88%98%EB%8F%84%EA%B6%8C%20%EC%A0%84%EC%B2%A0%201%ED%98%B8%EC%84%A0

@@ -1,11 +1,11 @@
 export type Member = {
   id: number;
   email: string;
-  nickname: string;
   isAdmin: boolean;
-  createAt: string;
+  nickname: string;
+  createdAt: string;
   deregisteredAt: string;
 }
 
 // Response
-export type FetchMemberResponse = Member
+export type FetchMemberResponse = Member;

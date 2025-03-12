@@ -12,16 +12,14 @@ export default function useQueryParams<T extends Record<string, any>>(
 } {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams() ?? new URLSearchParams()
 
   const queryParams = useMemo<T>(() => {
     const query = { ...(defaultValues || {}) } as Partial<T>
 
     if (searchParams) {
       for (const [key, value] of searchParams.entries()) {
-        // if (key in query) {
-          query[key as keyof T] = value as T[keyof T]
-        // }
+        query[key as keyof T] = value as T[keyof T]
       }
     }
 
