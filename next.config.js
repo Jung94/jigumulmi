@@ -8,6 +8,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    unoptimized: true,
     minimumCacheTTL: 86400, // 24시간
     remotePatterns: [
       {
@@ -40,15 +41,6 @@ const nextConfig = {
       },
     ]
   },
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/',
-  //       destination: '/search',
-  //       permanent: false,
-  //     },
-  //   ]
-  // },
 }
 
 module.exports = nextConfig
