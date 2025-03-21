@@ -3,7 +3,7 @@
 import styles from './kakaoMap.module.scss'
 import React, { useState, useEffect, useRef, useCallback, memo } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
-import { useWindowSize } from '@/lib/hooks'
+import { useWindowSize } from '@/src/shared/hooks'
 import { set_kakao_map_func, set_kakao_places_func, update_marker, update_is_shown_detail } from '@/lib/store/modules/search'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import type { PlaceListItem, PlaceForMarker } from '@/src/4.entities/banner/model/types'
