@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState, useEffect } from 'react'
-import ImagePreview from '@/components/image-preview'
+import ImagePreview from '@/src/shared/ui/image-preview'
 
 type Options = {
   disabledBackdropClosing?: boolean

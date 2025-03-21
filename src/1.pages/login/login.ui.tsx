@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import styles from './login.module.scss'
 import { postAPI } from '@/lib/api'
-import { useModal } from '@/lib/hooks'
 import { APIaccount } from '@/lib/api/account'
 import { useQueryClient } from '@tanstack/react-query'
 import { getCookie, deleteCookie } from 'cookies-next'
@@ -12,7 +11,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Logo from '@/public/jigumulmi_logo.png'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
 import KakaoLoginSymbol from '@/public/icons/login/kakao_login_symbol.svg'
-import RegistrationNicknameContent from '@/components/modal/registration-nickname/Content'
 
 async function checkRegistered(code: string, redirectUrl: string) { // 회원가입된 유저인지 아닌지
   const response = await postAPI({apiURL: APIaccount.checkRegisteredUser, body: { code, redirectUrl }})
@@ -48,25 +46,13 @@ export default function LoginPage() {
       queryClient.invalidateQueries([APIaccount.getUserDetail])
       setIsLoading(false)
 
-      if (data.hasRegistered) { // 기존 회원
-        // 로그인 페이지 이전 경로 기록 유무에 따른 페이지 이동
-        const prevPath: string | undefined = getCookie("ji-login-prev-path")
-        deleteCookie("ji-login-prev-path")
+      const prevPath: string | undefined = getCookie("ji-login-prev-path")
+      deleteCookie("ji-login-prev-path")
 
-        if (prevPath) router.push(prevPath)
-          else router.push('/')
-      } else { // 신규 회원
-        setDefaultNickname(data.nickname)
-        handleOpenRegistrationNicknameModal()
-      }
+      if (prevPath) router.push(prevPath)
+        else router.push('/')
     }
   }
-
-  const RegistrationNicknameModal = useModal(
-    <RegistrationNicknameContent defaultNickname={defaultNickname} />,
-    { disabledBackdropClosing: true }
-  )
-  function handleOpenRegistrationNicknameModal() { RegistrationNicknameModal.open() }
 
   // 카카오 로그인 callback url 처리
   useEffect(() => {
@@ -96,7 +82,6 @@ export default function LoginPage() {
           카카오톡으로 로그인하기
         </button>
       </div>
-      {RegistrationNicknameModal.Dialog}
     </>
   )
 }

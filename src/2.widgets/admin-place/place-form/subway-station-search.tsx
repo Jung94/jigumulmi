@@ -1,11 +1,11 @@
 'use client'
 
 import { ChangeEvent, KeyboardEvent, useState } from 'react'
+import { CSS } from '@dnd-kit/utilities'
+import XMarkIcon from '@/public/icons/XMark'
 import styles from './place-form.module.scss'
 import { Input } from '@/src/shared/ui/admin'
-import { useGetPlaceSubway } from '@/domain/place/query'
-import XMarkIcon from '@/public/icons/XMark'
-import { CSS } from '@dnd-kit/utilities'
+import { useFetchSubwayList } from '@/src/4.entities/place/model/queries'
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable'
 import { DndContext, closestCorners, useSensor, useSensors, MouseSensor, KeyboardSensor } from '@dnd-kit/core'
 import type { SubwayStation } from '@/src/4.entities/place-admin/model/types'
@@ -53,7 +53,7 @@ export default function SubwayStationSearch({
     if (e.code === 'Enter') e.preventDefault()
   }
 
-  const { data: searchedSubwayStationList } = useGetPlaceSubway(subwayStationName)
+  const { data: searchedSubwayStationList } = useFetchSubwayList({ stationName: subwayStationName })
 
   const handleSubwayStationClick = (station: SubwayStation) => {
     let newSubwayStationList = [] as SubwayStation[]
@@ -100,9 +100,9 @@ export default function SubwayStationSearch({
 
   return (
     <div className={styles['subway-station']}>
-      {!!searchedSubwayStationList?.data?.length && subwayStationName &&
+      {!!searchedSubwayStationList?.length && subwayStationName &&
         <div className={styles['subway-station-option-list']}>
-          {searchedSubwayStationList.data.map((v: SubwayStation) =>
+          {searchedSubwayStationList.map((v: SubwayStation) =>
             <div 
               key={v.id} 
               className={`
