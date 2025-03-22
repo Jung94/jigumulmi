@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useMemo } from 'react'
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { store } from '@/src/shared/store'
 import { Provider as ReduxProvider } from 'react-redux'
-import { store } from '@/lib/store'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 export default function Provider({ children }: React.PropsWithChildren) {
   const queryClient = useMemo(
