@@ -2,7 +2,7 @@ import './globals.scss'
 import Script from 'next/script'
 import localFont from 'next/font/local'
 import { Provider } from '@/src/shared/providers'
-import getQueryClient from '@/lib/utils/getQueryClient'
+import { getQueryClient } from '@/src/shared/lib'
 import { Hydrate, dehydrate } from '@tanstack/react-query'
 import type { Metadata } from 'next'
 
