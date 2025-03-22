@@ -7,5 +7,11 @@ export type Member = {
   deregisteredAt: string;
 }
 
+// Request
+export type CheckIsRegisteredMemberVariables = {
+  code: string;
+  redirectUrl: string;
+}
+
 // Response
 export type FetchMemberResponse = Member;
