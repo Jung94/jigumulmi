@@ -1,10 +1,10 @@
 import './globals.scss'
 import Script from 'next/script'
-import type { Metadata } from 'next'
+import Provider from '@/app/provider'
 import localFont from 'next/font/local'
-import Providers from '@/lib/utils/Provider'
 import getQueryClient from '@/lib/utils/getQueryClient'
 import { Hydrate, dehydrate } from '@tanstack/react-query'
+import type { Metadata } from 'next'
 
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
@@ -101,11 +101,11 @@ export default async function RootLayout({children}: {children: React.ReactNode}
         </noscript>
       </head>
       <body className={pretendard.className}>
-        <Providers>
+        <Provider>
           <Hydrate state={dehydratedState}>
             {children}
           </Hydrate>
-        </Providers>
+        </Provider>
       </body>
     </html>
   )
