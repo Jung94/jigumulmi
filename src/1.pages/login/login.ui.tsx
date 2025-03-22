@@ -1,16 +1,16 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
 import styles from './login.module.scss'
-import { APIaccount } from '@/lib/api/account'
+import { useState, useEffect } from 'react'
+import Logo from '@/public/jigumulmi_logo.png'
 import { useQueryClient } from '@tanstack/react-query'
 import { getCookie, deleteCookie } from 'cookies-next'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useCheckIsRegisteredMember } from '@/src/4.entities/member/model/queries'
-import Logo from '@/public/jigumulmi_logo.png'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
+import { useRouter, useSearchParams } from 'next/navigation'
 import KakaoLoginSymbol from '@/public/icons/login/kakao_login_symbol.svg'
+import { useCheckIsRegisteredMember } from '@/src/4.entities/member/model/queries'
+import memberQueryKey from '@/src/4.entities/member/model/queries/query-key.constant'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -42,7 +42,7 @@ export default function LoginPage() {
       )
 
       if (status === 201) {
-        queryClient.invalidateQueries([APIaccount.getUserDetail])
+        await queryClient.refetchQueries({ queryKey: [memberQueryKey.base()] })
         setIsLoading(false)
   
         const prevPath: string | undefined = getCookie("ji-login-prev-path")
