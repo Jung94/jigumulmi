@@ -1,14 +1,13 @@
-"use client"
+'use client'
 
-import React from "react"
-import {QueryClientProvider, QueryClient} from "@tanstack/react-query"
-import {ReactQueryDevtools} from "@tanstack/react-query-devtools"
-import {Provider as Providers} from "react-redux"
-import {store} from "@/lib/store"
+import React, { useMemo } from 'react'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { Provider as Providers } from 'react-redux'
+import { store } from '@/lib/store'
 
-const Provider = ({children}: React.PropsWithChildren) => {
-  const [client] = React.useState(
-    new QueryClient({
+export default function Provider({ children }: React.PropsWithChildren) {
+  const queryClient = useMemo(
+    () => new QueryClient({
       defaultOptions: {
         queries: {
           refetchOnWindowFocus: false,
@@ -18,14 +17,12 @@ const Provider = ({children}: React.PropsWithChildren) => {
         }
       }
     })
+    , []
   )
 
   return (
-    <QueryClientProvider client={client}>
+    <QueryClientProvider client={queryClient}>
       <Providers store={store}>{children}</Providers>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   )
 }
-
-export default Provider
