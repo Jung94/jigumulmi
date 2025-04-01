@@ -14,8 +14,6 @@
     "@dnd-kit/sortable": "8.0.0",
     "@dnd-kit/utilities": "3.2.2",
     "@reduxjs/toolkit": "1.9.5",
-    "@supabase/ssr": "0.1.0",
-    "@supabase/supabase-js": "2.39.7",
     "@tanstack/react-query": "4.32.6",
     "@tanstack/react-query-devtools": "4.32.6",
     "@types/node": "20.4.7",
