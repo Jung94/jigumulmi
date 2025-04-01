@@ -1,31 +1,24 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
 import styles from './login.module.scss'
-import { postAPI } from '@/lib/api'
-import { useModal } from '@/lib/hooks'
-import { APIaccount } from '@/lib/api/account'
+import { useState, useEffect } from 'react'
+import Logo from '@/public/jigumulmi_logo.png'
 import { useQueryClient } from '@tanstack/react-query'
 import { getCookie, deleteCookie } from 'cookies-next'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Logo from '@/public/jigumulmi_logo.png'
 import Spinner from '@/public/icons/LoadingSpinnerWhite'
+import { useRouter, useSearchParams } from 'next/navigation'
 import KakaoLoginSymbol from '@/public/icons/login/kakao_login_symbol.svg'
-import RegistrationNicknameContent from '@/components/modal/registration-nickname/Content'
-
-async function checkRegistered(code: string, redirectUrl: string) { // 회원가입된 유저인지 아닌지
-  const response = await postAPI({apiURL: APIaccount.checkRegisteredUser, body: { code, redirectUrl }})
-  return response
-}
+import { useCheckIsRegisteredMember } from '@/src/4.entities/member/model/queries'
+import memberQueryKey from '@/src/4.entities/member/model/queries/query-key.constant'
 
 export default function LoginPage() {
   const router = useRouter()
   const queryClient = useQueryClient()
   const searchParams = useSearchParams()
   const code = searchParams?.get("code") // string | null
+  const checkIsRegisteredMember = useCheckIsRegisteredMember()
   const [ isLoading, setIsLoading ] = useState(!!(code))
-  const [ defaultNickname, setDefaultNickname ] = useState('')
 
   const handleLogin = () => {
     setIsLoading(true)
@@ -42,31 +35,26 @@ export default function LoginPage() {
     const REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL_ORIGIN
 
     if (!code || !REDIRECT_URI) return
-    const { status, data } = await checkRegistered(code, decodeURI(REDIRECT_URI))
-    
-    if (status === 201) {
-      queryClient.invalidateQueries([APIaccount.getUserDetail])
-      setIsLoading(false)
+    try {
+      // data: { hasRegistered: boolean; nickname: string; }
+      const { status, data } = await checkIsRegisteredMember.mutateAsync(
+        { code, redirectUrl: decodeURI(REDIRECT_URI) }
+      )
 
-      if (data.hasRegistered) { // 기존 회원
-        // 로그인 페이지 이전 경로 기록 유무에 따른 페이지 이동
+      if (status === 201) {
+        await queryClient.refetchQueries({ queryKey: [memberQueryKey.base()] })
+        setIsLoading(false)
+  
         const prevPath: string | undefined = getCookie("ji-login-prev-path")
         deleteCookie("ji-login-prev-path")
-
+  
         if (prevPath) router.push(prevPath)
           else router.push('/')
-      } else { // 신규 회원
-        setDefaultNickname(data.nickname)
-        handleOpenRegistrationNicknameModal()
       }
+    } catch (error) {
+      console.error(error)
     }
   }
-
-  const RegistrationNicknameModal = useModal(
-    <RegistrationNicknameContent defaultNickname={defaultNickname} />,
-    { disabledBackdropClosing: true }
-  )
-  function handleOpenRegistrationNicknameModal() { RegistrationNicknameModal.open() }
 
   // 카카오 로그인 callback url 처리
   useEffect(() => {
@@ -82,7 +70,6 @@ export default function LoginPage() {
           </div>
         }
         <Image src={Logo} width={130} height={24.6} alt='logo'></Image>
-        {/* <div className={styles.title}>지구멀미</div> */}
         <div className={styles.desc}>
           <div className={styles.text}>
             비정상적인 속도로 달려가는 지구의 속도에 멀미가 느껴지진 않나요?
@@ -96,7 +83,6 @@ export default function LoginPage() {
           카카오톡으로 로그인하기
         </button>
       </div>
-      {RegistrationNicknameModal.Dialog}
     </>
   )
 }
